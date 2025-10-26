@@ -1,20 +1,14 @@
 plugins {
     id 'java-library'
 }
-
 java {
-    sourceCompatibility = JavaVersion.VERSION_1_8
-    targetCompatibility = JavaVersion.VERSION_1_8
+    sourceCompatibility JavaVersion.VERSION_11
+    targetCompatibility JavaVersion.VERSION_11
 }
 repositories {
-    maven { url = 'https://jitpack.io' }
     maven { url = 'https://maven.brott.dev/' }
 }
-//
-//repositories {
-//    maven { url = 'https://maven.brott.dev/' }
-//}
 
 dependencies {
-    implementation 'com.acmerobotics.roadrunner:MeepMeep:0.1.7'
+    implementation 'com.acmerobotics.roadrunner:MeepMeep:0.1.6'
 }

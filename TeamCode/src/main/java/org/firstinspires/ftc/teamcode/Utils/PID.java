@@ -60,14 +60,14 @@ public class PID {
         return power;
 
         // Update memory
-    }
-    public void printValues(){
-        pid.calculatePIDValue(lastError, 0);
-        opMode.telemetry.addData("Tag ID", detection.id);
-        opMode.telemetry.addData("Bearing (deg)", "%.2f", error);
-        opMode.telemetry.addData("Servo Power", "%.3f", power);
-        opMode.telemetry.addData("Integral Sum", "%.3f", integralSum);
-        opMode.telemetry.addData("Distance (m)", "%.2f", detection.ftcPose.range);
+//    }
+//    public void printValues(){
+//        pid.calculatePIDValue(lastError, 0);
+//        opMode.telemetry.addData("Tag ID", detection.id);
+//        opMode.telemetry.addData("Bearing (deg)", "%.2f", error);
+//        opMode.telemetry.addData("Servo Power", "%.3f", power);
+//        opMode.telemetry.addData("Integral Sum", "%.3f", integralSum);
+//        opMode.telemetry.addData("Distance (m)", "%.2f", detection.ftcPose.range);
 
     }
 }

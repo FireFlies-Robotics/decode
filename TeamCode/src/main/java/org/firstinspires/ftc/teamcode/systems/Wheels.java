@@ -24,7 +24,7 @@ public class Wheels {
     private final DcMotor backRight;
 
     private final LinearOpMode opMode; // The opmode used to get the wheels
-    private final IMU imu; // Gyros used to get the robots rotation
+    public IMU imu; // Gyros used to get the robots rotation
 
     double maxSpeed = 1;
 
@@ -43,8 +43,8 @@ public class Wheels {
         this.imu = opMode.hardwareMap.get(IMU.class, "imu");
         // Adjust the orientation parameters to match your robot
         IMU.Parameters parameters = new IMU.Parameters(new RevHubOrientationOnRobot(
-                RevHubOrientationOnRobot.LogoFacingDirection.UP,
-                RevHubOrientationOnRobot.UsbFacingDirection.BACKWARD));
+                RevHubOrientationOnRobot.LogoFacingDirection.RIGHT ,
+                RevHubOrientationOnRobot.UsbFacingDirection.UP));
         // Without this, the REV Hub's orientation is assumed to be logo up / USB forward
         imu.initialize(parameters);
 
@@ -54,10 +54,10 @@ public class Wheels {
         frontRight = opMode.hardwareMap.get(DcMotor.class, "rightFront");
         backLeft = opMode.hardwareMap.get(DcMotor.class, "leftBack");
         backRight = opMode.hardwareMap.get(DcMotor.class, "rightBack");
-//        imu = opMode.hardwareMap.get(IMU.class, "imu");
+//        frontLeft.setDirection(DcMotorSimple.Direction.REVERSE);
+//        backRight.setDirection(DcMotorSimple.Direction.REVERSE);
 
-        frontLeft.setDirection(DcMotorSimple.Direction.REVERSE);
-        backLeft.setDirection(DcMotorSimple.Direction.REVERSE);
+
 
         frontLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         frontRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -86,9 +86,6 @@ public class Wheels {
         backLeft = opMode.hardwareMap.get(DcMotor.class, "leftBack");
         backRight = opMode.hardwareMap.get(DcMotor.class, "rightBack");
         imu = opMode.hardwareMap.get(IMU.class, "imu");
-        frontLeft.setDirection(DcMotorSimple.Direction.REVERSE);
-        backLeft.setDirection(DcMotorSimple.Direction.REVERSE);
-
         frontLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         frontRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         backLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);

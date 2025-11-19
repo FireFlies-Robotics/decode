@@ -53,6 +53,8 @@ android {
         minSdkVersion 24
         //noinspection ExpiredTargetSdkVersion
         targetSdkVersion 28
+        multiDexEnabled true
+
 
         /**
          * We keep the versionCode and versionName of robot controller applications in sync with
@@ -111,7 +113,7 @@ android {
     }
     ndkVersion '21.3.6528147'
 }
-
 repositories {
+    mavenCentral()
 }
 

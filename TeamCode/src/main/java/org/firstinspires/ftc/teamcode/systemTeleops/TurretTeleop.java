@@ -24,7 +24,7 @@ public class TurretTeleop extends LinearOpMode {
         while (opModeIsActive()) {
             turret.moveTurret(gamepad2.right_stick_x);
 
-                // If square (X) button is pressed, run intake
+                // If square (X) butt  on is pressed, run intake
 
 
             telemetry.addData("Turret power", turret.rightTurret.getPower());

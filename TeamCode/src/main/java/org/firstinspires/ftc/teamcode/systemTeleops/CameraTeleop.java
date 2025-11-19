@@ -73,7 +73,7 @@ public class CameraTeleop extends LinearOpMode {
             if (!detections.isEmpty()) {
                 for (AprilTagDetection detection : detections) {
                     if (detection.id == TARGET_TAG_ID) {
-                        break;
+                        pid.calculatePIDValue(detection.ftcPose.bearing, 0);
                     }
                 }
             } else {

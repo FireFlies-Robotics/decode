@@ -27,9 +27,19 @@ public class PID {
         this.INTEGRAL_LIMIT = INTEGRAL_LIMIT;
         this.DEADZONE = DEADZONE;
         this.opMode = opMode;
-
     }
 
+    public PID(double KP, double KI, double KD, LinearOpMode opMode){
+        this.KP = KP;
+        this.KI = KI;
+        this.KD = KD;
+        this.opMode = opMode;
+    }
+    public void setPID(double kp, double ki, double kd){
+        KP = kp;
+        KI = ki;
+        KD = kd;
+    }
     public double calculatePIDValue(double position, double target){
         double error = position - target;
 

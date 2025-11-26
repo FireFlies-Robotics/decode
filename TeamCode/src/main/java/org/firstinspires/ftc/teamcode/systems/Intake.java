@@ -12,16 +12,16 @@ public class Intake {
     public DcMotor transfer;
 
 //    public Servo transferServo;
-//    public CRServo transferServo;
-    public Servo transferServo;
+    public CRServo transferServo;
+//    public Servo transferServo;
 
     // Constructor: initialize the motor
     public Intake(LinearOpMode opMode) {
         this.opMode = opMode;
         intakeMotor = opMode.hardwareMap.get(DcMotor.class, "intakeMotor");
         transfer = opMode.hardwareMap.get(DcMotor.class, "transfer");
-//        transferServo = opMode.hardwareMap.get(CRServo.class, "transferServo");
-        transferServo = opMode.hardwareMap.get(Servo.class, "transferServo");
+        transferServo = opMode.hardwareMap.get(CRServo.class, "transferServo");
+//        transferServo = opMode.hardwareMap.get(Servo.class, "transferServo");
 
         intakeMotor.setDirection(DcMotorSimple.Direction.REVERSE);
         transfer.setDirection(DcMotorSimple.Direction.REVERSE);
@@ -36,8 +36,8 @@ public class Intake {
         transfer.setPower(power);
     }
     public void setFinalTransferPower(double power){
-//        transferServo.setPower(power);
-        transferServo.setPosition(power);
+        transferServo.setPower(power);
+//        transferServo.setPosition(power);
     }
     public void setFinalTransferPower(){
 

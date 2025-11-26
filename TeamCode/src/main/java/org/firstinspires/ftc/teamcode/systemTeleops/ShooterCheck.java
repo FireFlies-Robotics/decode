@@ -1,23 +1,21 @@
 package org.firstinspires.ftc.teamcode.systemTeleops;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.systems.Shooter;
+@TeleOp(name = "shooter Control", group = "TeleOp")
 
 public class ShooterCheck extends LinearOpMode {
-    Shooter shooter = new Shooter(this);
+
+    Shooter shooter;
     @Override
     public void runOpMode() throws InterruptedException {
+        shooter = new Shooter(this);
         shooter.setShotingPower(0);
         waitForStart();
         while (opModeIsActive()){
-            if (gamepad2.left_bumper){
-                shooter.setShotingPower(1);
-            }
-            else {
-                shooter.setShotingPower(0);
-            }
+            shooter.shooterPID();
         }
     }
-
 }

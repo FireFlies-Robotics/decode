@@ -4,7 +4,10 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.AnalogInput;
 import com.qualcomm.robotcore.hardware.CRServo;
 
-public class Turret {
+import org.firstinspires.ftc.teamcode.Utils.PID;
+
+   public class Turret {
+
     private LinearOpMode opMode;
     public CRServo rightTurret;
     public CRServo leftTurret;
@@ -12,9 +15,15 @@ public class Turret {
     private double turretOldPos;
     private double trueRotation;
 
+    double kp;
+    double ki;
+    double kd;
+    public static double targetRotation = 180;
 
-
+    PID pid;
     public Turret(LinearOpMode opMode) {
+        pid = new PID(kp, ki, kd, opMode);
+
         this.opMode = opMode;
         rightTurret =opMode.hardwareMap.get(CRServo.class, "rightTurret");
         leftTurret = opMode.hardwareMap.get(CRServo.class, "leftTurret");
@@ -46,12 +55,13 @@ public class Turret {
                 diff -= 360; //minus rotation
 
         }
-
-
         turretOldPos = currentRotation;
         trueRotation += diff;
         opMode.telemetry.addData("rottion", trueRotation);
 
+    }
+    public void turretPID(){
+        pid.calculatePIDValue(trueRotation, targetRotation);
     }
 }
 

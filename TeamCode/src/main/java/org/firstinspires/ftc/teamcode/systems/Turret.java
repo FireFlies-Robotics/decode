@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.systems;
+   package org.firstinspires.ftc.teamcode.systems;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.AnalogInput;
@@ -8,15 +8,19 @@ public class Turret {
     private LinearOpMode opMode;
     public CRServo rightTurret;
     public CRServo leftTurret;
-    public AnalogInput turretAnalog;
+    public AnalogInput turretAnalog ;
     private double turretOldPos;
     private double trueRotation;
+
 
 
     public Turret(LinearOpMode opMode) {
         this.opMode = opMode;
         rightTurret =opMode.hardwareMap.get(CRServo.class, "rightTurret");
         leftTurret = opMode.hardwareMap.get(CRServo.class, "leftTurret");
+        turretAnalog = opMode.hardwareMap.get(AnalogInput.class, "turretAnalog");
+
+
     }
     public void moveTurret(double power) {
         rightTurret.setPower(power);
@@ -43,8 +47,13 @@ public class Turret {
 
         }
 
+
         turretOldPos = currentRotation;
         trueRotation += diff;
+        opMode.telemetry.addData("rottion", trueRotation);
 
     }
 }
+
+
+

@@ -18,7 +18,7 @@ import org.firstinspires.ftc.teamcode.Utils.PID;
     double kp;
     double ki;
     double kd;
-    public static double targetRotation = 180;
+//    public static double targetRotation = 180;
 
     PID pid;
     public Turret(LinearOpMode opMode) {
@@ -60,7 +60,7 @@ import org.firstinspires.ftc.teamcode.Utils.PID;
         opMode.telemetry.addData("rottion", trueRotation);
 
     }
-    public void turretPID(){
+    public void turretPID(double targetRotation){
         pid.calculatePIDValue(trueRotation, targetRotation);
     }
 }

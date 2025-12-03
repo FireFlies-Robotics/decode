@@ -15,7 +15,8 @@ public class ShooterCheck extends LinearOpMode {
         shooter.setShotingPower(0);
         waitForStart();
         while (opModeIsActive()){
-            shooter.shooterPID();
+            shooter.shooterPID(900);
+
         }
     }
 }

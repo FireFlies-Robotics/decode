@@ -5,11 +5,11 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 public class PID {
     private LinearOpMode opMode;
     // Dashboard-tunable PID constants
-    private static double KP;
-    private static double KI;      // <-- new integral gain (start small!)
-    private static double KD;
+    private  double KP;
+    private  double KI;      // <-- new integral gain (start small!)
+    private  double KD;
     // Optional tuning parameters
-    private static double MAX_POWER;
+    private static double maxPower;
     private static double INTEGRAL_LIMIT; // anti-windup limit
     private static double DEADZONE; // degrees
 
@@ -23,16 +23,17 @@ public class PID {
         this.KP = KP;
         this.KI = KI;
         this.KD = KD;
-        this.MAX_POWER = MAX_POWER;
+        this.maxPower = MAX_POWER;
         this.INTEGRAL_LIMIT = INTEGRAL_LIMIT;
         this.DEADZONE = DEADZONE;
         this.opMode = opMode;
     }
 
-    public PID(double KP, double KI, double KD, LinearOpMode opMode){
+    public PID(double KP, double KI, double KD, LinearOpMode opMode, double maxPower){
         this.KP = KP;
         this.KI = KI;
         this.KD = KD;
+        this.maxPower = maxPower;
         this.opMode = opMode;
     }
     public void setPID(double kp, double ki, double kd){
@@ -59,15 +60,21 @@ public class PID {
 
         // PID Control
         double power = KP * error + KI * integralSum + KD * derivative;
+        opMode.telemetry.addData("power", power);
+        opMode.telemetry.addData("max power", maxPower);
+
 
         // Clamp output
-        power = Math.max(-MAX_POWER, Math.min(MAX_POWER, power));
+        power = Math.max(-maxPower, Math.min(maxPower, power));
 
         // Set servo power
         lastError = error;
         lastTime = currentTime;
 
+        opMode.telemetry.addData("error", error);
+        opMode.telemetry.addLine("calculatePIDValue");
         return power;
+
 
         // Update memory
 //    }

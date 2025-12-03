@@ -22,7 +22,7 @@ import org.firstinspires.ftc.teamcode.Utils.PID;
 
     PID pid;
     public Turret(LinearOpMode opMode) {
-        pid = new PID(kp, ki, kd, opMode);
+        pid = new PID(kp, ki, kd, opMode, 1);
 
         this.opMode = opMode;
         rightTurret =opMode.hardwareMap.get(CRServo.class, "rightTurret");

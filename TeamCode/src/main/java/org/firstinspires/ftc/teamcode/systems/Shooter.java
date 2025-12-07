@@ -15,7 +15,7 @@ import org.firstinspires.ftc.teamcode.systemTeleops.ShooterCheck;
 public class Shooter {
 
     PID pid;
-    public static double kp = 0;
+    public static double kp = 1;
     public static double ki = 0;
     public static double kd = 0;
 
@@ -45,7 +45,7 @@ public class Shooter {
         //     tunet = opMode.hardwareMap.get(CRServo.class, "tunet");
         leftShotingMotor = opMode.hardwareMap.get(DcMotorEx.class, "leftShootingMotor");
         rigtShotingMotor = opMode.hardwareMap.get(DcMotorEx.class, "rightShootingMotor");
-        rigtShotingMotor.setDirection(DcMotorSimple.Direction.REVERSE);
+        leftShotingMotor.setDirection(DcMotorSimple.Direction.REVERSE);
         //   feywhed = opMode.hardwareMap.get(DcMotor.class, "feywhed");
     }
     //    public void
@@ -57,9 +57,9 @@ public class Shooter {
     public void shooterPID(double targetVel){
         pid.setPID(kp,ki, kd);
         double currentTime = opMode.getRuntime();
-//        double dt = currentTime - lastTime;
+//        double dt = currentTixme - lastTime;
 
-        double velocity = rigtShotingMotor.getVelocity();
+        double velocity = -leftShotingMotor.getVelocity();
 
         double shootingPID = pid.calculatePIDValue(velocity,targetVel);
         setShotingPower(shootingPID);

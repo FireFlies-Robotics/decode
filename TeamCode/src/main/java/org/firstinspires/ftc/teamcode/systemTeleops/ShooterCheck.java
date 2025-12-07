@@ -1,12 +1,18 @@
 package org.firstinspires.ftc.teamcode.systemTeleops;
 
+import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.systems.Shooter;
+import org.intellij.lang.annotations.JdkConstants;
+
 @TeleOp(name = "shooter Control", group = "TeleOp")
+@Config
+
 
 public class ShooterCheck extends LinearOpMode {
+    public static double targetVel = 2000;
 
     Shooter shooter;
     @Override
@@ -15,7 +21,7 @@ public class ShooterCheck extends LinearOpMode {
         shooter.setShotingPower(0);
         waitForStart();
         while (opModeIsActive()){
-            shooter.shooterPID(900);
+            shooter.shooterPID(targetVel);
 
         }
     }

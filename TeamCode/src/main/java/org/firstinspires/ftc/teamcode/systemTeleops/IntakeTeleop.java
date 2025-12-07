@@ -2,17 +2,17 @@ package org.firstinspires.ftc.teamcode.systemTeleops;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import org.firstinspires.ftc.teamcode.systems.Intake;
+import org.firstinspires.ftc.teamcode.systems.Transfer;
 
 @TeleOp(name = "Intake Control", group = "TeleOp")
 public class IntakeTeleop extends LinearOpMode {
 
-    private Intake intake;
+    private Transfer intake;
 
     @Override
     public void runOpMode() {
         // Initialize the intake system
-        intake = new Intake(this);
+        intake = new Transfer(this);
 
         telemetry.addLine("Initialized — Ready to start");
         telemetry.update();

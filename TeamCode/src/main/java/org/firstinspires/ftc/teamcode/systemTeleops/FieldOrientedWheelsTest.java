@@ -60,7 +60,7 @@ public class FieldOrientedWheelsTest extends LinearOpMode {
             // Show data on driver station
             telemetry.addData("Status", "Run Time: " + runtime.toString());
             telemetry.addData("Speed", wheels.getMaxSpeed()*100 + "%");
-            telemetry.update();
+//            telemetry.update();
         }
     }
 }

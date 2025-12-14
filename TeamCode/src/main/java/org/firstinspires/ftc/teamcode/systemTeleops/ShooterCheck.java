@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.systemTeleops;
 
 import com.acmerobotics.dashboard.config.Config;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
@@ -9,6 +10,7 @@ import org.intellij.lang.annotations.JdkConstants;
 
 @TeleOp(name = "shooter Control", group = "TeleOp")
 @Config
+@Disabled
 
 
 public class ShooterCheck extends LinearOpMode {

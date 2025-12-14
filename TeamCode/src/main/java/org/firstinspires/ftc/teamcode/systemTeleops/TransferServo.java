@@ -1,12 +1,14 @@
 package org.firstinspires.ftc.teamcode.systemTeleops;
 
 import com.acmerobotics.dashboard.config.Config;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.Servo;
 
 @TeleOp(name = "transfer servo")
 @Config
+@Disabled
 public class TransferServo extends LinearOpMode {
 
     // Dashboard-adjustable values

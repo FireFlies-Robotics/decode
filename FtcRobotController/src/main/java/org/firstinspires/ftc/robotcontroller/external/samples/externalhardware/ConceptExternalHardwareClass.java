@@ -135,7 +135,6 @@ public class ConceptExternalHardwareClass extends LinearOpMode {
             telemetry.addData("Turn Power",  "%.2f", turn);
             telemetry.addData("Arm Power",  "%.2f", arm);
             telemetry.addData("Hand Position",  "Offset = %.2f", handOffset);
-            telemetry.update();
 
             // Pace this loop so hands move at a reasonable speed.
             sleep(50);

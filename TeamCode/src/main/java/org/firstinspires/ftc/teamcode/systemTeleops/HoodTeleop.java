@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.systemTeleops;
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.CRServo;
@@ -21,6 +22,7 @@ public class HoodTeleop {
 //     Hood hood;
     @TeleOp(name = "CRServo AprilTag PID Tracking Dashboard", group = "Vision")
     @Config
+    @Disabled
     public class CameraTeleop extends LinearOpMode {
         Hood hood = new Hood(this);
         @Override

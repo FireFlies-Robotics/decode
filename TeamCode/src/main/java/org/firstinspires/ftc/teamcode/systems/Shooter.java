@@ -6,7 +6,7 @@ import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorEx;
+    import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
 import org.firstinspires.ftc.teamcode.Utils.PID;
@@ -15,9 +15,9 @@ import org.firstinspires.ftc.teamcode.systemTeleops.ShooterCheck;
 public class Shooter {
 
     PID pid;
-    public static double kp = 1;
-    public static double ki = 0;
-    public static double kd = 0;
+    public static double kp = 0.1;
+    public static double ki = 0.0000005;
+    public static double kd = 0.0012;
 
 
     private LinearOpMode opMode;
@@ -45,7 +45,7 @@ public class Shooter {
         //     tunet = opMode.hardwareMap.get(CRServo.class, "tunet");
         leftShotingMotor = opMode.hardwareMap.get(DcMotorEx.class, "leftShootingMotor");
         rigtShotingMotor = opMode.hardwareMap.get(DcMotorEx.class, "rightShootingMotor");
-        leftShotingMotor.setDirection(DcMotorSimple.Direction.REVERSE);
+        rigtShotingMotor.setDirection(DcMotorSimple.Direction.REVERSE);
         //   feywhed = opMode.hardwareMap.get(DcMotor.class, "feywhed");
     }
     //    public void
@@ -59,9 +59,10 @@ public class Shooter {
         double currentTime = opMode.getRuntime();
 //        double dt = currentTixme - lastTime;
 
-        double velocity = -leftShotingMotor.getVelocity();
+        double velocity = leftShotingMotor.getVelocity();
 
-        double shootingPID = pid.calculatePIDValue(velocity,targetVel);
+        double shootingPID = pid.calculatePIDValue(targetVel ,velocity);
+        shootingPID = Math.max(-1, Math.min(shootingPID, 1));
         setShotingPower(shootingPID);
 //        oldShootingPosition = rigtShotingMotor.getCurrentPosition()/28;
         lastTime = currentTime;
@@ -77,7 +78,7 @@ public class Shooter {
         FtcDashboard.getInstance().sendTelemetryPacket(packet);
 
 
-        opMode.telemetry.update();
+//        opMode.telemetry.update();
 
     }
 }

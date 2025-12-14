@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.systemTeleops;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
@@ -11,6 +12,7 @@ import com.acmerobotics.dashboard.config.Config;
 
 @TeleOp(name = "Transfare Control", group = "TeleOp")
 @Config
+@Disabled
 public class TransferTeleop extends LinearOpMode {
 
     private Transfer transfer;

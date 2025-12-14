@@ -25,7 +25,7 @@ public class Intake {
     // Activate intake with a given power
     public void activateIntake(double power) {
         intakeMotor.setPower(power);
-        transfer.setPower(power);
+//        transfer.setPower(power);
     }
     // Stop intake
 }

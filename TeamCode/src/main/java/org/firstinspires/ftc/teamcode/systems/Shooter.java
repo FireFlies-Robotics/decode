@@ -15,9 +15,9 @@ import org.firstinspires.ftc.teamcode.systemTeleops.ShooterCheck;
 public class Shooter {
 
     PID pid;
-    public static double kp = 0.1;
+    public static double kp = 0.01;
     public static double ki = 0.0000005;
-    public static double kd = 0.0012;
+    public static double kd = 0.00;
 
 
     private LinearOpMode opMode;
@@ -63,7 +63,7 @@ public class Shooter {
 
         double shootingPID = pid.calculatePIDValue(targetVel ,velocity);
         shootingPID = Math.max(-1, Math.min(shootingPID, 1));
-        setShotingPower(shootingPID);
+        setShotingPower(shootingPID + 0.8);
 //        oldShootingPosition = rigtShotingMotor.getCurrentPosition()/28;
         lastTime = currentTime;
 

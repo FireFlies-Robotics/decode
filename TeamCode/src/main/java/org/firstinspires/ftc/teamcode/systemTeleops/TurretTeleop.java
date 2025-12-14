@@ -13,9 +13,8 @@ import org.firstinspires.ftc.teamcode.systems.Turret;
 @TeleOp(name = "Turret Control1", group = "TeleOp")
 @Disabled
 public class TurretTeleop extends LinearOpMode {
-
-
     Turret turret;
+
     AnalogInput analogInput;
 
     IMU imu;

@@ -13,7 +13,7 @@ import org.firstinspires.ftc.teamcode.systems.Transfer;
 import org.firstinspires.ftc.teamcode.systems.Wheels;
 
 @Autonomous(name = "Autotototo")
-@Disabled
+//@Disabled
 public class FarAutoOp extends LinearOpMode {
 
     Wheels wheels;
@@ -52,14 +52,17 @@ public class FarAutoOp extends LinearOpMode {
         waitForStart();
 
         while (opModeIsActive()) {
+            hood.setPosition(Hood.UP);
+            if(runtime.time() < 7){
             shooter.shooterPID(1900);
             if(shooter.leftShotingMotor.getVelocity() > 1830) {
                 intake.activateIntake(1);
                 transfer.setTransferPower(1);
-            }
-            if(runtime.time() > 12 && runtime.time() < 17){
-                wheels.driveForwordByPower(-.1);
-
+            }}
+            if(runtime.time() > 8 && runtime.time() < 9){
+                wheels.driveForwordByPower(.5);
+            } else {
+                wheels.driveForwordByPower(0);
             }
         }
     }

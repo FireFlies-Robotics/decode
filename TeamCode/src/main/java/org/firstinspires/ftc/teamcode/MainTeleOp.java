@@ -34,7 +34,7 @@ public class MainTeleOp extends LinearOpMode {
     boolean isLeftBumper = false;
 
     boolean preLeftBumper = false;
-
+    public static double shootoingPower = 0;
 
     public static int selectedVelocity = 1375;  // hood decides this
     int targetVelocity = 0;       // shooterPID uses this
@@ -122,7 +122,7 @@ public class MainTeleOp extends LinearOpMode {
                 shooter.setShotingPower(0);
             }
             else{shooter.shooterPID(targetVelocity);}
-
+//            shooter.setShotingPower(shootoingPower);
             if (gamepad1.dpad_up) {
                 hood.setPosition(Hood.UP);
                 selectedVelocity = 1900;
@@ -130,8 +130,9 @@ public class MainTeleOp extends LinearOpMode {
 
             if (gamepad1.dpad_down) {
                 hood.setPosition(Hood.DOWN);
-                selectedVelocity = 1375;
+                selectedVelocity = 1900;
             }
+
             telemetry.addData("target velocity", targetVelocity);
 
 
@@ -150,6 +151,7 @@ public class MainTeleOp extends LinearOpMode {
                 // Move robot by controller 1
             wheels.driveByJoystickFieldOriented(gamepad1.left_stick_x, -gamepad1.left_stick_y, gamepad1.right_stick_x);
             TelemetryPacket packet = new TelemetryPacket();
+            packet.put("shooting velocity",shooter.leftShotingMotor.getVelocity());
             packet.put("up", Hood.UP);
             packet.put("down", Hood.DOWN);
 

@@ -265,4 +265,10 @@ public class Wheels {
         wheel.setPower(power);
         wheel.setMode(DcMotor.RunMode.RUN_TO_POSITION);
     }
+    public void driveForwordByPower(double power){
+        backRight.setPower(power);
+        backLeft.setPower(power);
+        frontRight.setPower(power);
+        frontLeft.setPower(power);
+    }
 }

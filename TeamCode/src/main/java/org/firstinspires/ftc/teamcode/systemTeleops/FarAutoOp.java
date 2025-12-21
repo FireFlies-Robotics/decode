@@ -55,10 +55,11 @@ public class FarAutoOp extends LinearOpMode {
             hood.setPosition(Hood.UP);
             if(runtime.time() < 7){
             shooter.shooterPID(1850);
+            }
             if(shooter.leftShotingMotor.getVelocity() > 1840) {
                 intake.activateIntake(1);
                 transfer.setTransferPower(1);
-            }}
+            }
             if(runtime.time() > 8 && runtime.time() < 9){
                 wheels.driveForwordByPower(.5);
             } else {

@@ -36,7 +36,7 @@ public class MainTeleOp extends LinearOpMode {
     boolean preLeftBumper = false;
     public static double shootoingPower = 0;
 
-    public static int selectedVelocity = 1375;  // hood decides this
+    public static int selectedVelocity = 1245;  // hood decides this
     int targetVelocity = 0;       // shooterPID uses this
     // Time that runs since the program began running
     private ElapsedTime runtime = new ElapsedTime();
@@ -54,7 +54,7 @@ public class MainTeleOp extends LinearOpMode {
         telemetry.addData("Status", "Initialized");
         telemetry.addData("Speed", "Waiting to start");
         telemetry.update();
-
+        runtime.reset();
         imu.resetYaw();
         boolean shootingOn = false;
         boolean lastpress = false;
@@ -76,12 +76,13 @@ public class MainTeleOp extends LinearOpMode {
 
             // Slow the robot down when the left bumber is pressed
 
-            wheels.setMaxSpeed(1 - gamepad1.left_trigger);
+            wheels.setMaxSpeed(1 - (gamepad1.left_trigger * 0.7));
 
             if (gamepad1.right_trigger >0.2) {
                 intake.activateIntake(1.0); // full power intake
             } else if (gamepad1.square){
-                intake.activateIntake(-1);
+                transfer.setTransferPower(-1);
+                intake.activateIntake(-4);
             }else {
                 intake.activateIntake(0); // stop when not pressed
             }// --- Shooter toggle on left bumper ---
@@ -125,12 +126,15 @@ public class MainTeleOp extends LinearOpMode {
 //            shooter.setShotingPower(shootoingPower);
             if (gamepad1.dpad_up) {
                 hood.setPosition(Hood.UP);
-                selectedVelocity = 1900;
+                selectedVelocity = 1700;
             }
 
             if (gamepad1.dpad_down) {
                 hood.setPosition(Hood.DOWN);
-                selectedVelocity = 1900;
+                selectedVelocity = 1230;
+            }
+            if (shooter.leftShotingMotor.getVelocity() > (selectedVelocity - 10)){
+                gamepad1.rumble(100);
             }
 
             telemetry.addData("target velocity", targetVelocity);
@@ -151,6 +155,7 @@ public class MainTeleOp extends LinearOpMode {
                 // Move robot by controller 1
             wheels.driveByJoystickFieldOriented(gamepad1.left_stick_x, -gamepad1.left_stick_y, gamepad1.right_stick_x);
             TelemetryPacket packet = new TelemetryPacket();
+            packet.put("time", runtime.seconds());
             packet.put("shooting velocity",shooter.leftShotingMotor.getVelocity());
             packet.put("up", Hood.UP);
             packet.put("down", Hood.DOWN);

@@ -12,7 +12,7 @@ public class Hood {
 
 
     public static double UP = 0;
-    public static double DOWN = 0.36;
+    public static double DOWN = 0.22;
 
 
     public Hood(LinearOpMode opMode){

@@ -13,7 +13,7 @@ import org.firstinspires.ftc.teamcode.systems.Shooter;
 import org.firstinspires.ftc.teamcode.systems.Transfer;
 import org.firstinspires.ftc.teamcode.systems.Wheels;
 
-@Autonomous(name = "Autotototo")
+@Autonomous(name = "close auto")
 //@Disabled
 public class CloseAutoOp extends LinearOpMode {
 
@@ -54,13 +54,19 @@ public class CloseAutoOp extends LinearOpMode {
 
         while (opModeIsActive()) {
             hood.setPosition(Hood.DOWN);
-            if(runtime.time() < 7){
-                shooter.shooterPID(1900);
-                if(shooter.leftShotingMotor.getVelocity() > 1830) {
+
+            if(runtime.time() < 5){
+                wheels.driveForwordByPower(-.4);
+            }
+            if (runtime.time() > 6){
+                shooter.shooterPID(1300);
+                if(shooter.leftShotingMotor.getVelocity() > 1250) {
                     intake.activateIntake(1);
                     transfer.setTransferPower(1);
-            }}
-            if(runtime.time() > 12 && runtime.time() < 17){
+                }
+            }
+            if (runtime.time() > 13 && runtime.time() < 16){
+                shooter.setShotingPower(0);
                 wheels.driveForwordByPower(-.4);
 
             }

@@ -17,14 +17,14 @@ import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
 
 import java.util.List;
 
-public class HoodTeleop {
-    public static double hoodPos = 0;
 //     Hood hood;
     @TeleOp(name = "CRServo AprilTag PID Tracking Dashboard", group = "Vision")
     @Config
     @Disabled
-    public class CameraTeleop extends LinearOpMode {
-        Hood hood = new Hood(this);
+    public class HoodTeleop extends LinearOpMode {
+    public static double hoodPos = 0;
+
+    Hood hood = new Hood(this);
         @Override
         public void runOpMode() {
 
@@ -45,4 +45,4 @@ public class HoodTeleop {
             }
         }
     }
-}
+

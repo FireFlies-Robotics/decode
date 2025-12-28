@@ -55,19 +55,20 @@ public class CloseAutoOp extends LinearOpMode {
         while (opModeIsActive()) {
             hood.setPosition(Hood.DOWN);
 
-            if(runtime.time() < 5){
+
+            if(runtime.time() < 6){
                 wheels.driveForwordByPower(-.4);
             }
             if (runtime.time() > 6){
                 shooter.shooterPID(1300);
-                if(shooter.leftShotingMotor.getVelocity() > 1250) {
+                if(shooter.leftShotingMotor.getVelocity() > 1275) {
                     intake.activateIntake(1);
                     transfer.setTransferPower(1);
                 }
             }
             if (runtime.time() > 13 && runtime.time() < 16){
                 shooter.setShotingPower(0);
-                wheels.driveForwordByPower(-.4);
+//                wheels.driveForwordByPower(-.4);
 
             }
         }

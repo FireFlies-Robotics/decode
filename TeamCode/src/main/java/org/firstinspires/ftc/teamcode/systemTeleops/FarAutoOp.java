@@ -29,7 +29,6 @@ public class FarAutoOp extends LinearOpMode {
 
     @Override
     public void runOpMode() {
-        runtime.reset();
         // Initialize the intake system
 
         // Runs when init is pressed. Initialize variables and pregame logic here
@@ -46,17 +45,16 @@ public class FarAutoOp extends LinearOpMode {
         imu.resetYaw();
         shooter.setShotingPower(0);
 
-        runtime.reset();
-
 
         waitForStart();
+        runtime.reset();
 
         while (opModeIsActive()) {
             hood.setPosition(Hood.UP);
-            if(runtime.time() < 7){
-            shooter.shooterPID(1850);
+            if(runtime.time() < 7) {
+                shooter.shooterPID(1700);
             }
-            if(shooter.leftShotingMotor.getVelocity() > 1840) {
+            if(shooter.leftShotingMotor.getVelocity() > 1680) {
                 intake.activateIntake(1);
                 transfer.setTransferPower(1);
             }
@@ -65,6 +63,8 @@ public class FarAutoOp extends LinearOpMode {
             } else {
                 wheels.driveForwordByPower(0);
             }
+            telemetry.addData("shooting power", shooter.leftShotingMotor.getPower());
+            telemetry.update();
         }
     }
 }

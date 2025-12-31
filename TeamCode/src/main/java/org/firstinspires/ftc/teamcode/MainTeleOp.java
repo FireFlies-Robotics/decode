@@ -50,6 +50,7 @@ public class MainTeleOp extends LinearOpMode {
         transfer = new Transfer(this);
         shooter = new Shooter(this);
         wheels = new Wheels(this, imu);
+
         hood =  new Hood(this);
         telemetry.addData("Status", "Initialized");
         telemetry.addData("Speed", "Waiting to start");

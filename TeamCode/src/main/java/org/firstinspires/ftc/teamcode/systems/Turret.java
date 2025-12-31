@@ -1,12 +1,20 @@
-   package org.firstinspires.ftc.teamcode.systems;
+package org.firstinspires.ftc.teamcode.systems;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.AnalogInput;
 import com.qualcomm.robotcore.hardware.CRServo;
+import com.qualcomm.robotcore.hardware.IMU;
 
 import org.firstinspires.ftc.teamcode.Utils.PID;
 
-   public class Turret {
+public class Turret {
+
+    private IMU imu;
+    Camera camera;
+
+    private final double MIN_TURRET_ANGLE = -400; //ToDo find real limits
+    private final double MAX_TURRET_ANGLE = 400;
+
 
     private LinearOpMode opMode;
     public CRServo rightTurret;
@@ -21,9 +29,9 @@ import org.firstinspires.ftc.teamcode.Utils.PID;
 //    public static double targetRotation = 180;
 
     PID pid;
-    public Turret(LinearOpMode opMode) {
+    public Turret(LinearOpMode opMode, IMU imu) {
         pid = new PID(kp, ki, kd, opMode, 1);
-
+        this.imu = imu;
         this.opMode = opMode;
         rightTurret =opMode.hardwareMap.get(CRServo.class, "rightTurret");
         leftTurret = opMode.hardwareMap.get(CRServo.class, "leftTurret");
@@ -60,9 +68,45 @@ import org.firstinspires.ftc.teamcode.Utils.PID;
         opMode.telemetry.addData("rottion", trueRotation);
 
     }
-    public void turretPID(double targetRotation){
-        pid.calculatePIDValue(trueRotation, targetRotation);
+    public double turretPID(double targetRotation){
+        return pid.calculatePIDValue(trueRotation, targetRotation);
     }
+    public void setTurretFinalPosition(double targetRotation){
+        //check if the turret is in limit and fix it
+        if (targetRotation > MAX_TURRET_ANGLE){
+            leftTurret.setPower(turretPID(targetRotation - 360));
+            rightTurret.setPower(turretPID(targetRotation - 360));
+        }
+        else if (targetRotation < MIN_TURRET_ANGLE){
+            leftTurret.setPower(turretPID(targetRotation + 360));
+            rightTurret.setPower(turretPID(targetRotation + 360));
+        }
+        else {
+            // if the turret is in limit aim with camera
+            turnWithCamera();
+        }
+    }
+    public double calculateTargetRotation() {
+        return -imu.getRobotYawPitchRollAngles().getYaw() -45;
+    }
+    public void turnWithCamera(){
+        double erroretion = camera.returnBearing();
+        // if there is detection aim with camera
+        if (erroretion != -999){
+            double poweretion = pid.calculatePIDValue(erroretion, 0);
+            leftTurret.setPower(poweretion);
+            rightTurret.setPower(poweretion);
+        }
+        // when no detection aim with imu
+        else {
+            leftTurret.setPower(turretPID(calculateTargetRotation()));
+            rightTurret.setPower(turretPID(calculateTargetRotation()));
+        }
+    }
+    public void setTurretPosition(){
+        setTurretFinalPosition(calculateTargetRotation());
+    }
+
 }
 
 

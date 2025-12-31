@@ -36,45 +36,45 @@ public class Wheels {
         this.maxSpeed = maxSpeed;
     }
 
-    public Wheels(LinearOpMode opMode) {
-        this.opMode = opMode;
-
-        // Retrieve the IMU from the hardware map
-        this.imu = opMode.hardwareMap.get(IMU.class, "imu");
-        // Adjust the orientation parameters to match your robot
-        IMU.Parameters parameters = new IMU.Parameters(new RevHubOrientationOnRobot(
-                RevHubOrientationOnRobot.LogoFacingDirection.LEFT ,
-                RevHubOrientationOnRobot.UsbFacingDirection.UP));
-        // Without this, the REV Hub's orientation is assumed to be logo up / USB forward
-        imu.initialize(parameters);
-
-        // Getting the wheel motors and setting them up
-
-        frontLeft = opMode.hardwareMap.get(DcMotor.class, "leftFront");
-        frontRight = opMode.hardwareMap.get(DcMotor.class, "rightFront");
-        backLeft = opMode.hardwareMap.get(DcMotor.class, "leftBack");
-        backRight = opMode.hardwareMap.get(DcMotor.class, "rightBack");
-//        frontRight.setDirection(DcMotorSimple.Direction.REVERSE);
-//        backRight.setDirection(DcMotorSimple.Direction.REVERSE);
-
-
-
-        frontLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        frontRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        backLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        backRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-
-        frontLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        frontRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        backLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        backRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
-        frontLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        frontRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        backLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        backRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        opMode.telemetry.addLine("rinnging");
-    }
+//    public Wheels(LinearOpMode opMode) {
+//        this.opMode = opMode;
+//
+//        // Retrieve the IMU from the hardware map
+//        this.imu = opMode.hardwareMap.get(IMU.class, "imu");
+//        // Adjust the orientation parameters to match your robot
+//        IMU.Parameters parameters = new IMU.Parameters(new RevHubOrientationOnRobot(
+//                RevHubOrientationOnRobot.LogoFacingDirection.LEFT ,
+//                RevHubOrientationOnRobot.UsbFacingDirection.UP));
+//        // Without this, the REV Hub's orientation is assumed to be logo up / USB forward
+//        imu.initialize(parameters);
+//
+//        // Getting the wheel motors and setting them up
+//
+//        frontLeft = opMode.hardwareMap.get(DcMotor.class, "leftFront");
+//        frontRight = opMode.hardwareMap.get(DcMotor.class, "rightFront");
+//        backLeft = opMode.hardwareMap.get(DcMotor.class, "leftBack");
+//        backRight = opMode.hardwareMap.get(DcMotor.class, "rightBack");
+////        frontRight.setDirection(DcMotorSimple.Direction.REVERSE);
+////        backRight.setDirection(DcMotorSimple.Direction.REVERSE);
+//
+//
+//
+//        frontLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+//        frontRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+//        backLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+//        backRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+//
+//        frontLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+//        frontRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+//        backLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+//        backRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+//
+//        frontLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+//        frontRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+//        backLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+//        backRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+//        opMode.telemetry.addLine("rinnging");
+//    }
 
     public Wheels(LinearOpMode opMode, IMU imu) {
         this.opMode = opMode;

@@ -24,7 +24,6 @@ public class TurretTeleop extends LinearOpMode {
     @Override
     public void runOpMode() {
         // Initialize the intake system
-        turret = new Turret(this);
 
 
         telemetry.addLine("Initialized — Ready to start");
@@ -35,6 +34,8 @@ public class TurretTeleop extends LinearOpMode {
                 RevHubOrientationOnRobot.LogoFacingDirection.UP,
                 RevHubOrientationOnRobot.UsbFacingDirection.FORWARD)));
         imu.resetYaw();
+        turret = new Turret(this, imu);
+
         // Wait for the start button
         waitForStart();
 

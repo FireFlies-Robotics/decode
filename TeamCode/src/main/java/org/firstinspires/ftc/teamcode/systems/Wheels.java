@@ -1,14 +1,21 @@
 package org.firstinspires.ftc.teamcode.systems;
 
+import com.acmerobotics.roadrunner.Pose2d;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.IMU;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.teamcode.MecanumDrive;
+import org.firstinspires.ftc.teamcode.ThreeDeadWheelLocalizer;
 
 public class Wheels {
+    MecanumDrive drive;
+    MecanumDrive.DriveLocalizer driveLocalizer;
+
 
     public static final double TICKS_PER_ROTATION = 3611.2; // נמדד על ידי סיבוב הרובוט 20 פעם
 
@@ -22,6 +29,9 @@ public class Wheels {
     private final DcMotor frontRight;
     private final DcMotor backLeft;
     private final DcMotor backRight;
+
+    public ThreeDeadWheelLocalizer localizer;
+
 
     private final LinearOpMode opMode; // The opmode used to get the wheels
     public IMU imu; // Gyros used to get the robots rotation
@@ -88,6 +98,7 @@ public class Wheels {
         imu.initialize(parameters);
 
 
+
         // Getting the wheel motors and setting them up
 
         frontLeft = opMode.hardwareMap.get(DcMotor.class, "leftFront");
@@ -95,6 +106,7 @@ public class Wheels {
         backLeft = opMode.hardwareMap.get(DcMotor.class, "leftBack");
         backRight = opMode.hardwareMap.get(DcMotor.class, "rightBack");
         imu = opMode.hardwareMap.get(IMU.class, "imu");
+
         frontLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         frontRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         backLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -103,7 +115,18 @@ public class Wheels {
         backRight.setDirection(DcMotorSimple.Direction.REVERSE);
         frontRight.setDirection(DcMotorSimple.Direction.REVERSE);
 
+        localizer = new ThreeDeadWheelLocalizer(opMode.hardwareMap, 168, new Pose2d(0,0,0));
+// ToDO DoTo dodo change inch per tick
+
     }
+    public Pose2d getEstimatedPose() {
+        return localizer.getPose();
+    }
+
+    public void updatePose() {
+        localizer.update();
+    }
+
 
     public void driveByJoystickFieldOriented(double x, double y, double rot) {
         double yaw = imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS); // Get the yaw angle of the robot

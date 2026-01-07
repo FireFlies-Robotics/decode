@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.systemTeleops;
 
 import android.provider.ContactsContract;
 
+import com.acmerobotics.roadrunner.Pose2d;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -42,12 +43,22 @@ public class JoyTest extends LinearOpMode {
                 RevHubOrientationOnRobot.UsbFacingDirection.RIGHT)));
         imu.resetYaw();
         turret = new Turret(this, imu);
+        Pose2d startPose = new Pose2d(0, 0, 0);
+        wheels.localizer.setPose(startPose);
+        wheels = new Wheels(this, imu);
 
         waitForStart();
         while (opModeIsActive()) {
             telemetry.addData("angle", Math.toDegrees(Math.atan2(gamepad1.left_stick_y, gamepad1.left_stick_x)) + 180);
             telemetry.addData("calculated angle", turret.calculateTargetRotation());
             telemetry.addData("imu", imu.getRobotYawPitchRollAngles().getYaw());
+            wheels.updatePose();
+            Pose2d pose = wheels.getEstimatedPose();
+            telemetry.addData("X", pose.position.x);
+            telemetry.addData("Y", pose.position.y);
+            telemetry.addData("Heading", Math.toDegrees(pose.heading.toDouble()));
+            telemetry.update();
+
 
             turret.setTurretPosition();
             turret.updateTurretServoRotation();

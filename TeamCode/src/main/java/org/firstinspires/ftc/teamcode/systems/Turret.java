@@ -1,13 +1,16 @@
 package org.firstinspires.ftc.teamcode.systems;
 
+import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.AnalogInput;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.IMU;
 
 import org.firstinspires.ftc.teamcode.Utils.PID;
+@Config
 
 public class Turret {
+
 
     private IMU imu;
     Camera camera;
@@ -22,10 +25,9 @@ public class Turret {
     public AnalogInput turretAnalog ;
     private double turretOldPos;
     private double trueRotation;
-
-    double kp;
-    double ki;
-    double kd;
+    public static double kp = 0.009;
+    public static double ki = 0;
+    public static double kd = 0;
 //    public static double targetRotation = 180;
 
     PID pid;
@@ -69,7 +71,11 @@ public class Turret {
 
     }
     public double turretPID(double targetRotation){
-        return pid.calculatePIDValue(trueRotation, targetRotation);
+        double pidd = pid.calculatePIDValue(trueRotation+180, targetRotation);
+        opMode.telemetry.addData("pid", pidd);
+
+        return pidd;
+
     }
     public void setTurretFinalPosition(double targetRotation){
         //check if the turret is in limit and fix it
@@ -87,7 +93,8 @@ public class Turret {
         }
     }
     public double calculateTargetRotation() {
-        return -imu.getRobotYawPitchRollAngles().getYaw() -45;
+        return imu.getRobotYawPitchRollAngles().getYaw()+
+         Math.toDegrees(Math.atan2(opMode.gamepad1.left_stick_y, opMode.gamepad1.left_stick_x)) + 180;
     }
     public void turnWithCamera(){
         double erroretion = camera.returnBearing();
@@ -104,9 +111,8 @@ public class Turret {
         }
     }
     public void setTurretPosition(){
-        setTurretFinalPosition(calculateTargetRotation());
+        moveTurret(-turretPID(calculateTargetRotation()));
     }
-
 }
 
 

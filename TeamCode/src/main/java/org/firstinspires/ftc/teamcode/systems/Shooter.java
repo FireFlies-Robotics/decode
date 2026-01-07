@@ -15,11 +15,12 @@ import org.firstinspires.ftc.teamcode.systemTeleops.ShooterCheck;
 public class Shooter {
 
     PID pid;
-    public static double kp = 0.01;
-    public static double ki = 0.0000005;
-    public static double kd = 0.00;
+    public static double kp = 0.001;
+    public static double ki = 0.0;
+    public static double kd = 0.0;
 
-
+    public static double kF = 0.000135; // ← ערך התחלתי, נכוון בדשבורד
+    //todo find real KP
     private LinearOpMode opMode;
     public CRServo tunet;
     public CRServo houd;
@@ -62,17 +63,21 @@ public class Shooter {
         double velocity = leftShotingMotor.getVelocity();
 
         double shootingPID = pid.calculatePIDValue(targetVel ,velocity);
+        double ff = kF * targetVel;
+
         shootingPID = Math.max(-1, Math.min(shootingPID, 1));
-        setShotingPower(shootingPID + 0.8);
+        setShotingPower(shootingPID + ff);
 //        oldShootingPosition = rigtShotingMotor.getCurrentPosition()/28;
         lastTime = currentTime;
 
         opMode.telemetry.addData("velocity", velocity);
         opMode.telemetry.addData("kp", kp);
         opMode.telemetry.addData("ki", ki);
-        opMode.telemetry.addData("kd", kd);
+
+
         opMode.telemetry.addData("PID",shootingPID);
         TelemetryPacket packet = new TelemetryPacket();
+        packet.put("FF", ff);
         packet.put("Velocity", velocity);
         packet.put("TargetVel", targetVel);
         FtcDashboard.getInstance().sendTelemetryPacket(packet);

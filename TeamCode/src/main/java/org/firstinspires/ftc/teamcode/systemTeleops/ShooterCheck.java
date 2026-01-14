@@ -14,7 +14,7 @@ import org.intellij.lang.annotations.JdkConstants;
 
 
 public class ShooterCheck extends LinearOpMode {
-    public static double targetVel = 2000;
+    public static double targetVel = 1700;
 
     Shooter shooter;
     @Override

@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.systems;
 
 import com.acmerobotics.roadrunner.Pose2d;
+import com.acmerobotics.roadrunner.Vector2d;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -11,8 +12,10 @@ import com.qualcomm.robotcore.hardware.IMU;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.teamcode.MecanumDrive;
 import org.firstinspires.ftc.teamcode.ThreeDeadWheelLocalizer;
+import org.firstinspires.ftc.teamcode.Utils.AllianceColor;
 
 public class Wheels {
+    AllianceColor allianceColor;
     MecanumDrive drive;
     MecanumDrive.DriveLocalizer driveLocalizer;
 
@@ -86,7 +89,8 @@ public class Wheels {
 //        opMode.telemetry.addLine("rinnging");
 //    }
 
-    public Wheels(LinearOpMode opMode, IMU imu) {
+    public Wheels(LinearOpMode opMode, IMU imu, AllianceColor allianceColor){
+        this.allianceColor = allianceColor;
         this.opMode = opMode;
         this.imu = imu;
         this.imu = opMode.hardwareMap.get(IMU.class, "imu");
@@ -120,11 +124,52 @@ public class Wheels {
 
     }
     public Pose2d getEstimatedPose() {
+        localizer.update();
         return localizer.getPose();
+
     }
 
     public void updatePose() {
         localizer.update();
+    }
+
+    // הגדרת הנקודה הקבועה (למשל הפינה השמאלית העליונה)
+
+    Vector2d targetPoint;
+    public double getAbsoluteAngle() {
+        if (allianceColor == AllianceColor.BLUE){
+            targetPoint = new Vector2d(-65, 65);
+        }
+        else {
+            targetPoint = new Vector2d(65, 65);}
+
+
+        // מיקום הרובוט בשדה
+        Vector2d robotPosition = localizer.getPose().position;
+
+        // וקטור מהרובוט אל המטרה
+        Vector2d delta = targetPoint.minus(robotPosition);
+
+        // חישוב זווית אבסולוטית בשדה (רדיאנים)
+        double angleRad = Math.atan2(delta.y, delta.x);
+
+        // המרה למעלות
+        return Math.toDegrees(angleRad);
+    }
+    public double getDistanceFromGoal(){
+
+        if (allianceColor == AllianceColor.BLUE){
+            targetPoint = new Vector2d(-65, 65);
+        }
+        else {
+            targetPoint = new Vector2d(65, 65);}
+
+        // מיקום הרובוט בשדה
+        Vector2d robotPosition = localizer.getPose().position;
+
+        // וקטור מהרובוט אל המטרה
+        Vector2d delta = targetPoint.minus(robotPosition);
+        return Math.sqrt(Math.pow(delta.x, 2) + Math.pow(delta.y, 2));
     }
 
 

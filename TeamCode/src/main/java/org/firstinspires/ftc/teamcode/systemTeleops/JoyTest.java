@@ -44,8 +44,9 @@ public class JoyTest extends LinearOpMode {
         imu.resetYaw();
         turret = new Turret(this, imu);
         Pose2d startPose = new Pose2d(0, 0, 0);
-        wheels.localizer.setPose(startPose);
         wheels = new Wheels(this, imu);
+
+        wheels.localizer.setPose(startPose);
 
         waitForStart();
         while (opModeIsActive()) {

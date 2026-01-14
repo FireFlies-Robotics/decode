@@ -14,6 +14,7 @@ public class Turret {
 
     private IMU imu;
     Camera camera;
+    Wheels wheels;
 
     private final double MIN_TURRET_ANGLE = -400; //ToDo find real limits
     private final double MAX_TURRET_ANGLE = 400;
@@ -94,7 +95,8 @@ public class Turret {
     }
     public double calculateTargetRotation() {
         return imu.getRobotYawPitchRollAngles().getYaw()+
-         Math.toDegrees(Math.atan2(opMode.gamepad1.left_stick_y, opMode.gamepad1.left_stick_x)) + 180;
+//         Math.toDegrees(Math.atan2(opMode.gamepad1.left_stick_y, opMode.gamepad1.left_stick_x)) + 180;
+         wheels.getAbsoluteAngle();
     }
     public void turnWithCamera(){
         double erroretion = camera.returnBearing();

@@ -8,6 +8,8 @@ public class PID {
     private  double KP;
     private  double KI;      // <-- new integral gain (start small!)
     private  double KD;
+    public double kS, kV, kA = 0; // Feedforward
+
     // Optional tuning parameters
     private static double maxPower;
     private static double INTEGRAL_LIMIT; // anti-windup limit
@@ -28,7 +30,11 @@ public class PID {
         this.DEADZONE = DEADZONE;
         this.opMode = opMode;
     }
-
+    public void setKF(double kS,double kV,double kA){
+        this.kS = kS;
+        this.kV = kV;
+        this.kA = kA;
+    }
     public PID(double KP, double KI, double KD, LinearOpMode opMode, double maxPower){
         this.KP = KP;
         this.KI = KI;
@@ -58,8 +64,12 @@ public class PID {
         // Derivative term
         double derivative = (error - lastError) / dt;
 
+        double ff = kS * Math.signum(target)
+                + kV * target
+                + kA * position;
         // PID Control
-        double power = KP * error + KI * integralSum + KD * derivative;
+        double power = KP * error + KI * integralSum + KD * derivative + ff;
+
         opMode.telemetry.addData("power", power);
         opMode.telemetry.addData("max power", maxPower);
 

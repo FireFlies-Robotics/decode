@@ -19,7 +19,9 @@ public class Shooter {
     public static double ki = 0.0;
     public static double kd = 0.0;
 
-    public static double kF = 0.000135; // ← ערך התחלתי, נכוון בדשבורד
+
+
+    public static double kS, kV, kA = 0; // Feedforward
     //todo find real KP
     private LinearOpMode opMode;
     public CRServo tunet;
@@ -57,6 +59,7 @@ public class Shooter {
     }
     public void shooterPID(double targetVel){
         pid.setPID(kp,ki, kd);
+        pid.setKF(kS, kV, kA);
         double currentTime = opMode.getRuntime();
 //        double dt = currentTixme - lastTime;
 

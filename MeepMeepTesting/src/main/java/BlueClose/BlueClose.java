@@ -1,14 +1,10 @@
 package BlueClose;
 
-import static java.lang.Math.PI;
-
-import com.acmerobotics.roadrunner.Pose2d;
-import com.acmerobotics.roadrunner.Vector2d;
 import com.noahbres.meepmeep.MeepMeep;
 import com.noahbres.meepmeep.roadrunner.DefaultBotBuilder;
 import com.noahbres.meepmeep.roadrunner.entity.RoadRunnerBotEntity;
 
-import MeepMeep.coordinates.BlueCloseCoordinatesMeepMeep;
+import MeepMeep.coordinates.BlueCoordinates.BlueCloseCoordinatesMeepMeep;
 
 public class BlueClose {
     public static void main(String[] args) {
@@ -23,7 +19,16 @@ public class BlueClose {
                 .setTangent(Math.toRadians(45))
                 .splineToLinearHeading(BlueCloseCoordinatesMeepMeep.getFirstIntakeStart(), BlueCloseCoordinatesMeepMeep.getFirstIntakeStart().heading)
                 .splineToSplineHeading(BlueCloseCoordinatesMeepMeep.getFirstIntakeEnd(), BlueCloseCoordinatesMeepMeep.getFirstIntakeEnd().heading)
-                        .splineToLinearHeading(BlueCloseCoordinatesMeepMeep.getShooting(), BlueCloseCoordinatesMeepMeep.getShooting().heading)
+
+                //first intake
+
+                .strafeToLinearHeading(BlueCloseCoordinatesMeepMeep.getShooting().position, BlueCloseCoordinatesMeepMeep.getShooting().heading)
+                .waitSeconds(2)
+                //first shoot
+
+                .splineToLinearHeading(BlueCloseCoordinatesMeepMeep.getSecondIntakeStart(), BlueCloseCoordinatesMeepMeep.getSecondIntakeStart().heading)
+                .strafeToSplineHeading(BlueCloseCoordinatesMeepMeep.getSecondIntakeEnd().position, BlueCloseCoordinatesMeepMeep.getSecondIntakeEnd().heading)
+                .strafeToLinearHeading(BlueCloseCoordinatesMeepMeep.getShooting().position, BlueCloseCoordinatesMeepMeep.getShooting().heading)
                 .build());
 
         meepMeep.setBackground(MeepMeep.Background.FIELD_DECODE_JUICE_BLACK)

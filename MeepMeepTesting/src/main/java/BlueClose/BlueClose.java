@@ -5,10 +5,12 @@ import com.noahbres.meepmeep.roadrunner.DefaultBotBuilder;
 import com.noahbres.meepmeep.roadrunner.entity.RoadRunnerBotEntity;
 
 import MeepMeep.coordinates.BlueCoordinates.BlueCloseCoordinatesMeepMeep;
+import MeepMeep.coordinates.RedCoordinatesMeepMeep.RedCloseCoordinatesMeepMeep;
 
 public class BlueClose {
     public static void main(String[] args) {
         MeepMeep meepMeep = new MeepMeep(670);
+
 
         RoadRunnerBotEntity myBot = new DefaultBotBuilder(meepMeep)
                 // Set bot constraints: maxVel, maxAccel, maxAngVel, maxAngAccel, track width
@@ -16,6 +18,8 @@ public class BlueClose {
                 .build();
 
         myBot.runAction(myBot.getDrive().actionBuilder(BlueCloseCoordinatesMeepMeep.getStart())
+                .strafeTo(BlueCloseCoordinatesMeepMeep.getShooting().position)
+
                 .setTangent(Math.toRadians(45))
                 .splineToLinearHeading(BlueCloseCoordinatesMeepMeep.getFirstIntakeStart(), BlueCloseCoordinatesMeepMeep.getFirstIntakeStart().heading)
                 .splineToSplineHeading(BlueCloseCoordinatesMeepMeep.getFirstIntakeEnd(), BlueCloseCoordinatesMeepMeep.getFirstIntakeEnd().heading)

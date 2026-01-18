@@ -26,6 +26,7 @@ public class RedClose {
                 myBot.getDrive().actionBuilder(
                                 RedCloseCoordinatesMeepMeep.getStart()
                         )
+                        .strafeTo(RedCloseCoordinatesMeepMeep.getShooting().position)
                         .setTangent(Math.toRadians(45))
                         .splineToLinearHeading(
                                 RedCloseCoordinatesMeepMeep.getFirstIntakeStart(),

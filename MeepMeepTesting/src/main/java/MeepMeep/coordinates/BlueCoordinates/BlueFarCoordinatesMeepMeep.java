@@ -4,11 +4,12 @@ import com.acmerobotics.roadrunner.Pose2d;
 
 public class BlueFarCoordinatesMeepMeep {
 
-    private static final double startX = -50;
-    private static final double startY = -50;
-    private static final double startPoseHeading = Math.toRadians(234);
+    private static final double startX = 60.5;
 
-    private static final double firstIntakeStartX = -12.5;
+    private static final double startY = -13.6;
+    private static final double startPoseHeading = Math.toRadians(180);
+
+    private static final double firstIntakeStartX = -10.5;
     private static final double intakeStartY = -35;
     private static final double secondIntakeX = 11.5;
 
@@ -16,9 +17,9 @@ public class BlueFarCoordinatesMeepMeep {
     private static final double intakeSEndY = -50;
 
 
-    private static final double shootingX = -20;
-    private static final double shootingY = -15;
-    private static final double shootingHeading = Math.toRadians(225);
+    private static final double shootingX = 57;
+    private static final double shootingY = -10;
+    private static final double shootingHeading = Math.toRadians(200);
 
 
 

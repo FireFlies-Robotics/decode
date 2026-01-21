@@ -1,11 +1,10 @@
-package BlueClose;
+package BlueC;
 
 import com.noahbres.meepmeep.MeepMeep;
 import com.noahbres.meepmeep.roadrunner.DefaultBotBuilder;
 import com.noahbres.meepmeep.roadrunner.entity.RoadRunnerBotEntity;
 
 import MeepMeep.coordinates.BlueCoordinates.BlueCloseCoordinatesMeepMeep;
-import MeepMeep.coordinates.RedCoordinatesMeepMeep.RedCloseCoordinatesMeepMeep;
 
 public class BlueClose {
     public static void main(String[] args) {

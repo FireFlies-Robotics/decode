@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.systemTeleops;
 
+import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -11,6 +12,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.teamcode.systems.Turret;
 
 @TeleOp(name = "Turret Control1", group = "TeleOp")
+@Config
 //@Disabled
 public class TurretTeleop extends LinearOpMode {
     Turret turret;
@@ -19,11 +21,13 @@ public class TurretTeleop extends LinearOpMode {
 
     IMU imu;
     double sensorVoltage;
+    public static double position;
 
     int targetTurretAngle = 270;
     @Override
     public void runOpMode() {
         // Initialize the intake system
+//        turret.init();
 
 
 //        telemetry.addLine("Initialized — Ready to start");
@@ -48,7 +52,9 @@ public class TurretTeleop extends LinearOpMode {
 
             sensorVoltage = analogInput.getVoltage();
             telemetry.addData( "analog input sensor", sensorVoltage);
-            turret.moveTurret(gamepad1.left_stick_x);
+
+//            turret.moveTurret(gamepad1.left_stick_x);
+            turret.moveTurret(turret.turretPID(position));
 //            turret.moveTurret(gamepad2.right_stick_x);
                 // If square (X) button is pressed, run intake
 
@@ -56,7 +62,8 @@ public class TurretTeleop extends LinearOpMode {
 
 
 //            telemetry.addData("Turret power", turret.rightTurret.getPower());
-//            turret.updateTurretServoRotation();
+            turret.updateTurretServoRotation();
+
             telemetry.update();
         }
     }

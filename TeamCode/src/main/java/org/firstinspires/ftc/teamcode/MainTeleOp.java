@@ -127,15 +127,15 @@ public class MainTeleOp extends LinearOpMode {
             else{shooter.shooterPID(targetVelocity);}
 //            shooter.setShotingPower(shootoingPower);
             if (gamepad1.dpad_up) {
-                hood.setPosition(Hood.UP);
-                selectedVelocity = 1700;
+                hood.setPosition(Hood.DOWN);
+                selectedVelocity = 1640;
             }
 
             if (gamepad1.dpad_down) {
-                hood.setPosition(Hood.DOWN);
-                selectedVelocity = 1230;
+                hood.setPosition(Hood.UP);
+                selectedVelocity = 1300;
             }
-            if (shooter.leftShotingMotor.getVelocity() > (selectedVelocity - 10)){
+            if (shooter.leftShotingMotor.getVelocity() > (selectedVelocity - 50)){
                 gamepad1.rumble(100);
             }
 

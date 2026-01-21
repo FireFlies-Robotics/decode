@@ -43,6 +43,7 @@ public class Turret {
         turretAnalog = opMode.hardwareMap.get(AnalogInput.class, "turretAnalog");
 
 
+
     }
     public void init() {
         turretOldPos = getRotationOfInput(turretAnalog);
@@ -78,9 +79,10 @@ public class Turret {
         opMode.telemetry.addData("current rotation" ,currentRotation);
         opMode.telemetry.addData("rottion", trueRotation);
 
+
     }
     public double turretPID(double targetRotation){
-        double pidd = pid.calculatePIDValue(trueRotation +180, targetRotation);
+        double pidd = -pid.calculatePIDValue(trueRotation +180, targetRotation);
         opMode.telemetry.addData("pid", pidd);
 
         return pidd;

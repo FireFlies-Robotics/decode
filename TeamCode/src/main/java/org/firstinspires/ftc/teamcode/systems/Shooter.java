@@ -8,6 +8,7 @@ import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
     import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.VoltageSensor;
 
 import org.firstinspires.ftc.teamcode.Utils.PID;
 import org.firstinspires.ftc.teamcode.systemTeleops.ShooterCheck;
@@ -15,13 +16,13 @@ import org.firstinspires.ftc.teamcode.systemTeleops.ShooterCheck;
 public class Shooter {
 
     PID pid;
-    public static double kp = 0.0001;
+    public static double kp = 0.001;
     public static double ki = 0.0;
     public static double kd = 0.00002;
 
 
 
-    public static double kS = 0.032, kV = 0.000184, kA = 0.000004; // Feedforward
+    public static double kS = 0.042, kV = 0.000184, kA = 0.000004; // Feedforward
     //todo find real KP
     private LinearOpMode opMode;
     public CRServo tunet;
@@ -38,7 +39,7 @@ public class Shooter {
 
     double lastVelocity = 0;
 
-
+    VoltageSensor voltage;
 
     ShooterCheck shooterCheck;
 
@@ -49,6 +50,7 @@ public class Shooter {
         //     tunet = opMode.hardwareMap.get(CRServo.class, "tunet");
         leftShotingMotor = opMode.hardwareMap.get(DcMotorEx.class, "leftShootingMotor");
         rigtShotingMotor = opMode.hardwareMap.get(DcMotorEx.class, "rightShootingMotor");
+//        voltage = opMode.hardwareMap.voltageSensor.iterator().next().getVoltage();
         rigtShotingMotor.setDirection(DcMotorSimple.Direction.REVERSE);
         //   feywhed = opMode.hardwareMap.get(DcMotor.class, "feywhed");
     }
@@ -74,12 +76,12 @@ public class Shooter {
                 kA * (velocity - lastVelocity) / (currentTime - lastTime);
 
         shootingPID = Math.max(-1, Math.min(shootingPID, 1));
-        setShotingPower(shootingPID + ff
-        );
+        setShotingPower((shootingPID + ff));
 //        oldShootingPosition = rigtShotingMotor.getCurrentPosition()/28;
         lastTime = currentTime;
         lastVelocity = velocity;
 
+        opMode.telemetry.addData("velocity", velocity);
         opMode.telemetry.addData("velocity", velocity);
         opMode.telemetry.addData("kp", kp);
         opMode.telemetry.addData("ki", ki);

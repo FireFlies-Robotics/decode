@@ -109,14 +109,11 @@ public class Wheels {
         frontRight = opMode.hardwareMap.get(DcMotor.class, "rightFront");
         backLeft = opMode.hardwareMap.get(DcMotor.class, "leftBack");
         backRight = opMode.hardwareMap.get(DcMotor.class, "rightBack");
-        imu = opMode.hardwareMap.get(IMU.class, "imu");
-
         frontLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         frontRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         backLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         backRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-
-        backRight.setDirection(DcMotorSimple.Direction.REVERSE);
+//        backRight.setDirection(DcMotorSimple.Direction.REVERSE);
         frontRight.setDirection(DcMotorSimple.Direction.REVERSE);
 
         localizer = new ThreeDeadWheelLocalizer(opMode.hardwareMap, 168, new Pose2d(0,0,0));

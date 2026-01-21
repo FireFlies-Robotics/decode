@@ -36,6 +36,7 @@ public class Shooter {
 
     double lastTime = 0;
 
+    double lastVelocity = 0;
 
 
 
@@ -65,13 +66,19 @@ public class Shooter {
 
         double velocity = leftShotingMotor.getVelocity();
 
+
         double shootingPID = pid.calculatePIDValue(targetVel ,velocity);
-        double ff = kF * targetVel;
+        double ff =
+                kS * Math.signum(targetVel) +
+                kV * targetVel +
+                kA * (velocity - lastVelocity) / (currentTime - lastTime);
 
         shootingPID = Math.max(-1, Math.min(shootingPID, 1));
-        setShotingPower(shootingPID + ff);
+        setShotingPower(shootingPID + ff
+        );
 //        oldShootingPosition = rigtShotingMotor.getCurrentPosition()/28;
         lastTime = currentTime;
+        lastVelocity = velocity;
 
         opMode.telemetry.addData("velocity", velocity);
         opMode.telemetry.addData("kp", kp);
@@ -80,7 +87,7 @@ public class Shooter {
 
         opMode.telemetry.addData("PID",shootingPID);
         TelemetryPacket packet = new TelemetryPacket();
-        packet.put("FF", ff);
+//        packet.put("FF", ff);
         packet.put("Velocity", velocity);
         packet.put("TargetVel", targetVel);
         FtcDashboard.getInstance().sendTelemetryPacket(packet);

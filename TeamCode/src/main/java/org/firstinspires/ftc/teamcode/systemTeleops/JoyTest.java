@@ -10,6 +10,7 @@ import com.qualcomm.robotcore.hardware.AnalogInput;
 import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.teamcode.Utils.AllianceColor;
 import org.firstinspires.ftc.teamcode.systems.Hood;
 import org.firstinspires.ftc.teamcode.systems.Intake;
 import org.firstinspires.ftc.teamcode.systems.Shooter;
@@ -44,26 +45,29 @@ public class JoyTest extends LinearOpMode {
         imu.resetYaw();
         turret = new Turret(this, imu);
         Pose2d startPose = new Pose2d(0, 0, 0);
-        wheels = new Wheels(this, imu);
+        wheels = new Wheels(this, imu, AllianceColor.BLUE);
 
         wheels.localizer.setPose(startPose);
-
+        turret.init();
         waitForStart();
         while (opModeIsActive()) {
-            telemetry.addData("angle", Math.toDegrees(Math.atan2(gamepad1.left_stick_y, gamepad1.left_stick_x)) + 180);
+
+            telemetry.addData("joystick angle", Math.toDegrees(Math.atan2(gamepad1.left_stick_y, gamepad1.left_stick_x)) + 180);
             telemetry.addData("calculated angle", turret.calculateTargetRotation());
             telemetry.addData("imu", imu.getRobotYawPitchRollAngles().getYaw());
-            wheels.updatePose();
-            Pose2d pose = wheels.getEstimatedPose();
-            telemetry.addData("X", pose.position.x);
-            telemetry.addData("Y", pose.position.y);
-            telemetry.addData("Heading", Math.toDegrees(pose.heading.toDouble()));
-            telemetry.update();
-
-
-            turret.setTurretPosition();
+//            turret.turretPID(turret.calculateTargetRotation());
+//            wheels.updatePose();
+//            Pose2d pose = wheels.getEstimatedPose();
+//            telemetry.addData("X", pose.position.x);
+//            telemetry.addData("Y", pose.position.y);
+//            telemetry.addData("Heading", Math.toDegrees(pose.heading.toDouble()));
             turret.updateTurretServoRotation();
+
             telemetry.update();
+
+//
+            turret.setTurretPosition();
+//            telemetry.update();
         }
     }
 }

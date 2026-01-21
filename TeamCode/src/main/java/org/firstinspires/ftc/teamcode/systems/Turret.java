@@ -15,6 +15,9 @@ public class Turret {
     private IMU imu;
     Camera camera;
     Wheels wheels;
+    private double turretOldPos = 0;
+    private double trueRotation = 0;
+
 
     private final double MIN_TURRET_ANGLE = -400; //ToDo find real limits
     private final double MAX_TURRET_ANGLE = 400;
@@ -24,8 +27,7 @@ public class Turret {
     public CRServo rightTurret;
     public CRServo leftTurret;
     public AnalogInput turretAnalog ;
-    private double turretOldPos;
-    private double trueRotation;
+
     public static double kp = 0.009;
     public static double ki = 0;
     public static double kd = 0;
@@ -42,6 +44,11 @@ public class Turret {
 
 
     }
+    public void init() {
+        turretOldPos = getRotationOfInput(turretAnalog);
+        trueRotation = turretOldPos;
+    }
+
     public void moveTurret(double power) {
         rightTurret.setPower(power);
         leftTurret.setPower(power);
@@ -68,11 +75,12 @@ public class Turret {
         }
         turretOldPos = currentRotation;
         trueRotation += diff;
+        opMode.telemetry.addData("current rotation" ,currentRotation);
         opMode.telemetry.addData("rottion", trueRotation);
 
     }
     public double turretPID(double targetRotation){
-        double pidd = pid.calculatePIDValue(trueRotation+180, targetRotation);
+        double pidd = pid.calculatePIDValue(trueRotation +180, targetRotation);
         opMode.telemetry.addData("pid", pidd);
 
         return pidd;
@@ -94,9 +102,9 @@ public class Turret {
         }
     }
     public double calculateTargetRotation() {
-        return imu.getRobotYawPitchRollAngles().getYaw()+
-//         Math.toDegrees(Math.atan2(opMode.gamepad1.left_stick_y, opMode.gamepad1.left_stick_x)) + 180;
-         wheels.getAbsoluteAngle();
+        return //imu.getRobotYawPitchRollAngles().getYaw()+
+         Math.toDegrees(Math.atan2(opMode.gamepad1.left_stick_y, opMode.gamepad1.left_stick_x)) + 180;
+//         wheels.getAbsoluteAngle();
     }
     public void turnWithCamera(){
         double erroretion = camera.returnBearing();

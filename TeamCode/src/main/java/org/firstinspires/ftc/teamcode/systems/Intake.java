@@ -17,7 +17,7 @@ public class Intake {
     public Intake(LinearOpMode opMode) {
         this.opMode = opMode;
         intakeMotor = opMode.hardwareMap.get(DcMotor.class, "intakeMotor");
-        intakeMotor.setDirection(DcMotorSimple.Direction.REVERSE);
+//        intakeMotor.setDirection(DcMotorSimple.Direction.REVERSE);
 
 //        transferServo = opMode.hardwareMap.get(Servo.class, "transferServo");
 

@@ -11,7 +11,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.teamcode.systems.Turret;
 
 @TeleOp(name = "Turret Control1", group = "TeleOp")
-@Disabled
+//@Disabled
 public class TurretTeleop extends LinearOpMode {
     Turret turret;
 
@@ -26,36 +26,37 @@ public class TurretTeleop extends LinearOpMode {
         // Initialize the intake system
 
 
-        telemetry.addLine("Initialized — Ready to start");
-        telemetry.update();
+//        telemetry.addLine("Initialized — Ready to start");
+//        telemetry.update();
         analogInput = hardwareMap.get(AnalogInput.class, "turretAnalog");
-        imu = hardwareMap.get(IMU.class, "imu");
-        imu.initialize(new IMU.Parameters(new RevHubOrientationOnRobot(
-                RevHubOrientationOnRobot.LogoFacingDirection.UP,
-                RevHubOrientationOnRobot.UsbFacingDirection.FORWARD)));
-        imu.resetYaw();
+
+//        imu = hardwareMap.get(IMU.class, "imu");
+//        imu.initialize(new IMU.Parameters(new RevHubOrientationOnRobot(
+//                RevHubOrientationOnRobot.LogoFacingDirection.UP,
+//                RevHubOrientationOnRobot.UsbFacingDirection.FORWARD)));
+//        imu.resetYaw();
         turret = new Turret(this, imu);
 
         // Wait for the start button
         waitForStart();
 
         while (opModeIsActive()) {
-            double robotHeading = imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.DEGREES);
-            double turretTarget = targetTurretAngle - robotHeading;
+//            double robotHeading = imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.DEGREES);
+//            double turretTarget = targetTurretAngle - robotHeading;
 
-            turret.turretPID(turretTarget);
+//            turret.turretPID(turretTarget);
 
             sensorVoltage = analogInput.getVoltage();
             telemetry.addData( "analog input sensor", sensorVoltage);
-
+            turret.moveTurret(gamepad1.left_stick_x);
 //            turret.moveTurret(gamepad2.right_stick_x);
                 // If square (X) button is pressed, run intake
 
                 // If square (X) butt  on is pressed, run intake
 
 
-            telemetry.addData("Turret power", turret.rightTurret.getPower());
-            turret.updateTurretServoRotation();
+//            telemetry.addData("Turret power", turret.rightTurret.getPower());
+//            turret.updateTurretServoRotation();
             telemetry.update();
         }
     }

@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.teamcode.Utils.AllianceColor;
 import org.firstinspires.ftc.teamcode.systems.Hood;
 import org.firstinspires.ftc.teamcode.systems.Intake;
 import org.firstinspires.ftc.teamcode.systems.Shooter;
@@ -36,7 +37,7 @@ public class FarAutoOp extends LinearOpMode {
         intake = new Intake(this);
         transfer = new Transfer(this);
         shooter = new Shooter(this);
-        wheels = new Wheels(this, imu);
+        wheels = new Wheels(this, imu, AllianceColor.BLUE);
         hood =  new Hood(this);
         telemetry.addData("Status", "Initialized");
         telemetry.addData("Speed", "Waiting to start");

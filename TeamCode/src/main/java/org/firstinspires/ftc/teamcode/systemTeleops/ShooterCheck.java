@@ -10,11 +10,11 @@ import org.intellij.lang.annotations.JdkConstants;
 
 @TeleOp(name = "shooter Control", group = "TeleOp")
 @Config
-@Disabled
+//@Disabled
 
 
 public class ShooterCheck extends LinearOpMode {
-    public static double targetVel = 1700;
+    public static double targetVel = 2000;
 
     Shooter shooter;
     @Override
@@ -24,6 +24,16 @@ public class ShooterCheck extends LinearOpMode {
         waitForStart();
         while (opModeIsActive()){
             shooter.shooterPID(targetVel);
+            if (gamepad1.triangle){targetVel = 2000;}
+            if (gamepad1.cross){targetVel = 1000;}
+            if (gamepad1.circle){targetVel = 1500;}
+
+            if (gamepad1.square){
+                shooter.setShotingPower(0);}
+
+
+
+
 
         }
     }

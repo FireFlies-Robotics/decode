@@ -15,13 +15,13 @@ import org.firstinspires.ftc.teamcode.systemTeleops.ShooterCheck;
 public class Shooter {
 
     PID pid;
-    public static double kp = 0.001;
+    public static double kp = 0.0001;
     public static double ki = 0.0;
-    public static double kd = 0.0;
+    public static double kd = 0.00002;
 
 
 
-    public static double kS, kV, kA = 0; // Feedforward
+    public static double kS = 0.032, kV = 0.000184, kA = 0.000004; // Feedforward
     //todo find real KP
     private LinearOpMode opMode;
     public CRServo tunet;
@@ -90,6 +90,8 @@ public class Shooter {
 //        packet.put("FF", ff);
         packet.put("Velocity", velocity);
         packet.put("TargetVel", targetVel);
+
+
         FtcDashboard.getInstance().sendTelemetryPacket(packet);
 
 

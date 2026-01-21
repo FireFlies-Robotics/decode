@@ -8,7 +8,8 @@ public class PID {
     private  double KP;
     private  double KI;      // <-- new integral gain (start small!)
     private  double KD;
-    public double kS, kV, kA = 0; // Feedforward
+    public double kS = 0.05
+            , kV, kA = 0; // Feedforward
 
     // Optional tuning parameters
     private static double maxPower;

@@ -84,7 +84,7 @@ public class MainTeleOp extends LinearOpMode {
                 intake.activateIntake(1.0); // full power intake
             } else if (gamepad1.square){
                 transfer.setTransferPower(-1);
-                intake.activateIntake(-4);
+                intake.activateIntake(-1);
             }else {
                 intake.activateIntake(0); // stop when not pressed
             }// --- Shooter toggle on left bumper ---

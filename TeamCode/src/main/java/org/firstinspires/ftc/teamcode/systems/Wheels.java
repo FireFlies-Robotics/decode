@@ -177,7 +177,8 @@ public class Wheels {
         double rotX = x * Math.cos(-yaw) - y * Math.sin(-yaw);
         double rotY = x * Math.sin(-yaw) + y * Math.cos(-yaw);
 
-        rotX = rotX * 1.1;  // Counteract imperfect strafing
+        rotX = rotX * 1.1
+        ;  // Counteract imperfect strafing
 
         // Denominator is the largest motor power (absolute value) or 1
         // This ensures all the powers maintain the same ratio,

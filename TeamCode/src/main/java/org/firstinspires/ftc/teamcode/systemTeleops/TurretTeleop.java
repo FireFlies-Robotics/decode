@@ -22,50 +22,52 @@ public class TurretTeleop extends LinearOpMode {
     IMU imu;
     double sensorVoltage;
     public static double position;
+    public static double angleToFix = 0;
 
     int targetTurretAngle = 270;
     @Override
     public void runOpMode() {
-        // Initialize the intake system
-//        turret.init();
-
-
-//        telemetry.addLine("Initialized — Ready to start");
-//        telemetry.update();
         analogInput = hardwareMap.get(AnalogInput.class, "turretAnalog");
+        imu = hardwareMap.get(IMU.class, "imu");
+        imu.initialize(new IMU.Parameters(new RevHubOrientationOnRobot(
+                RevHubOrientationOnRobot.LogoFacingDirection.LEFT,
+                RevHubOrientationOnRobot.UsbFacingDirection.UP)));
+        imu.resetYaw();
 
-//        imu = hardwareMap.get(IMU.class, "imu");
-//        imu.initialize(new IMU.Parameters(new RevHubOrientationOnRobot(
-//                RevHubOrientationOnRobot.LogoFacingDirection.UP,
-//                RevHubOrientationOnRobot.UsbFacingDirection.FORWARD)));
-//        imu.resetYaw();
+        // ADD THESE DEBUG LINES BEFORE CREATING TURRET
+        telemetry.addData("Sensor Voltage", analogInput.getVoltage());
+        telemetry.addData("Max Voltage", analogInput.getMaxVoltage());
+        telemetry.addData("Calculated Angle", (analogInput.getVoltage() / analogInput.getMaxVoltage()) * 360);
+        telemetry.update();
+//        sleep(3000); // Give you time to read it
+
         turret = new Turret(this, imu);
+        turret.init();
 
-        // Wait for the start button
         waitForStart();
 
         while (opModeIsActive()) {
-//            double robotHeading = imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.DEGREES);
-//            double turretTarget = targetTurretAngle - robotHeading;
+            double stickMagnitude = Math.hypot(gamepad1.left_stick_x, gamepad1.left_stick_y);
 
-//            turret.turretPID(turretTarget);
+            // ALSO ADD IN LOOP
+//            telemetry.addData("LIVE Sensor Voltage", analogInput.getVoltage());
+//            telemetry.addData("LIVE Max Voltage", analogInput.getMaxVoltage());
 
-            sensorVoltage = analogInput.getVoltage();
-            telemetry.addData( "analog input sensor", sensorVoltage);
-
-//            turret.moveTurret(gamepad1.left_stick_x);
-            turret.moveTurret(turret.turretPID(position));
-//            turret.moveTurret(gamepad2.right_stick_x);
-                // If square (X) button is pressed, run intake
-
-                // If square (X) butt  on is pressed, run intake
-
-
-//            telemetry.addData("Turret power", turret.rightTurret.getPower());
             turret.updateTurretServoRotation();
+//            if (gamepad1.triangle){
+                turret.setTurretFinalPosition();
+//            }
+//                turret.moveTurret(turret.turretPID(turret.calculateTargetRotation()));}
+            if (gamepad1.cross) {turret.moveTurret(gamepad1.right_stick_x * 0.5);}
+//            turret.moveTurret(gamepad1.left_stick_x);
+            telemetry.addData("Turret Rotation", turret.getTurretRotation());
+            telemetry.addData("calculated Rotation", turret.calculateTargetRotation());
+            telemetry.addData("joystick Rotation", gamepad1.left_stick_x);
 
+            telemetry.addData("imu", imu.getRobotYawPitchRollAngles().getYaw());
+
+            telemetry.addData("Target", position);
             telemetry.update();
         }
     }
 }
-

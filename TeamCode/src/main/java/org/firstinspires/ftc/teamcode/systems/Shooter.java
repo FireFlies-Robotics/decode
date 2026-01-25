@@ -22,7 +22,7 @@ public class Shooter {
 
 
 
-    public static double kS = 0.042, kV = 0.000184, kA = 0.000004; // Feedforward
+    public static double kS = 0.042, kV = 0.0002 , kA = 0.000004; // Feedforward
     //todo find real KP
     private LinearOpMode opMode;
     public CRServo tunet;

@@ -115,7 +115,7 @@ public class Turret {
 
     public double calculateTargetRotation() {
         double joystickAngle = Math.toDegrees(Math.atan2(opMode.gamepad1.left_stick_y, opMode.gamepad1.left_stick_x));
-        double robotHeading = imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.DEGREES) + 180;
+        double robotHeading = imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.DEGREES) ;
         opMode.telemetry.addData("joystickAngle", joystickAngle);
         return (robotHeading +
                 joystickAngle + 180);

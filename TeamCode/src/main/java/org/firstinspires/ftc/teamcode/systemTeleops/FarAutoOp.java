@@ -51,11 +51,11 @@ public class FarAutoOp extends LinearOpMode {
         runtime.reset();
 
         while (opModeIsActive()) {
-            hood.setPosition(Hood.UP);
+            hood.setPosition(Hood.DOWN);
             if(runtime.time() < 7) {
                 shooter.shooterPID(1700);
             }
-            if(shooter.leftShotingMotor.getVelocity() > 1680) {
+            if(shooter.leftShotingMotor.getVelocity() > 1650) {
                 intake.activateIntake(1);
                 transfer.setTransferPower(1);
             }
@@ -64,7 +64,11 @@ public class FarAutoOp extends LinearOpMode {
             } else {
                 wheels.driveForwordByPower(0);
             }
-            telemetry.addData("shooting power", shooter.leftShotingMotor.getPower());
+            telemetry.addData("shooting power left", shooter.leftShotingMotor.getPower());
+            telemetry.addData("shooting power right", shooter.rigtShotingMotor.getPower());
+
+
+            telemetry.addData("left velocity", shooter.leftShotingMotor.getVelocity());
             telemetry.update();
         }
     }

@@ -28,7 +28,6 @@ public class CloseAutoOp extends LinearOpMode {
 
     Hood hood;
 
-
     @Override
     public void runOpMode() {
         runtime.reset();
@@ -48,28 +47,32 @@ public class CloseAutoOp extends LinearOpMode {
         imu.resetYaw();
         shooter.setShotingPower(0);
 
-        runtime.reset();
 
 
         waitForStart();
 
+        runtime.reset();
         while (opModeIsActive()) {
-            hood.setPosition(Hood.DOWN);
+            hood.setPosition(Hood.UP);
 
 
-            if(runtime.time() < 6){
-                wheels.driveForwordByPower(-.4);
+            if(runtime.time() < 3){
+                wheels.driveForwordByPower(-.23);
             }
-            if (runtime.time() > 6){
-                shooter.shooterPID(1300);
-                if(shooter.leftShotingMotor.getVelocity() > 1275) {
+            else wheels.driveForwordByPower(0);
+            if (runtime.time() > 4 && runtime.time() < 10){
+                shooter.shooterPID(1200);
+                if(shooter.leftShotingMotor.getVelocity() > 1170) {
                     intake.activateIntake(1);
                     transfer.setTransferPower(1);
                 }
             }
-            if (runtime.time() > 13 && runtime.time() < 16){
+            if (runtime.time() > 13 && runtime.time() < 15){
+                intake.activateIntake(0);
+                transfer.setTransferPower(0);
                 shooter.setShotingPower(0);
-//                wheels.driveForwordByPower(-.4);
+                wheels.driveForwordByPower(0.5);
+                wheels.driveLeftByPower(-0.65);
 
             }
         }

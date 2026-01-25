@@ -339,9 +339,9 @@ public class Wheels {
     }
 
     public void driveLeftByPower(double power){
-        backRight.setPower(power);
+        backRight.setPower(-power);
         backLeft.setPower(power);
         frontRight.setPower(power);
-        frontLeft.setPower(power);
+        frontLeft.setPower(-power);
     }
 }

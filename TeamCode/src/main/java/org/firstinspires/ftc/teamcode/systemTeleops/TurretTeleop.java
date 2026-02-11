@@ -51,7 +51,7 @@ public class TurretTeleop extends LinearOpMode {
         waitForStart();
 
         while (opModeIsActive()) {
-            double stickMagnitude = Math.hypot(gamepad1.left_stick_x, gamepad1.left_stick_y);
+//            double stickMagnitude = Math.hypot(gamepad1.left_stick_x, gamepad1.left_stick_y);
 
             // ALSO ADD IN LOOP
 //            telemetry.addData("LIVE Sensor Voltage", analogInput.getVoltage());
@@ -60,7 +60,7 @@ public class TurretTeleop extends LinearOpMode {
 //            turret.updateTurretServoRotation();
 
 //            if (gamepad1.triangle){
-            turret.trunTurretWithCamera();
+            turret.turnWithCamera();
             telemetry.update();
         }
     }

@@ -37,9 +37,14 @@ public class Turret {
     public static double kd = 0.0003;
 
     PID pid;
+    public static double smallkp = 0.0085;
+    public static double smallki = 0;
+    public static double smallkd = 0.0003;
+    PID smallpid;
 
     public Turret(LinearOpMode opMode, IMU imu, Camera camera) {
         pid = new PID(kp, ki, kd, opMode, 1);
+        smallpid = new PID(smallkp, smallki, smallkd, opMode ,1);
         this.camera = camera;
 
         this.imu = imu;
@@ -51,6 +56,7 @@ public class Turret {
     }
 
     public void init() {
+
         // Just read the current position with offset applied
         turretOldPos = getRotationOfInput();
 
@@ -102,17 +108,17 @@ public class Turret {
         return pidd;
     }
 
-    public void setTurretFinalPosition() {
-        if (calculateTargetRotation() > MAX_TURRET_ANGLE) {
-            setTurretPositionWithOffset(-360);
-        }
-        else if (calculateTargetRotation() < MIN_TURRET_ANGLE) {
-            setTurretPositionWithOffset(360);
-        }
-        else {
-            setTurretPosition();
-        }
-    }
+//    public void setTurretFinalPosition() {
+//        if (calculateTargetRotation() > MAX_TURRET_ANGLE) {
+//            setTurretPositionWithOffset(-360);
+//        }
+//        else if (calculateTargetRotation() < MIN_TURRET_ANGLE) {
+//            setTurretPositionWithOffset(360);
+//        }
+//        else {
+//            setTurretPosition();
+//        }
+//    }
 
     public double calculateTargetRotation() {
         double joystickAngle = Math.toDegrees(Math.atan2(opMode.gamepad1.left_stick_y, opMode.gamepad1.left_stick_x));
@@ -121,39 +127,56 @@ public class Turret {
         return (robotHeading +
                 joystickAngle + 180);
     }
-
+    double pos =0;
     public void turnWithCamera() {
         pid.setPID(kp, ki, kd);
+        smallpid.setPID(smallkp, smallki, smallkd);
         double erroretion = camera.returnBearing();
+        opMode.telemetry.addData("bearing", camera.returnBearing());
+        opMode.telemetry.addData("angle", getRotationOfInput());
+        opMode.telemetry.addData("errotation", erroretion);
+
+
         if (erroretion != -999) {
             double poweretion = -pid.calculatePIDValue(erroretion, 0);
             leftTurret.setPower(poweretion);
             rightTurret.setPower(poweretion);
+            pos = getRotationOfInput();
         }
-        else {
-            double toZero = -pid.calculatePIDValue(getRotationOfInput(), 0);
-            leftTurret.setPower(toZero);
-            rightTurret.setPower(toZero);
+//        else {
+//            leftTurret.setPower(0);
+//            rightTurret.setPower(0);}
+        if (leftTurret.getPower() > 0.1) {
+            double power = -smallpid.calculatePIDValue(getTurretRotation(), pos);
+            leftTurret.setPower(power);
+            rightTurret.setPower(power);
         }
-    }
 
-    public void setTurretPosition() {
-        moveTurret(-turretPID(calculateTargetRotation()));
+//        else {
+//            double toZero = -pid.calculatePIDValue(getRotationOfInput(), 0);
+//            leftTurret.setPower(toZero);
+//            rightTurret.setPower(toZero);
+//        }
     }
-
-    public void setTurretPositionWithOffset(double offset) {
-        moveTurret(-turretPID(calculateTargetRotation()+ offset));
-    }
-    public void trunTurretWithCamera(){
-        opMode.telemetry.addData("raw input", getRotationOfInput());
-        opMode.telemetry.addData("turret rotation finale", turretRotation);
-
-        pid.setPID(kp, ki, kd);
-        if (getRotationOfInput() <= 60 && getRotationOfInput()>= -60){
-            turnWithCamera();
-        }
-        else {
-
-        }
-    }
+//
+//    public void setTurretPosition() {
+//        moveTurret(-turretPID(calculateTargetRotation()));
+//    }
+//
+//    public void setTurretPositionWithOffset(double offset) {
+//        moveTurret(-turretPID(calculateTargetRotation()+ offset));
+////    }
+//    public void trunTurretWithCamera(){
+//        opMode.telemetry.addData("raw input", getRotationOfInput());
+//        opMode.telemetry.addData("turret rotation finale", turretRotation);
+//
+////        pid.setPID(kp, ki, kd);
+////        if (getRotationOfInput() <= 60 && getRotationOfInput()>= -60){
+//            turnWithCamera();
+////        }
+//        else {
+//            double toZero = -pid.calculatePIDValue(getRotationOfInput(), 0);
+//            leftTurret.setPower(toZero);
+//            rightTurret.setPower(toZero);
+////        }
 }

@@ -9,6 +9,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
     import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.VoltageSensor;
+import com.qualcomm.robotcore.hardware.VoltageSensor;
 
 import org.firstinspires.ftc.teamcode.Utils.PID;
 import org.firstinspires.ftc.teamcode.systemTeleops.ShooterCheck;
@@ -16,13 +17,13 @@ import org.firstinspires.ftc.teamcode.systemTeleops.ShooterCheck;
 public class Shooter {
 
     PID pid;
-    public static double kp = 0.001;
+    public static double kp = 0.0009;
     public static double ki = 0.0;
-    public static double kd = 0.00002;
+    public static double kd = 0.00005;
 
 
 
-    public static double kS = 0.042, kV = 0.0002 , kA = 0.000004; // Feedforward
+            public static double kS = 0.1, kV = 0.000139 , kA = 0.0000055; // Feedforward
     //todo find real KP
     private LinearOpMode opMode;
     public CRServo tunet;
@@ -34,12 +35,11 @@ public class Shooter {
 //    public static double TARGRT_VEL = 5000;
 
     private double oldShootingPosition;
-
+    private VoltageSensor voltageSensor;
     double lastTime = 0;
 
     double lastVelocity = 0;
 
-    VoltageSensor voltage;
 
     ShooterCheck shooterCheck;
 
@@ -50,8 +50,10 @@ public class Shooter {
         //     tunet = opMode.hardwareMap.get(CRServo.class, "tunet");
         leftShotingMotor = opMode.hardwareMap.get(DcMotorEx.class, "leftShootingMotor");
         rigtShotingMotor = opMode.hardwareMap.get(DcMotorEx.class, "rightShootingMotor");
-//        voltage = opMode.hardwareMap.voltageSensor.iterator().next().getVoltage();
         rigtShotingMotor.setDirection(DcMotorSimple.Direction.REVERSE);
+        leftShotingMotor.setDirection(DcMotorSimple.Direction.FORWARD);
+
+        voltageSensor = opMode.hardwareMap.voltageSensor.iterator().next();
         //   feywhed = opMode.hardwareMap.get(DcMotor.class, "feywhed");
     }
     //    public void
@@ -61,6 +63,9 @@ public class Shooter {
 
     }
     public void shooterPID(double targetVel){
+        double voltage = (voltageSensor !=null) ? voltageSensor.getVoltage() : 12.0;
+        if (voltage <=0.0){voltage = 12.0;}
+
         pid.setPID(kp,ki, kd);
         pid.setKF(kS, kV, kA);
         double currentTime = opMode.getRuntime();
@@ -70,10 +75,13 @@ public class Shooter {
 
 
         double shootingPID = pid.calculatePIDValue(targetVel ,velocity);
-        double ff =
+
+        double ff =(
                 kS * Math.signum(targetVel) +
-                kV * targetVel +
-                kA * (velocity - lastVelocity) / (currentTime - lastTime);
+                        kV * targetVel +
+                        kA * (velocity - lastVelocity) / (currentTime - lastTime)) *12/voltage;
+
+
 
         shootingPID = Math.max(-1, Math.min(shootingPID, 1));
         setShotingPower((shootingPID + ff));
@@ -95,9 +103,14 @@ public class Shooter {
 
 
         FtcDashboard.getInstance().sendTelemetryPacket(packet);
-
-
 //        opMode.telemetry.update();
-
     }
+
+//    private double calculateFF(){
+//        double voltage = (voltageSensor != null)
+//                ? voltageSensor.getVoltage() : 12.0;
+//        if (voltage <= 0){
+//            voltage = 12.0;
+//            return  ff *12/voltage}
+//    }
 }

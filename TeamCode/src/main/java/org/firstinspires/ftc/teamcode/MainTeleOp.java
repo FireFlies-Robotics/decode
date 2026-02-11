@@ -9,11 +9,11 @@ import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.Utils.AllianceColor;
+import org.firstinspires.ftc.teamcode.systems.Camera;
 import org.firstinspires.ftc.teamcode.systems.Hood;
 import org.firstinspires.ftc.teamcode.systems.Intake;
 import org.firstinspires.ftc.teamcode.systems.Transfer;
 import org.firstinspires.ftc.teamcode.systems.Shooter;
-import org.firstinspires.ftc.teamcode.systems.Turret;
 import org.firstinspires.ftc.teamcode.systems.Wheels;
 
 @TeleOp(name = "MainTeleOp", group = "Test")
@@ -38,9 +38,12 @@ public class MainTeleOp extends LinearOpMode {
     public static double shootoingPower = 0;
 
     public static int selectedVelocity = 1245;  // hood decides this
+    public static int farVelocity = 1550;
+    public static int closeVelocity = 1220;
     int targetVelocity = 0;       // shooterPID uses this
     // Time that runs since the program began running
     private ElapsedTime runtime = new ElapsedTime();
+    Camera camera;
     @Override
     public void runOpMode() {
 
@@ -56,6 +59,7 @@ public class MainTeleOp extends LinearOpMode {
         telemetry.addData("Status", "Initialized");
         telemetry.addData("Speed", "Waiting to start");
         telemetry.update();
+
         runtime.reset();
         imu.resetYaw();
         boolean shootingOn = false;
@@ -99,13 +103,13 @@ public class MainTeleOp extends LinearOpMode {
 //                    telemetry.addData("a", 1);
 //                } else {
 //                    shooter.shooterPID(0);      // turn off
-//                    telemetry.addData("a", 0);
+//          h          telemetry.addData("a", 0);
 //                }
 //            }
 
 // Always update previous state based on the button, not shooter state
 
-            if (gamepad1.right_bumper){
+            if (gamepad1.right_bumper && shooter.leftShotingMotor.getVelocity() >= (targetVelocity -40)){
                 transfer.setTransferPower(1);
             }
 
@@ -128,16 +132,18 @@ public class MainTeleOp extends LinearOpMode {
 //            shooter.setShotingPower(shootoingPower);
             if (gamepad1.dpad_up) {
                 hood.setPosition(Hood.DOWN);
-                selectedVelocity = 1640;
+                selectedVelocity = farVelocity;
             }
 
             if (gamepad1.dpad_down) {
                 hood.setPosition(Hood.UP);
-                selectedVelocity = 1300;
+                selectedVelocity = closeVelocity;
             }
-            if (shooter.leftShotingMotor.getVelocity() > (selectedVelocity - 50)){
+            if (shooter.leftShotingMotor.getVelocity() >= (selectedVelocity - 40)){
                 gamepad1.rumble(100);
             }
+            if (gamepad1.triangle){transfer.setTransferPower(1);}
+            if (gamepad1.cross){transfer.setTransferPower(-1);}
 
             telemetry.addData("target velocity", targetVelocity);
 

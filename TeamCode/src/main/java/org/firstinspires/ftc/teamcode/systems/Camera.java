@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.systems;
 
+import com.acmerobotics.dashboard.FtcDashboard;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
@@ -12,9 +13,11 @@ import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
 import java.util.List;
 
 public class Camera {
+    FtcDashboard dashboard;
     OpMode opMode;
     public Camera(OpMode opMode){
         this.opMode = opMode;
+        initAprilTag();
     }
     private AprilTagProcessor aprilTag;
     private VisionPortal visionPortal;
@@ -32,8 +35,11 @@ public class Camera {
         // Set and enable the processor.
         builder.addProcessor(aprilTag);
 
+
         // Build the Vision Portal, using the above settings.
         visionPortal = builder.build();
+        FtcDashboard.getInstance().startCameraStream(visionPortal, 0);
+
     }   // end method initAprilTag()
     public double returnBearing() {
 

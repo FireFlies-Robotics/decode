@@ -1,7 +1,9 @@
 package org.firstinspires.ftc.teamcode.systems;
 
+import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.hardware.bosch.BNO055IMU;
+import com.qualcomm.hardware.limelightvision.Limelight3A;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.AnalogInput;
 import com.qualcomm.robotcore.hardware.CRServo;
@@ -19,7 +21,7 @@ public class Turret {
     Wheels wheels;
 
     // Fixed offset you can tune in FTC Dashboard
-    public static double SENSOR_ZERO_OFFSET = 10;
+    public static double SENSOR_ZERO_OFFSET = 146;
 
     private double turretOldPos = 0;
     private double turretRotation = 0;
@@ -37,9 +39,9 @@ public class Turret {
     public static double kd = 0.0003;
 
     PID pid;
-    public static double smallkp = 0.0085;
+    public static double smallkp = 0.045;
     public static double smallki = 0;
-    public static double smallkd = 0.0003;
+    public static double smallkd = 0.0004;
     PID smallpid;
 
     public Turret(LinearOpMode opMode, IMU imu, Camera camera) {
@@ -61,15 +63,19 @@ public class Turret {
         turretOldPos = getRotationOfInput();
 
         turretRotation = 0; // We say this is zero
-
+//        FtcDashboard.getInstance().startCameraStream();
         opMode.telemetry.addData("Sensor at Init", turretOldPos);
         opMode.telemetry.addLine("Make sure turret is at ZERO position!");
         opMode.telemetry.update();
     }
 
     // Get sensor reading with optional fixed offset
-    private double getRotationOfInput() {
+    public double getRotationOfInput() {
+        opMode.telemetry.addData("Sensor Voltage", turretAnalog.getVoltage());
+        opMode.telemetry.addData("Max Voltage", turretAnalog.getMaxVoltage());
+        opMode.telemetry.addData("Calculated Angle", (turretAnalog.getVoltage() / turretAnalog.getMaxVoltage()));
         return ((turretAnalog.getVoltage() / turretAnalog.getMaxVoltage()) * 360) - SENSOR_ZERO_OFFSET;
+
     }
 
     public double getTurretRotation() {
@@ -103,9 +109,13 @@ public class Turret {
     public double turretPID(double targetRotation) {
         pid.setPID(kp, ki, kd);
 
-        double pidd = pid.calculatePIDValue(turretRotation+180, targetRotation);
+        double pidd = -pid.calculatePIDValue(getRotationOfInput(), targetRotation);
         opMode.telemetry.addData("PID Output", pidd);
         return pidd;
+    }
+
+    public void setTurretPosition(double target) {
+        moveTurret(turretPID(target));
     }
 
 //    public void setTurretFinalPosition() {
@@ -120,6 +130,7 @@ public class Turret {
 //        }
 //    }
 
+
     public double calculateTargetRotation() {
         double joystickAngle = Math.toDegrees(Math.atan2(opMode.gamepad1.left_stick_y, opMode.gamepad1.left_stick_x));
         double robotHeading = imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.DEGREES) ;
@@ -131,26 +142,47 @@ public class Turret {
     public void turnWithCamera() {
         pid.setPID(kp, ki, kd);
         smallpid.setPID(smallkp, smallki, smallkd);
-        double erroretion = camera.returnBearing();
-        opMode.telemetry.addData("bearing", camera.returnBearing());
+        double erroretion = camera.getBearingToTag20();
+        opMode.telemetry.addData("bearing", camera.getBearingToTag20());
         opMode.telemetry.addData("angle", getRotationOfInput());
         opMode.telemetry.addData("errotation", erroretion);
-
-
-        if (erroretion != -999) {
-            double poweretion = -pid.calculatePIDValue(erroretion, 0);
-            leftTurret.setPower(poweretion);
-            rightTurret.setPower(poweretion);
-            pos = getRotationOfInput();
+//
+//
+        if (getRotationOfInput() <= -50){
+            moveTurret(turretPID(-40));
         }
+
+        else if (getRotationOfInput() >= 50){
+            moveTurret(turretPID(40));
+        }
+        else
+        if (erroretion != -999) {
+
+            if (Math.abs(erroretion) > 3){
+                double poweretion = pid.calculatePIDValue(erroretion, 0);
+                leftTurret.setPower(poweretion);
+                rightTurret.setPower(poweretion);
+                pos = getRotationOfInput();
+            }
+            else  if (Math.abs(erroretion) < 3){
+                double power = -smallpid.calculatePIDValue(getRotationOfInput(), pos);
+                leftTurret.setPower(power);
+                rightTurret.setPower(power);
+//            else {
+////            if (Math.abs(erroretion) > 3){
+            }
+        }
+        else {moveTurret(0);}
+
+//            }
+
+//        }
+//        else {
+//            moveTurret(turretPID(0));
+//        }
 //        else {
 //            leftTurret.setPower(0);
 //            rightTurret.setPower(0);}
-        if (leftTurret.getPower() > 0.1) {
-            double power = -smallpid.calculatePIDValue(getTurretRotation(), pos);
-            leftTurret.setPower(power);
-            rightTurret.setPower(power);
-        }
 
 //        else {
 //            double toZero = -pid.calculatePIDValue(getRotationOfInput(), 0);
@@ -158,10 +190,7 @@ public class Turret {
 //            rightTurret.setPower(toZero);
 //        }
     }
-//
-//    public void setTurretPosition() {
-//        moveTurret(-turretPID(calculateTargetRotation()));
-//    }
+
 //
 //    public void setTurretPositionWithOffset(double offset) {
 //        moveTurret(-turretPID(calculateTargetRotation()+ offset));

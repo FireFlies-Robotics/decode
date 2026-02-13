@@ -10,8 +10,10 @@ import com.qualcomm.robotcore.hardware.AnalogInput;
 import com.qualcomm.robotcore.hardware.IMU;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.teamcode.Utils.AllianceColor;
 import org.firstinspires.ftc.teamcode.systems.Camera;
 import org.firstinspires.ftc.teamcode.systems.Turret;
+import org.firstinspires.ftc.teamcode.systems.Wheels;
 
 @TeleOp(name = "Turret Control1", group = "TeleOp")
 @Config
@@ -23,6 +25,7 @@ public class TurretTeleop extends LinearOpMode {
 
     IMU imu;
     Camera camera;
+    Wheels wheels;
     double sensorVoltage;
     public static double position;
     public static double angleToFix = 0;
@@ -46,11 +49,20 @@ public class TurretTeleop extends LinearOpMode {
 //        sleep(3000); // Give you time to read it
         camera = new Camera(this);
         turret = new Turret(this, imu, camera);
+        wheels = new Wheels(this, imu, AllianceColor.BLUE);
         turret.init();
+
 
         waitForStart();
 
         while (opModeIsActive()) {
+//            if (gamepad1.cross){
+//                wheels.driveForwordByPower(-0.5);
+//            }
+//            else if (gamepad1.triangle){
+//                wheels.driveForwordByPower(0.5);
+//            }
+//            else {wheels.driveForwordByPower(0);}
 //            double stickMagnitude = Math.hypot(gamepad1.left_stick_x, gamepad1.left_stick_y);
 
             // ALSO ADD IN LOOP
@@ -60,7 +72,19 @@ public class TurretTeleop extends LinearOpMode {
 //            turret.updateTurretServoRotation();
 
 //            if (gamepad1.triangle){
-            turret.turnWithCamera();
+//            turret.turnWithCamera();
+            telemetry.addData("turretRotation" ,turret.getTurretRotation());
+
+//            turret.moveTurret(gamepad1.right_stick_x);
+            turret.getRotationOfInput();
+            if (gamepad1.dpad_down){
+                turret.moveTurret(gamepad1.right_stick_x/7);
+            }else {
+            turret.turnWithCamera();}
+//            turret.moveTurret(gamepad1.right_stick_x);
+//            turret.setTurretPosition(position);
+
+            telemetry.addData("raw rotation" ,turret.getRotationOfInput());
             telemetry.update();
         }
     }

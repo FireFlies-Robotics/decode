@@ -5,10 +5,12 @@ import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.AnalogInput;
 import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.Utils.AllianceColor;
+import org.firstinspires.ftc.teamcode.systems.Camera;
 import org.firstinspires.ftc.teamcode.systems.Hood;
 import org.firstinspires.ftc.teamcode.systems.Intake;
 import org.firstinspires.ftc.teamcode.systems.Transfer;
@@ -24,6 +26,12 @@ public class MainTeleOp extends LinearOpMode {
 //    public static double targetVel = 2000;
 
     // Declare variables you will be using throughout this class here
+
+    Turret turret;
+
+    AnalogInput analogInput;
+
+    Camera camera;
     Wheels wheels;
     IMU imu; // Declare class for getting robot angles
     Transfer transfer;
@@ -38,12 +46,15 @@ public class MainTeleOp extends LinearOpMode {
     public static double shootoingPower = 0;
 
     public static int selectedVelocity = 1245;  // hood decides this
+    public static int farVelocity = 1600;
+    public static int closeVelocity = 1220;
     int targetVelocity = 0;       // shooterPID uses this
     // Time that runs since the program began running
     private ElapsedTime runtime = new ElapsedTime();
     @Override
     public void runOpMode() {
 
+        analogInput = hardwareMap.get(AnalogInput.class, "turretAnalog");
 
         // Runs when init is pressed. Initialize variables and pregame logic here
         imu = hardwareMap.get(IMU.class, "imu");
@@ -51,11 +62,14 @@ public class MainTeleOp extends LinearOpMode {
         transfer = new Transfer(this);
         shooter = new Shooter(this);
         wheels = new Wheels(this, imu, AllianceColor.BLUE);
-
+        camera = new Camera(this);
+        turret = new Turret(this, imu, camera);
+        turret.init();
         hood =  new Hood(this);
         telemetry.addData("Status", "Initialized");
         telemetry.addData("Speed", "Waiting to start");
         telemetry.update();
+
         runtime.reset();
         imu.resetYaw();
         boolean shootingOn = false;
@@ -99,13 +113,18 @@ public class MainTeleOp extends LinearOpMode {
 //                    telemetry.addData("a", 1);
 //                } else {
 //                    shooter.shooterPID(0);      // turn off
-//                    telemetry.addData("a", 0);
+//          h          telemetry.addData("a", 0);
 //                }
 //            }
 
 // Always update previous state based on the button, not shooter state
+            turret.turnWithCamera();
+//            turret.moveTurret(gamepad1.right_stick_x);
+//            turret.setTurretPosition(position);
 
-            if (gamepad1.right_bumper){
+        telemetry.addData("raw rotation" ,turret.getRotationOfInput());
+
+        if (gamepad1.right_bumper && shooter.leftShotingMotor.getVelocity() >= (targetVelocity -40)){
                 transfer.setTransferPower(1);
             }
 
@@ -128,16 +147,18 @@ public class MainTeleOp extends LinearOpMode {
 //            shooter.setShotingPower(shootoingPower);
             if (gamepad1.dpad_up) {
                 hood.setPosition(Hood.DOWN);
-                selectedVelocity = 1640;
+                selectedVelocity = farVelocity;
             }
 
             if (gamepad1.dpad_down) {
                 hood.setPosition(Hood.UP);
-                selectedVelocity = 1300;
+                selectedVelocity = closeVelocity;
             }
-            if (shooter.leftShotingMotor.getVelocity() > (selectedVelocity - 50)){
+            if (shooter.leftShotingMotor.getVelocity() >= (selectedVelocity - 40)){
                 gamepad1.rumble(100);
             }
+            if (gamepad1.triangle){transfer.setTransferPower(1);}
+            if (gamepad1.cross){transfer.setTransferPower(-1);}
 
             telemetry.addData("target velocity", targetVelocity);
 

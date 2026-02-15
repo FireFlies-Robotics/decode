@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.systems;
 
 import com.acmerobotics.roadrunner.Pose2d;
 import com.acmerobotics.roadrunner.Vector2d;
+import com.arcrobotics.ftclib.kinematics.wpilibkinematics.MecanumDriveOdometry;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -18,6 +19,8 @@ public class Wheels {
     AllianceColor allianceColor;
     MecanumDrive drive;
     MecanumDrive.DriveLocalizer driveLocalizer;
+
+//    MecanumDriveOdometry
 
 
     public static final double TICKS_PER_ROTATION = 3611.2; // נמדד על ידי סיבוב הרובוט 20 פעם
@@ -177,7 +180,7 @@ public class Wheels {
         double rotX = x * Math.cos(-yaw) - y * Math.sin(-yaw);
         double rotY = x * Math.sin(-yaw) + y * Math.cos(-yaw);
 
-        rotX = rotX * 1.1
+        rotX = rotX * 1.2
         ;  // Counteract imperfect strafing
 
         // Denominator is the largest motor power (absolute value) or 1

@@ -1,56 +1,52 @@
 package org.firstinspires.ftc.teamcode.systems;
 
+import com.acmerobotics.dashboard.FtcDashboard;
+import com.qualcomm.hardware.limelightvision.LLResult;
+import com.qualcomm.hardware.limelightvision.LLResultTypes;
+import com.qualcomm.hardware.limelightvision.Limelight3A;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
-import com.qualcomm.robotcore.hardware.HardwareMap;
-
-import org.firstinspires.ftc.robotcore.external.hardware.camera.BuiltinCameraDirection;
-import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
-import org.firstinspires.ftc.vision.VisionPortal;
-import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
-import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
 
 import java.util.List;
 
 public class Camera {
-    OpMode opMode;
-    public Camera(OpMode opMode){
+
+    private final Limelight3A limelight;
+    private final OpMode opMode;  // needed for telemetry
+
+    public Camera(OpMode opMode) {
         this.opMode = opMode;
+        limelight = opMode.hardwareMap.get(Limelight3A.class, "limelight");
+
+        limelight.pipelineSwitch(0); // choose the correct pipeline
+        limelight.start();           // REQUIRED for getLatestResult() to work
     }
-    private AprilTagProcessor aprilTag;
-    private VisionPortal visionPortal;
 
-    private void initAprilTag() {
+    /**
+     * Returns the bearing (horizontal angle) to tag 20.
+     * Returns -999 if no valid tag 20 is detected.
+     */
+    public double getBearingToTag20() {
+        LLResult result = limelight.getLatestResult();
 
-        // Create the AprilTag processor.
-        aprilTag = new AprilTagProcessor.Builder().build();
+        if (result == null || !result.isValid()) {
+            return -999;
+        }
 
-        // Create the vision portal by using a builder.
-        VisionPortal.Builder builder = new VisionPortal.Builder();
+        List<LLResultTypes.FiducialResult> tags = result.getFiducialResults();
 
-        // Set the camera (webcam vs. built-in RC phone camera).
-        builder.setCamera(opMode.hardwareMap.get(WebcamName.class, "Webcam 1"));
-        // Set and enable the processor.
-        builder.addProcessor(aprilTag);
-
-        // Build the Vision Portal, using the above settings.
-        visionPortal = builder.build();
-    }   // end method initAprilTag()
-    public double returnBearing() {
-
-        List<AprilTagDetection> currentDetections = aprilTag.getDetections();
-        opMode.telemetry.addData("# AprilTags Detected", currentDetections.size());
-
-        // Step through the list of detections and display info for each one.
-        for (AprilTagDetection detection : currentDetections) {
-            if (detection.id == 20){
-                opMode.telemetry.addLine("tag found");
-                return detection.ftcPose.bearing;
-
+        for (LLResultTypes.FiducialResult tag : tags) {
+            if (tag.getFiducialId() == 20) {
+                double bearing = tag.getTargetXDegrees();
+                opMode.telemetry.addData("Tag 20 Bearing", bearing);
+                return bearing;
             }
-        }   // end for() loop
-         return -999;
+        }
 
-    }   // end method telemetryAprilTag()
+        opMode.telemetry.addData("Tag 20 Bearing", "Not Detected");
+        return -999;
+    }
 
-
+    public void stop() {
+        limelight.stop();
+    }
 }

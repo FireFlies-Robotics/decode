@@ -11,8 +11,10 @@ import org.intellij.lang.annotations.JdkConstants;
 public class Hood {
 
 
-    public static double UP = 0;
-    public static double DOWN = 0.22;
+    public static double UP = 0.7;
+
+
+    public static double DOWN = 1;
 
 
     public Hood(LinearOpMode opMode){

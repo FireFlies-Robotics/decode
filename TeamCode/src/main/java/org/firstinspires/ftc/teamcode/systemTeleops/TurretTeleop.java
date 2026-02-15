@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.systemTeleops;
 
+import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
@@ -9,7 +10,10 @@ import com.qualcomm.robotcore.hardware.AnalogInput;
 import com.qualcomm.robotcore.hardware.IMU;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.teamcode.Utils.AllianceColor;
+import org.firstinspires.ftc.teamcode.systems.Camera;
 import org.firstinspires.ftc.teamcode.systems.Turret;
+import org.firstinspires.ftc.teamcode.systems.Wheels;
 
 @TeleOp(name = "Turret Control1", group = "TeleOp")
 @Config
@@ -20,6 +24,8 @@ public class TurretTeleop extends LinearOpMode {
     AnalogInput analogInput;
 
     IMU imu;
+    Camera camera;
+    Wheels wheels;
     double sensorVoltage;
     public static double position;
     public static double angleToFix = 0;
@@ -34,39 +40,51 @@ public class TurretTeleop extends LinearOpMode {
                 RevHubOrientationOnRobot.UsbFacingDirection.UP)));
         imu.resetYaw();
 
+
         // ADD THESE DEBUG LINES BEFORE CREATING TURRET
         telemetry.addData("Sensor Voltage", analogInput.getVoltage());
         telemetry.addData("Max Voltage", analogInput.getMaxVoltage());
         telemetry.addData("Calculated Angle", (analogInput.getVoltage() / analogInput.getMaxVoltage()) * 360);
         telemetry.update();
 //        sleep(3000); // Give you time to read it
-
-        turret = new Turret(this, imu);
+        camera = new Camera(this);
+        turret = new Turret(this, imu, camera);
+        wheels = new Wheels(this, imu, AllianceColor.BLUE);
         turret.init();
+
 
         waitForStart();
 
         while (opModeIsActive()) {
-            double stickMagnitude = Math.hypot(gamepad1.left_stick_x, gamepad1.left_stick_y);
+//            if (gamepad1.cross){
+//                wheels.driveForwordByPower(-0.5);
+//            }
+//            else if (gamepad1.triangle){
+//                wheels.driveForwordByPower(0.5);
+//            }
+//            else {wheels.driveForwordByPower(0);}
+//            double stickMagnitude = Math.hypot(gamepad1.left_stick_x, gamepad1.left_stick_y);
 
             // ALSO ADD IN LOOP
 //            telemetry.addData("LIVE Sensor Voltage", analogInput.getVoltage());
 //            telemetry.addData("LIVE Max Voltage", analogInput.getMaxVoltage());
 
-            turret.updateTurretServoRotation();
+//            turret.updateTurretServoRotation();
+
 //            if (gamepad1.triangle){
-                turret.setTurretFinalPosition();
-//            }
-//                turret.moveTurret(turret.turretPID(turret.calculateTargetRotation()));}
-            if (gamepad1.cross) {turret.moveTurret(gamepad1.right_stick_x * 0.5);}
-//            turret.moveTurret(gamepad1.left_stick_x);
-            telemetry.addData("Turret Rotation", turret.getTurretRotation());
-            telemetry.addData("calculated Rotation", turret.calculateTargetRotation());
-            telemetry.addData("joystick Rotation", gamepad1.left_stick_x);
+//            turret.turnWithCamera();
+            telemetry.addData("turretRotation" ,turret.getTurretRotation());
 
-            telemetry.addData("imu", imu.getRobotYawPitchRollAngles().getYaw());
+//            turret.moveTurret(gamepad1.right_stick_x);
+            turret.getRotationOfInput();
+            if (gamepad1.dpad_down){
+                turret.moveTurret(gamepad1.right_stick_x/7);
+            }else {
+            turret.turnWithCamera();}
+//            turret.moveTurret(gamepad1.right_stick_x);
+//            turret.setTurretPosition(position);
 
-            telemetry.addData("Target", position);
+            telemetry.addData("raw rotation" ,turret.getRotationOfInput());
             telemetry.update();
         }
     }

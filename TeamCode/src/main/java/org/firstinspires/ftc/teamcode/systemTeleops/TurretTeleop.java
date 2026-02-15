@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.systemTeleops;
 
+import com.acmerobotics.dashboard.FtcDashboard;
+import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -8,55 +10,82 @@ import com.qualcomm.robotcore.hardware.AnalogInput;
 import com.qualcomm.robotcore.hardware.IMU;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.teamcode.Utils.AllianceColor;
+import org.firstinspires.ftc.teamcode.systems.Camera;
 import org.firstinspires.ftc.teamcode.systems.Turret;
+import org.firstinspires.ftc.teamcode.systems.Wheels;
 
 @TeleOp(name = "Turret Control1", group = "TeleOp")
-@Disabled
+@Config
+//@Disabled
 public class TurretTeleop extends LinearOpMode {
     Turret turret;
 
     AnalogInput analogInput;
 
     IMU imu;
+    Camera camera;
+    Wheels wheels;
     double sensorVoltage;
+    public static double position;
+    public static double angleToFix = 0;
 
     int targetTurretAngle = 270;
     @Override
     public void runOpMode() {
-        // Initialize the intake system
-        turret = new Turret(this);
-
-
-        telemetry.addLine("Initialized — Ready to start");
-        telemetry.update();
         analogInput = hardwareMap.get(AnalogInput.class, "turretAnalog");
         imu = hardwareMap.get(IMU.class, "imu");
         imu.initialize(new IMU.Parameters(new RevHubOrientationOnRobot(
-                RevHubOrientationOnRobot.LogoFacingDirection.UP,
-                RevHubOrientationOnRobot.UsbFacingDirection.FORWARD)));
+                RevHubOrientationOnRobot.LogoFacingDirection.LEFT,
+                RevHubOrientationOnRobot.UsbFacingDirection.UP)));
         imu.resetYaw();
-        // Wait for the start button
+
+
+        // ADD THESE DEBUG LINES BEFORE CREATING TURRET
+        telemetry.addData("Sensor Voltage", analogInput.getVoltage());
+        telemetry.addData("Max Voltage", analogInput.getMaxVoltage());
+        telemetry.addData("Calculated Angle", (analogInput.getVoltage() / analogInput.getMaxVoltage()) * 360);
+        telemetry.update();
+//        sleep(3000); // Give you time to read it
+        camera = new Camera(this);
+        turret = new Turret(this, imu, camera);
+        wheels = new Wheels(this, imu, AllianceColor.BLUE);
+        turret.init();
+
+
         waitForStart();
 
         while (opModeIsActive()) {
-            double robotHeading = imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.DEGREES);
-            double turretTarget = targetTurretAngle - robotHeading;
+//            if (gamepad1.cross){
+//                wheels.driveForwordByPower(-0.5);
+//            }
+//            else if (gamepad1.triangle){
+//                wheels.driveForwordByPower(0.5);
+//            }
+//            else {wheels.driveForwordByPower(0);}
+//            double stickMagnitude = Math.hypot(gamepad1.left_stick_x, gamepad1.left_stick_y);
 
-            turret.turretPID(turretTarget);
+            // ALSO ADD IN LOOP
+//            telemetry.addData("LIVE Sensor Voltage", analogInput.getVoltage());
+//            telemetry.addData("LIVE Max Voltage", analogInput.getMaxVoltage());
 
-            sensorVoltage = analogInput.getVoltage();
-            telemetry.addData( "analog input sensor", sensorVoltage);
+//            turret.updateTurretServoRotation();
 
-//            turret.moveTurret(gamepad2.right_stick_x);
-                // If square (X) button is pressed, run intake
+//            if (gamepad1.triangle){
+//            turret.turnWithCamera();
+            telemetry.addData("turretRotation" ,turret.getTurretRotation());
 
-                // If square (X) butt  on is pressed, run intake
+//            turret.moveTurret(gamepad1.right_stick_x);
+            turret.getRotationOfInput();
+            if (gamepad1.dpad_down){
+                turret.moveTurret(gamepad1.right_stick_x/7);
+            }else {
+            turret.turnWithCamera();}
+//            turret.moveTurret(gamepad1.right_stick_x);
+//            turret.setTurretPosition(position);
 
-
-            telemetry.addData("Turret power", turret.rightTurret.getPower());
-            turret.updateTurretServoRotation();
+            telemetry.addData("raw rotation" ,turret.getRotationOfInput());
             telemetry.update();
         }
     }
 }
-

@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.systems;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
 public class Transfer {
     private LinearOpMode opMode;
@@ -9,7 +10,7 @@ public class Transfer {
     public Transfer(LinearOpMode opMode) {
         this.opMode = opMode;
         transferMotor = opMode.hardwareMap.get(DcMotor.class, "transferMotor");
-//        transferMotor.setDirection(DcMotorSimple.Direction.REVERSE);
+        transferMotor.setDirection(DcMotorSimple.Direction.REVERSE);
     }
 
     public void setTransferPower(double power){

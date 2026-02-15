@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.teamcode.Utils.AllianceColor;
 import org.firstinspires.ftc.teamcode.systems.Hood;
 import org.firstinspires.ftc.teamcode.systems.Intake;
 import org.firstinspires.ftc.teamcode.systems.Shooter;
@@ -36,7 +37,7 @@ public class FarAutoOp extends LinearOpMode {
         intake = new Intake(this);
         transfer = new Transfer(this);
         shooter = new Shooter(this);
-        wheels = new Wheels(this, imu);
+        wheels = new Wheels(this, imu, AllianceColor.BLUE);
         hood =  new Hood(this);
         telemetry.addData("Status", "Initialized");
         telemetry.addData("Speed", "Waiting to start");
@@ -50,11 +51,11 @@ public class FarAutoOp extends LinearOpMode {
         runtime.reset();
 
         while (opModeIsActive()) {
-            hood.setPosition(Hood.UP);
+            hood.setPosition(Hood.DOWN);
             if(runtime.time() < 7) {
                 shooter.shooterPID(1700);
             }
-            if(shooter.leftShotingMotor.getVelocity() > 1680) {
+            if(shooter.leftShotingMotor.getVelocity() > 1650) {
                 intake.activateIntake(1);
                 transfer.setTransferPower(1);
             }
@@ -63,7 +64,11 @@ public class FarAutoOp extends LinearOpMode {
             } else {
                 wheels.driveForwordByPower(0);
             }
-            telemetry.addData("shooting power", shooter.leftShotingMotor.getPower());
+            telemetry.addData("shooting power left", shooter.leftShotingMotor.getPower());
+            telemetry.addData("shooting power right", shooter.rigtShotingMotor.getPower());
+
+
+            telemetry.addData("left velocity", shooter.leftShotingMotor.getVelocity());
             telemetry.update();
         }
     }

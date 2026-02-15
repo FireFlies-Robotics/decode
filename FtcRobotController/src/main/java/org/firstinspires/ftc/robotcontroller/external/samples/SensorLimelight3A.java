@@ -67,7 +67,7 @@ import java.util.List;
  *   below the name of the Limelight on the top level configuration screen.
  */
 @TeleOp(name = "Sensor: Limelight3A", group = "Sensor")
-@Disabled
+//@Disabled
 public class SensorLimelight3A extends LinearOpMode {
 
     private Limelight3A limelight;
@@ -110,6 +110,7 @@ public class SensorLimelight3A extends LinearOpMode {
                 telemetry.addData("Parse Latency", parseLatency);
                 telemetry.addData("PythonOutput", java.util.Arrays.toString(result.getPythonOutput()));
 
+
                 telemetry.addData("tx", result.getTx());
                 telemetry.addData("txnc", result.getTxNC());
                 telemetry.addData("ty", result.getTy());
@@ -123,6 +124,9 @@ public class SensorLimelight3A extends LinearOpMode {
                     telemetry.addData("Barcode", "Data: %s", br.getData());
                 }
 
+                if (result != null && result.isValid()) {
+                    double bearing = result.getTx();
+                }
                 // Access classifier results
                 List<LLResultTypes.ClassifierResult> classifierResults = result.getClassifierResults();
                 for (LLResultTypes.ClassifierResult cr : classifierResults) {

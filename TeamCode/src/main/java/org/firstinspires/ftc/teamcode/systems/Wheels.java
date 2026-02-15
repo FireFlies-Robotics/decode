@@ -1,14 +1,27 @@
 package org.firstinspires.ftc.teamcode.systems;
 
+import com.acmerobotics.roadrunner.Pose2d;
+import com.acmerobotics.roadrunner.Vector2d;
+import com.arcrobotics.ftclib.kinematics.wpilibkinematics.MecanumDriveOdometry;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.IMU;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.teamcode.MecanumDrive;
+import org.firstinspires.ftc.teamcode.ThreeDeadWheelLocalizer;
+import org.firstinspires.ftc.teamcode.Utils.AllianceColor;
 
 public class Wheels {
+    AllianceColor allianceColor;
+    MecanumDrive drive;
+    MecanumDrive.DriveLocalizer driveLocalizer;
+
+//    MecanumDriveOdometry
+
 
     public static final double TICKS_PER_ROTATION = 3611.2; // נמדד על ידי סיבוב הרובוט 20 פעם
 
@@ -23,6 +36,9 @@ public class Wheels {
     private final DcMotor backLeft;
     private final DcMotor backRight;
 
+    public ThreeDeadWheelLocalizer localizer;
+
+
     private final LinearOpMode opMode; // The opmode used to get the wheels
     public IMU imu; // Gyros used to get the robots rotation
 
@@ -36,47 +52,48 @@ public class Wheels {
         this.maxSpeed = maxSpeed;
     }
 
-    public Wheels(LinearOpMode opMode) {
-        this.opMode = opMode;
+//    public Wheels(LinearOpMode opMode) {
+//        this.opMode = opMode;
+//
+//        // Retrieve the IMU from the hardware map
+//        this.imu = opMode.hardwareMap.get(IMU.class, "imu");
+//        // Adjust the orientation parameters to match your robot
+//        IMU.Parameters parameters = new IMU.Parameters(new RevHubOrientationOnRobot(
+//                RevHubOrientationOnRobot.LogoFacingDirection.LEFT ,
+//                RevHubOrientationOnRobot.UsbFacingDirection.UP));
+//        // Without this, the REV Hub's orientation is assumed to be logo up / USB forward
+//        imu.initialize(parameters);
+//
+//        // Getting the wheel motors and setting them up
+//
+//        frontLeft = opMode.hardwareMap.get(DcMotor.class, "leftFront");
+//        frontRight = opMode.hardwareMap.get(DcMotor.class, "rightFront");
+//        backLeft = opMode.hardwareMap.get(DcMotor.class, "leftBack");
+//        backRight = opMode.hardwareMap.get(DcMotor.class, "rightBack");
+////        frontRight.setDirection(DcMotorSimple.Direction.REVERSE);
+////        backRight.setDirection(DcMotorSimple.Direction.REVERSE);
+//
+//
+//
+//        frontLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+//        frontRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+//        backLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+//        backRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+//
+//        frontLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+//        frontRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+//        backLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+//        backRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+//
+//        frontLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+//        frontRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+//        backLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+//        backRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+//        opMode.telemetry.addLine("rinnging");
+//    }
 
-        // Retrieve the IMU from the hardware map
-        this.imu = opMode.hardwareMap.get(IMU.class, "imu");
-        // Adjust the orientation parameters to match your robot
-        IMU.Parameters parameters = new IMU.Parameters(new RevHubOrientationOnRobot(
-                RevHubOrientationOnRobot.LogoFacingDirection.LEFT ,
-                RevHubOrientationOnRobot.UsbFacingDirection.UP));
-        // Without this, the REV Hub's orientation is assumed to be logo up / USB forward
-        imu.initialize(parameters);
-
-        // Getting the wheel motors and setting them up
-
-        frontLeft = opMode.hardwareMap.get(DcMotor.class, "leftFront");
-        frontRight = opMode.hardwareMap.get(DcMotor.class, "rightFront");
-        backLeft = opMode.hardwareMap.get(DcMotor.class, "leftBack");
-        backRight = opMode.hardwareMap.get(DcMotor.class, "rightBack");
-//        frontRight.setDirection(DcMotorSimple.Direction.REVERSE);
-//        backRight.setDirection(DcMotorSimple.Direction.REVERSE);
-
-
-
-        frontLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        frontRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        backLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        backRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-
-        frontLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        frontRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        backLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        backRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
-        frontLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        frontRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        backLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        backRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        opMode.telemetry.addLine("rinnging");
-    }
-
-    public Wheels(LinearOpMode opMode, IMU imu) {
+    public Wheels(LinearOpMode opMode, IMU imu, AllianceColor allianceColor){
+        this.allianceColor = allianceColor;
         this.opMode = opMode;
         this.imu = imu;
         this.imu = opMode.hardwareMap.get(IMU.class, "imu");
@@ -88,22 +105,73 @@ public class Wheels {
         imu.initialize(parameters);
 
 
+
         // Getting the wheel motors and setting them up
 
         frontLeft = opMode.hardwareMap.get(DcMotor.class, "leftFront");
         frontRight = opMode.hardwareMap.get(DcMotor.class, "rightFront");
         backLeft = opMode.hardwareMap.get(DcMotor.class, "leftBack");
         backRight = opMode.hardwareMap.get(DcMotor.class, "rightBack");
-        imu = opMode.hardwareMap.get(IMU.class, "imu");
         frontLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         frontRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         backLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         backRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-
-        backRight.setDirection(DcMotorSimple.Direction.REVERSE);
+//        backRight.setDirection(DcMotorSimple.Direction.REVERSE);
         frontRight.setDirection(DcMotorSimple.Direction.REVERSE);
 
+        localizer = new ThreeDeadWheelLocalizer(opMode.hardwareMap, 168, new Pose2d(0,0,0));
+// ToDO DoTo dodo change inch per tick
+
     }
+    public Pose2d getEstimatedPose() {
+        localizer.update();
+        return localizer.getPose();
+
+    }
+
+    public void updatePose() {
+        localizer.update();
+    }
+
+    // הגדרת הנקודה הקבועה (למשל הפינה השמאלית העליונה)
+
+    Vector2d targetPoint;
+    public double getAbsoluteAngle() {
+        if (allianceColor == AllianceColor.BLUE){
+            targetPoint = new Vector2d(-65, 65);
+        }
+        else {
+            targetPoint = new Vector2d(65, 65);}
+
+
+        // מיקום הרובוט בשדה
+        Vector2d robotPosition = localizer.getPose().position;
+
+        // וקטור מהרובוט אל המטרה
+        Vector2d delta = targetPoint.minus(robotPosition);
+
+        // חישוב זווית אבסולוטית בשדה (רדיאנים)
+        double angleRad = Math.atan2(delta.y, delta.x);
+
+        // המרה למעלות
+        return Math.toDegrees(angleRad);
+    }
+    public double getDistanceFromGoal(){
+
+        if (allianceColor == AllianceColor.BLUE){
+            targetPoint = new Vector2d(-65, 65);
+        }
+        else {
+            targetPoint = new Vector2d(65, 65);}
+
+        // מיקום הרובוט בשדה
+        Vector2d robotPosition = localizer.getPose().position;
+
+        // וקטור מהרובוט אל המטרה
+        Vector2d delta = targetPoint.minus(robotPosition);
+        return Math.sqrt(Math.pow(delta.x, 2) + Math.pow(delta.y, 2));
+    }
+
 
     public void driveByJoystickFieldOriented(double x, double y, double rot) {
         double yaw = imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS); // Get the yaw angle of the robot
@@ -112,7 +180,8 @@ public class Wheels {
         double rotX = x * Math.cos(-yaw) - y * Math.sin(-yaw);
         double rotY = x * Math.sin(-yaw) + y * Math.cos(-yaw);
 
-        rotX = rotX * 1.1;  // Counteract imperfect strafing
+        rotX = rotX * 1.2
+        ;  // Counteract imperfect strafing
 
         // Denominator is the largest motor power (absolute value) or 1
         // This ensures all the powers maintain the same ratio,
@@ -273,9 +342,9 @@ public class Wheels {
     }
 
     public void driveLeftByPower(double power){
-        backRight.setPower(power);
+        backRight.setPower(-power);
         backLeft.setPower(power);
         frontRight.setPower(power);
-        frontLeft.setPower(power);
+        frontLeft.setPower(-power);
     }
 }

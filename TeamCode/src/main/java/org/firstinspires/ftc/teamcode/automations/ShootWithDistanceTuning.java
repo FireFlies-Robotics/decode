@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.systemTeleops;
+package org.firstinspires.ftc.teamcode.automations;
 
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
@@ -13,32 +13,33 @@ import org.firstinspires.ftc.teamcode.systems.Hood;
 import org.firstinspires.ftc.teamcode.systems.Intake;
 import org.firstinspires.ftc.teamcode.systems.Transfer;
 import org.firstinspires.ftc.teamcode.systems.Shooter;
-import org.firstinspires.ftc.teamcode.systems.Turret;
 import org.firstinspires.ftc.teamcode.systems.Wheels;
 
-@TeleOp(name = "transfer check", group = "Test")
+@TeleOp(name = "shootByDistanceTining", group = "Test")
 @Config
 //Uncomment the line below to disable this op
 //@Disabled
-public class TransferTeleop extends LinearOpMode {
+public class ShootWithDistanceTuning extends LinearOpMode {
 //    public static double targetVel = 2000;
 
     // Declare variables you will be using throughout this class here
+    Wheels wheels;
     IMU imu; // Declare class for getting robot angles
     Transfer transfer;
     Shooter shooter;
     Intake intake;
 
+    Hood hood;
 
     boolean isLeftBumper = false;
 
     boolean preLeftBumper = false;
-    public static double shootoingPower = 0;
+    public static double targetShootingVel = 0;
+    public static double hoodPosition = 0;
 
-    public static int selectedVelocity = 1245;  // hood decides this
-    int targetVelocity = 0;       // shooterPID uses this
     // Time that runs since the program began running
     private ElapsedTime runtime = new ElapsedTime();
+    double targetVelocity = 0;
     @Override
     public void runOpMode() {
 
@@ -48,7 +49,8 @@ public class TransferTeleop extends LinearOpMode {
         intake = new Intake(this);
         transfer = new Transfer(this);
         shooter = new Shooter(this);
-
+        wheels = new Wheels(this, imu, AllianceColor.BLUE);
+        hood =  new Hood(this);
         telemetry.addData("Status", "Initialized");
         telemetry.addData("Speed", "Waiting to start");
         telemetry.update();
@@ -74,6 +76,7 @@ public class TransferTeleop extends LinearOpMode {
 
             // Slow the robot down when the left bumber is pressed
 
+            wheels.setMaxSpeed(1 - (gamepad1.left_trigger * 0.7));
 
             if (gamepad1.right_trigger >0.2) {
                 intake.activateIntake(1.0); // full power intake
@@ -106,34 +109,21 @@ public class TransferTeleop extends LinearOpMode {
 
             else {transfer.setTransferPower(0);}
 
-            if (gamepad1.left_bumper && !lastpress) {
-                shootingOn = !shootingOn;
-            }
-            lastpress = gamepad1.left_bumper;
-
-            if (shootingOn) {
-                targetVelocity = selectedVelocity;
-            } else {
-                targetVelocity = 0;
-            }
-            if (targetVelocity == 0){
-                shooter.setShotingPower(0);
-            }
-            else{shooter.shooterPID(targetVelocity);}
-//            shooter.setShotingPower(shootoingPower);
-            if (gamepad1.dpad_up) {
-                selectedVelocity = 1700;
-            }
-
-            if (gamepad1.dpad_down) {
-                selectedVelocity = 1230;
-            }
-            if (shooter.leftShotingMotor.getVelocity() > (selectedVelocity - 10)){
-                gamepad1.rumble(100);
-            }
-
-            telemetry.addData("target velocity", targetVelocity);
-
+//            if (gamepad1.left_bumper && !lastpress) {
+//                shootingOn = !shootingOn;
+//            }
+//            lastpress = gamepad1.left_bumper;
+//
+//            if (shootingOn) {
+//                shooter.shooterPID(targetShootingVel);
+//            } else {
+//                shooter.setShotingPower(0);
+//            }
+//
+            hood.setPosition(hoodPosition);
+            if (gamepad1.left_bumper){
+                shooter.shooterPID(targetShootingVel);}
+            else {shooter.setShotingPower(0);}
 
 
 
@@ -148,6 +138,7 @@ public class TransferTeleop extends LinearOpMode {
 //                intake.transferServo.setPower(0);
 //            }
             // Move robot by controller 1
+            wheels.driveByJoystickFieldOriented(gamepad1.left_stick_x, -gamepad1.left_stick_y, gamepad1.right_stick_x);
             TelemetryPacket packet = new TelemetryPacket();
             packet.put("time", runtime.seconds());
             packet.put("shooting velocity",shooter.leftShotingMotor.getVelocity());
@@ -158,6 +149,7 @@ public class TransferTeleop extends LinearOpMode {
 
             // Show data on driver station
             telemetry.addData("Status", "Run Time: " + runtime.toString());
+            telemetry.addData("Speed", wheels.getMaxSpeed()*100 + "%");
             telemetry.update();
         }
     }

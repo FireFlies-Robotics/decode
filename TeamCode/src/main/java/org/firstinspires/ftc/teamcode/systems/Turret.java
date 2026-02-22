@@ -36,12 +36,12 @@ public class Turret {
 
     public static double kp = 0.0085;
     public static double ki = 0;
-    public static double kd = 0.0003;
+    public static double kd = 0.0005;
 
     PID pid;
-    public static double smallkp = 0.045;
-    public static double smallki = 0;
-    public static double smallkd = 0.0004;
+    public static double smallkp = 0.0083   ;
+    public static double smallki = 0.06;
+    public static double smallkd = 0.0003;
     PID smallpid;
 
     public Turret(LinearOpMode opMode, IMU imu, Camera camera) {
@@ -149,23 +149,22 @@ public class Turret {
 //
 //
         if (getRotationOfInput() <= -50){
-            moveTurret(turretPID(-40));
+            moveTurret(turretPID(-50));
         }
 
         else if (getRotationOfInput() >= 50){
-            moveTurret(turretPID(40));
+            moveTurret(turretPID(50));
         }
         else
         if (erroretion != -999) {
-
-            if (Math.abs(erroretion) > 3){
-                double poweretion = pid.calculatePIDValue(erroretion, 0);
+            if (Math.abs(erroretion) >= 10){
+                double poweretion = Math.min(pid.calculatePIDValue(erroretion, 0), 0.5);
                 leftTurret.setPower(poweretion);
                 rightTurret.setPower(poweretion);
                 pos = getRotationOfInput();
             }
-            else  if (Math.abs(erroretion) < 3){
-                double power = -smallpid.calculatePIDValue(getRotationOfInput(), pos);
+            else  if (Math.abs(erroretion) < 10){
+                double power = Math.min(smallpid.calculatePIDValue(erroretion, 0), 0.3);
                 leftTurret.setPower(power);
                 rightTurret.setPower(power);
 //            else {

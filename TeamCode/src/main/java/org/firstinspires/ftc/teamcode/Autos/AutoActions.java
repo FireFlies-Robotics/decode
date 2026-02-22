@@ -1,0 +1,138 @@
+package org.firstinspires.ftc.teamcode.Autos;
+
+import androidx.annotation.NonNull;
+
+import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
+import com.acmerobotics.roadrunner.Action;
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.IMU;
+import com.qualcomm.robotcore.util.ElapsedTime;
+
+import org.firstinspires.ftc.teamcode.systems.Camera;
+import org.firstinspires.ftc.teamcode.systems.Hood;
+import org.firstinspires.ftc.teamcode.systems.Intake;
+import org.firstinspires.ftc.teamcode.systems.Shooter;
+import org.firstinspires.ftc.teamcode.systems.Transfer;
+import org.firstinspires.ftc.teamcode.systems.Turret;
+
+public class AutoActions {
+    Intake intake;
+    Transfer transfer;
+    Shooter shooter;
+    Turret turret;
+    Hood hood;
+    Camera camera;
+    IMU imu;
+    LinearOpMode opMode;
+    public AutoActions(Intake intake, Transfer transfer, Turret turret, Shooter shooter, Hood hood, LinearOpMode opMode){
+        this.intake = intake;
+        this.transfer = transfer;
+        this.turret = turret;
+        this.shooter = shooter;
+        this.hood = hood;
+        this.opMode = opMode;
+    }
+    public class IntakeStart implements Action {
+
+        @Override
+        public boolean run(@NonNull TelemetryPacket packet) {
+            intake.intakeMotor.setPower(1);
+            transfer.setTransferPower(0.4);
+            return false;
+        }
+    }
+    public Action intakeStart() {
+        return new IntakeStart();
+    }
+
+    public class IntakeEnd implements Action {
+        @Override
+        public boolean run(@NonNull TelemetryPacket packet) {
+            intake.intakeMotor.setPower(0);
+            return false;
+        }
+    }
+    public Action intakeEnd() {return new IntakeEnd();}
+
+
+    public class TransferStart implements Action {
+        @Override
+        public boolean run(@NonNull TelemetryPacket packet) {
+            if (shooter.leftShotingMotor.getVelocity()>= 1180){
+                transfer.transferMotor.setPower(1);
+                intake.activateIntake(1);
+            return false;
+            }
+            else return true;
+        }
+    }
+    public Action transferStart() {
+        return new TransferStart();
+    }
+
+    public class TransferEnd implements Action {
+        @Override
+        public boolean run(@NonNull TelemetryPacket packet) {
+                transfer.transferMotor.setPower(0);
+                intake.activateIntake(0);
+                return false;
+        }
+    }
+    public Action transferEnd() {
+        return new TransferEnd();
+    }
+
+    public class ShooterStart implements Action{
+        private boolean initialized = false;
+        private ElapsedTime timer = new ElapsedTime();
+
+
+        @Override
+        public boolean run(@NonNull TelemetryPacket telemetryPacket) {
+            if (!initialized){
+                timer.reset();
+                initialized = true;
+            }
+
+            shooter.shooterPID(1200);
+
+            double vel = shooter.leftShotingMotor.getVelocity();
+            telemetryPacket.put("shooting speed", vel);
+            return timer.seconds() < 4;
+//            if (shooter.leftShotingMotor.getVelocity()<= 1000){
+//                return true;
+//            } else
+//            return false;
+        }
+    }
+    public Action shooterStart(){return new ShooterStart();}
+
+
+    public class ShooterEnd implements Action{
+        private boolean initialized = false;
+
+        @Override
+        public boolean run(@NonNull TelemetryPacket telemetryPacket) {
+
+            shooter.shooterPID(0);
+
+            double vel = shooter.leftShotingMotor.getVelocity();
+            telemetryPacket.put("shooting speed", vel);
+            return vel > 0;
+//            if (shooter.leftShotingMotor.getVelocity()<= 1000){
+//                return true;
+//            } else
+//            return false;
+        }
+    }
+    public Action shooterEnd(){return new ShooterEnd();}
+
+    public class MoveTurret implements Action{
+        @Override
+        public boolean run(@NonNull TelemetryPacket telemetryPacket) {
+            turret.turnWithCamera();
+            return true;
+        }
+    }
+    public Action moveTurret(){return new MoveTurret();}
+}

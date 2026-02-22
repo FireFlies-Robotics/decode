@@ -46,7 +46,7 @@ public class MainTeleOp extends LinearOpMode {
     public static double shootoingPower = 0;
 
     public static int selectedVelocity = 1245;  // hood decides this
-    public static int farVelocity = 1600;
+    public static int farVelocity = 1580;
     public static int closeVelocity = 1220;
     int targetVelocity = 0;       // shooterPID uses this
     // Time that runs since the program began running
@@ -124,7 +124,7 @@ public class MainTeleOp extends LinearOpMode {
 
         telemetry.addData("raw rotation" ,turret.getRotationOfInput());
 
-        if (gamepad1.right_bumper && shooter.leftShotingMotor.getVelocity() >= (targetVelocity -40)){
+        if (gamepad1.right_bumper && shooter.leftShotingMotor.getVelocity() >= (targetVelocity -30)){
                 transfer.setTransferPower(1);
             }
 
@@ -154,7 +154,7 @@ public class MainTeleOp extends LinearOpMode {
                 hood.setPosition(Hood.UP);
                 selectedVelocity = closeVelocity;
             }
-            if (shooter.leftShotingMotor.getVelocity() >= (selectedVelocity - 40)){
+            if (shooter.leftShotingMotor.getVelocity() >= (selectedVelocity - 30)){
                 gamepad1.rumble(100);
             }
             if (gamepad1.triangle){transfer.setTransferPower(1);}

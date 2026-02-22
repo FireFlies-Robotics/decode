@@ -1,25 +1,25 @@
-package MeepMeep.coordinates.BlueCoordinates;
+package MeepMeep.coordinates.RedCoordinatesMeepMeep;
 
 import com.acmerobotics.roadrunner.Pose2d;
 
-public class BlueCloseCoordinatesMeepMeep {
+public class RedFarCooddinatesMeepMeep {
 
-    private static final double startX = -56.5;
-    private static final double startY = -45.5;
-    private static final double startPoseHeading = Math.toRadians(234);
+    private static final double startX = 60.5;
 
-    private static final double firstIntakeStartX = -12.5;
-    private static final double intakeStartY = -33
-            ;
+    private static final double startY = 13.6;
+    private static final double startPoseHeading = Math.toRadians(180);
+
+    private static final double firstIntakeStartX = 34.5;
+    private static final double intakeStartY = 35;
     private static final double secondIntakeX = 11.5;
 
-    private static final double firstIntakeStartHeading = Math.toRadians(270);
-    private static final double intakeSEndY = -50;
+    private static final double firstIntakeStartHeading = Math.toRadians(-270);
+    private static final double intakeSEndY = 50;
 
 
-    private static final double shootingX = -18;
-    private static final double shootingY = -11;
-    private static final double shootingHeading = Math.toRadians(225);
+    private static final double shootingX = 57;
+    private static final double shootingY = 14;
+    private static final double shootingHeading = Math.toRadians(150);
 
 
 

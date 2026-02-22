@@ -6,6 +6,13 @@ import java.text.SimpleDateFormat
 apply plugin: 'com.android.library'
 
 android {
+    allprojects {
+        repositories {
+            google()
+            mavenCentral()
+            maven { url = "https://maven.brott.dev/" }
+        }
+    }
 
     defaultConfig {
         minSdkVersion 24

@@ -1,20 +1,20 @@
-package MeepMeep.coordinates.BlueCoordinates;
+package org.firstinspires.ftc.teamcode.Autos.Coordinates;
 
 import com.acmerobotics.roadrunner.Pose2d;
 
-public class BlueCloseCoordinatesMeepMeep {
+public class BlueCloseCoordianates {
 
     private static final double startX = -56.5;
     private static final double startY = -45.5;
     private static final double startPoseHeading = Math.toRadians(234);
 
-    private static final double firstIntakeStartX = -12.5;
-    private static final double intakeStartY = -33
-            ;
-    private static final double secondIntakeX = 11.5;
+    private static final double firstIntakeStartX = -8.7038;
+    private static final double intakeStartY = -28.2548;
+    private static final double intakeSEndY = -53.5;
 
-    private static final double firstIntakeStartHeading = Math.toRadians(270);
-    private static final double intakeSEndY = -50;
+    private static final double secondIntakeX = 13.5;
+
+    private static final double firstIntakeStartHeading = Math.toRadians(-91);
 
 
     private static final double shootingX = -18;
@@ -41,8 +41,7 @@ public class BlueCloseCoordinatesMeepMeep {
         return start;
     }
 
-    public static Pose2d getFirstIntakeStart() {
-        return firstIntakeStart;
+    public static Pose2d getFirstIntakeStart() {return firstIntakeStart;
     }
     public static Pose2d getFirstIntakeEnd() {
         return firstIntakeEnd;

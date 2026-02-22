@@ -9,7 +9,7 @@ public class BlueFarCoordinatesMeepMeep {
     private static final double startY = -13.6;
     private static final double startPoseHeading = Math.toRadians(180);
 
-    private static final double firstIntakeStartX = -10.5;
+    private static final double firstIntakeStartX = 34.5;
     private static final double intakeStartY = -35;
     private static final double secondIntakeX = 11.5;
 
@@ -18,8 +18,8 @@ public class BlueFarCoordinatesMeepMeep {
 
 
     private static final double shootingX = 57;
-    private static final double shootingY = -10;
-    private static final double shootingHeading = Math.toRadians(200);
+    private static final double shootingY = -14;
+    private static final double shootingHeading = Math.toRadians(205);
 
 
 

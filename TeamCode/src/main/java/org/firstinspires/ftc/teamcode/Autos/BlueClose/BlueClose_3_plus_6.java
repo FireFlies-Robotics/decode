@@ -7,13 +7,11 @@ import com.acmerobotics.roadrunner.MinVelConstraint;
 import com.acmerobotics.roadrunner.SequentialAction;
 import com.acmerobotics.roadrunner.TranslationalVelConstraint;
 import com.acmerobotics.roadrunner.ftc.Actions;
-import com.arcrobotics.ftclib.command.WaitUntilCommand;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
-import org.firstinspires.ftc.onbotjava.handlers.objbuild.WaitForBuild;
 import org.firstinspires.ftc.teamcode.MecanumDrive;
-import org.firstinspires.ftc.teamcode.Autos.Coordinates.BlueCloseCoordianates;
+import org.firstinspires.ftc.teamcode.Autos.Coordinates.RedCloseCoodrinates;
 
 import java.util.Arrays;
 
@@ -28,28 +26,28 @@ public class BlueClose_3_plus_6 extends LinearOpMode {
         MinVelConstraint velCon = new MinVelConstraint(Arrays.asList(new TranslationalVelConstraint(10),new AngularVelConstraint(10)));
 
 
-        MecanumDrive drive = new MecanumDrive(hardwareMap, BlueCloseCoordianates.getStart());
-        Action goToShoot_0 = drive.actionBuilder(BlueCloseCoordianates.getStart())
-                .strafeTo(BlueCloseCoordianates.getShooting().position)
+        MecanumDrive drive = new MecanumDrive(hardwareMap, RedCloseCoodrinates.getStart());
+        Action goToShoot_0 = drive.actionBuilder(RedCloseCoodrinates.getStart())
+                .strafeTo(RedCloseCoodrinates.getShooting().position)
                 .build();
 
-        Action goToCollect_1 = drive.actionBuilder(BlueCloseCoordianates.getShooting())
+        Action goToCollect_1 = drive.actionBuilder(RedCloseCoodrinates.getShooting())
                 .setTangent(Math.toRadians(90))
-                .splineToLinearHeading(BlueCloseCoordianates.getFirstIntakeStart(), BlueCloseCoordianates.getFirstIntakeStart().heading)
-                .splineToLinearHeading(BlueCloseCoordianates.getFirstIntakeEnd(), BlueCloseCoordianates.getFirstIntakeEnd().heading)
+                .splineToLinearHeading(RedCloseCoodrinates.getFirstIntakeStart(), RedCloseCoodrinates.getFirstIntakeStart().heading)
+                .splineToLinearHeading(RedCloseCoodrinates.getFirstIntakeEnd(), RedCloseCoodrinates.getFirstIntakeEnd().heading)
                 .build();
 
-        Action goToShoot_1 = drive.actionBuilder(BlueCloseCoordianates.getFirstIntakeEnd())
-                .strafeToLinearHeading(BlueCloseCoordianates.getShooting().position, BlueCloseCoordianates.getShooting().heading)
+        Action goToShoot_1 = drive.actionBuilder(RedCloseCoodrinates.getFirstIntakeEnd())
+                .strafeToLinearHeading(RedCloseCoodrinates.getShooting().position, RedCloseCoodrinates.getShooting().heading)
                 .build();
 
-        Action goToCollect_2 = drive.actionBuilder(BlueCloseCoordianates.getShooting())
-                .splineToLinearHeading(BlueCloseCoordianates.getSecondIntakeStart(), BlueCloseCoordianates.getSecondIntakeStart().heading)
-                .splineToLinearHeading(BlueCloseCoordianates.getSecondIntakeEnd(), BlueCloseCoordianates.getSecondIntakeEnd().heading)
+        Action goToCollect_2 = drive.actionBuilder(RedCloseCoodrinates.getShooting())
+                .splineToLinearHeading(RedCloseCoodrinates.getSecondIntakeStart(), RedCloseCoodrinates.getSecondIntakeStart().heading)
+                .splineToLinearHeading(RedCloseCoodrinates.getSecondIntakeEnd(), RedCloseCoodrinates.getSecondIntakeEnd().heading)
                 .build();
 
-        Action goToShoot_2 = drive.actionBuilder(BlueCloseCoordianates.getStart())
-                .strafeToLinearHeading(BlueCloseCoordianates.getShooting().position, BlueCloseCoordianates.getShooting().heading)
+        Action goToShoot_2 = drive.actionBuilder(RedCloseCoodrinates.getStart())
+                .strafeToLinearHeading(RedCloseCoodrinates.getShooting().position, RedCloseCoodrinates.getShooting().heading)
                 .build();
 
         waitForStart();

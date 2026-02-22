@@ -98,7 +98,7 @@ public class AutoActions {
 
             double vel = shooter.leftShotingMotor.getVelocity();
             telemetryPacket.put("shooting speed", vel);
-            return timer.seconds() < 4;
+            return timer.seconds() < 6;
 //            if (shooter.leftShotingMotor.getVelocity()<= 1000){
 //                return true;
 //            } else
@@ -106,6 +106,34 @@ public class AutoActions {
         }
     }
     public Action shooterStart(){return new ShooterStart();}
+
+
+
+
+    public class ShooterSecond implements Action{
+        private boolean initialized = false;
+        private ElapsedTime timer = new ElapsedTime();
+
+
+        @Override
+        public boolean run(@NonNull TelemetryPacket telemetryPacket) {
+            if (!initialized){
+                timer.reset();
+                initialized = true;
+            }
+
+            shooter.shooterPID(1200);
+
+            double vel = shooter.leftShotingMotor.getVelocity();
+            telemetryPacket.put("shooting speed", vel);
+            return timer.seconds() < 3;
+//            if (shooter.leftShotingMotor.getVelocity()<= 1000){
+//                return true;
+//            } else
+//            return false;
+        }
+    }
+    public Action shooterStartSecond(){return new ShooterSecond();}
 
 
     public class ShooterEnd implements Action{

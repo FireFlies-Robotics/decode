@@ -158,13 +158,67 @@ public class Turret {
         else
         if (erroretion != -999) {
             if (Math.abs(erroretion) >= 10){
+                double poweretion = Math.min(pid.calculatePIDValue(erroretion, 0), Math.abs(0.5));
+                leftTurret.setPower(poweretion);
+                rightTurret.setPower(poweretion);
+                pos = getRotationOfInput();
+            }
+            else  if (Math.abs(erroretion) < 10){
+                if (erroretion >0){
+                double power = Math.min(smallpid.calculatePIDValue(erroretion, 3), .5);
+                leftTurret.setPower(power);
+                rightTurret.setPower(power);}
+//            else {
+////            if (Math.abs(erroretion) > 3){
+            }
+        }
+        else {moveTurret(turretPID(0));}
+
+//            }
+
+//        }
+//        else {
+//            moveTurret(turretPID(0));
+//        }
+//        else {
+//            leftTurret.setPower(0);
+//            rightTurret.setPower(0);}
+
+//        else {
+//            double toZero = -pid.calculatePIDValue(getRotationOfInput(), 0);
+//            leftTurret.setPower(toZero);
+//            rightTurret.setPower(toZero);
+//        }
+    }
+
+
+
+    public void turnWithCameraButThisTimeRed() {
+        pid.setPID(kp, ki, kd);
+        smallpid.setPID(smallkp, smallki, smallkd);
+        double erroretion = camera.getBearingToTag24();
+        opMode.telemetry.addData("bearing", camera.getBearingToTag20());
+        opMode.telemetry.addData("angle", getRotationOfInput());
+        opMode.telemetry.addData("errotation", erroretion);
+//
+//
+        if (getRotationOfInput() <= -50){
+            moveTurret(turretPID(-50));
+        }
+
+        else if (getRotationOfInput() >= 50){
+            moveTurret(turretPID(50));
+        }
+        else
+        if (erroretion != -999) {
+            if (Math.abs(erroretion) >= 10){
                 double poweretion = Math.min(pid.calculatePIDValue(erroretion, 0), 0.5);
                 leftTurret.setPower(poweretion);
                 rightTurret.setPower(poweretion);
                 pos = getRotationOfInput();
             }
             else  if (Math.abs(erroretion) < 10){
-                double power = Math.min(smallpid.calculatePIDValue(erroretion, 0), 0.3);
+                double power = Math.min(smallpid.calculatePIDValue(erroretion, 0), 0.4);
                 leftTurret.setPower(power);
                 rightTurret.setPower(power);
 //            else {

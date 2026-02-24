@@ -18,11 +18,11 @@ import org.firstinspires.ftc.teamcode.systems.Shooter;
 import org.firstinspires.ftc.teamcode.systems.Turret;
 import org.firstinspires.ftc.teamcode.systems.Wheels;
 
-@TeleOp(name = "MainTeleOpBlue", group = "Main ")
+@TeleOp(name = "MainTeleOp Red", group = "Main")
 @Config
 //Uncomment the line below to disable this op
 //@Disabled
-public class MainTeleOp extends LinearOpMode {
+public class RedMainTeleop extends LinearOpMode {
 //    public static double targetVel = 2000;
 
     // Declare variables you will be using throughout this class here
@@ -118,13 +118,13 @@ public class MainTeleOp extends LinearOpMode {
 //            }
 
 // Always update previous state based on the button, not shooter state
-            turret.turnWithCamera();
+            turret.turnWithCameraButThisTimeRed();
 //            turret.moveTurret(gamepad1.right_stick_x);
 //            turret.setTurretPosition(position);
 
-        telemetry.addData("raw rotation" ,turret.getRotationOfInput());
+            telemetry.addData("raw rotation" ,turret.getRotationOfInput());
 
-        if (gamepad1.right_bumper && shooter.leftShotingMotor.getVelocity() >= (targetVelocity -30)){
+            if (gamepad1.right_bumper && shooter.leftShotingMotor.getVelocity() >= (targetVelocity -30)){
                 transfer.setTransferPower(1);
             }
 
@@ -175,7 +175,7 @@ public class MainTeleOp extends LinearOpMode {
 //            else {
 //                intake.transferServo.setPower(0);
 //            }
-                // Move robot by controller 1
+            // Move robot by controller 1
             wheels.driveByJoystickFieldOriented(gamepad1.left_stick_x, -gamepad1.left_stick_y, gamepad1.right_stick_x);
             TelemetryPacket packet = new TelemetryPacket();
             packet.put("time", runtime.seconds());

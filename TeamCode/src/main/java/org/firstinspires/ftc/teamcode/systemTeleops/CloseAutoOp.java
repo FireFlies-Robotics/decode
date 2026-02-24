@@ -15,7 +15,8 @@ import org.firstinspires.ftc.teamcode.systems.Transfer;
 import org.firstinspires.ftc.teamcode.systems.Wheels;
 
 @Autonomous(name = "close auto")
-//@Disabled
+
+@Disabled
 public class CloseAutoOp extends LinearOpMode {
 
     Wheels wheels;
@@ -24,7 +25,6 @@ public class CloseAutoOp extends LinearOpMode {
     Shooter shooter;
     Intake intake;
     private ElapsedTime runtime = new ElapsedTime();
-
 
     Hood hood;
 

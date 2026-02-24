@@ -35,7 +35,7 @@ public class Camera {
         List<LLResultTypes.FiducialResult> tags = result.getFiducialResults();
 
         for (LLResultTypes.FiducialResult tag : tags) {
-            if (tag.getFiducialId() == 20) {
+            if (tag.getFiducialId() == 21) {
                 double bearing = tag.getTargetXDegrees();
                 opMode.telemetry.addData("Tag 20 Bearing", bearing);
                 return bearing;
@@ -43,6 +43,27 @@ public class Camera {
         }
 
         opMode.telemetry.addData("Tag 20 Bearing", "Not Detected");
+        return -999;
+    }
+
+    public double getBearingToTag24() {
+        LLResult result = limelight.getLatestResult();
+
+        if (result == null || !result.isValid()) {
+            return -999;
+        }
+
+        List<LLResultTypes.FiducialResult> tags = result.getFiducialResults();
+
+        for (LLResultTypes.FiducialResult tag : tags) {
+            if (tag.getFiducialId() == 24) {
+                double bearing = tag.getTargetXDegrees();
+                opMode.telemetry.addData("Tag 24 Bearing", bearing);
+                return bearing;
+            }
+        }
+
+        opMode.telemetry.addData("Tag 24 Bearing", "Not Detected");
         return -999;
     }
 

@@ -70,6 +70,21 @@ public class AutoActions {
         return new TransferStart();
     }
 
+    public class TransferStartFar implements Action {
+        @Override
+        public boolean run(@NonNull TelemetryPacket packet) {
+            if (shooter.leftShotingMotor.getVelocity()>= 1560){
+                transfer.transferMotor.setPower(1);
+                intake.activateIntake(1);
+                return false;
+            }
+            else return true;
+        }
+    }
+    public Action transferStartFar() {
+        return new TransferStartFar();
+    }
+
     public class TransferEnd implements Action {
         @Override
         public boolean run(@NonNull TelemetryPacket packet) {
@@ -107,6 +122,31 @@ public class AutoActions {
     }
     public Action shooterStart(){return new ShooterStart();}
 
+
+    public class ShooterStartFar implements Action{
+        private boolean initialized = false;
+        private ElapsedTime timer = new ElapsedTime();
+
+
+        @Override
+        public boolean run(@NonNull TelemetryPacket telemetryPacket) {
+            if (!initialized){
+                timer.reset();
+                initialized = true;
+            }
+
+            shooter.shooterPID(1580);
+
+            double vel = shooter.leftShotingMotor.getVelocity();
+            telemetryPacket.put("shooting speed", vel);
+            return timer.seconds() < 6;
+//            if (shooter.leftShotingMotor.getVelocity()<= 1000){
+//                return true;
+//            } else
+//            return false;
+        }
+    }
+    public Action shooterStartFar(){return new ShooterStartFar();}
 
 
 
@@ -163,4 +203,16 @@ public class AutoActions {
         }
     }
     public Action moveTurret(){return new MoveTurret();}
+
+
+
+    public class MoveTurretRed implements Action{
+        @Override
+        public boolean run(@NonNull TelemetryPacket telemetryPacket) {
+            turret.turnWithCamera();
+            return true;
+        }
+    }
+    public Action moveTurretRed(){return new MoveTurretRed();}
+
 }

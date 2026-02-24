@@ -14,7 +14,7 @@ import org.firstinspires.ftc.teamcode.systems.Transfer;
 import org.firstinspires.ftc.teamcode.systems.Wheels;
 
 @Autonomous(name = "far auto")
-//@Disabled
+@Disabled
 public class FarAutoOp extends LinearOpMode {
 
     Wheels wheels;

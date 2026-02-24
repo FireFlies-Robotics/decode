@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.systemTeleops;
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.CRServo;
@@ -18,6 +19,7 @@ import java.util.List;
 
 @TeleOp(name = "SERVO", group = "Vision")
 @Config
+@Disabled
 public class hoodServoTeleop extends LinearOpMode {
 
     private CRServo servo;

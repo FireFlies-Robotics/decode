@@ -17,7 +17,7 @@ import org.firstinspires.ftc.teamcode.systems.Wheels;
 
 @TeleOp(name = "Turret Control1", group = "TeleOp")
 @Config
-//@Disabled
+@Disabled
 public class TurretTeleop extends LinearOpMode {
     Turret turret;
 

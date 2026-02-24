@@ -11,7 +11,7 @@ import org.intellij.lang.annotations.JdkConstants;
 
 @TeleOp(name = "shooter Control", group = "TeleOp")
 @Config
-//@Disabled
+@Disabled
 
 
 public class ShooterCheck extends LinearOpMode {

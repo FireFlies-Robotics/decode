@@ -12,8 +12,9 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.Autos.AutoActions;
+import org.firstinspires.ftc.teamcode.Autos.Coordinates.RedCloseCoordinates;
 import org.firstinspires.ftc.teamcode.MecanumDrive;
-import org.firstinspires.ftc.teamcode.Autos.Coordinates.RedCloseCoodrinates;
+import org.firstinspires.ftc.teamcode.Autos.Coordinates.RedCloseCoordinates;
 import org.firstinspires.ftc.teamcode.systems.Camera;
 import org.firstinspires.ftc.teamcode.systems.Hood;
 import org.firstinspires.ftc.teamcode.systems.Intake;
@@ -24,7 +25,7 @@ import org.firstinspires.ftc.teamcode.systems.Turret;
 import java.util.Arrays;
 
 @Config
-@Autonomous (name = "RedClose_3_plus_6 actions", group = "autonomus")
+@Autonomous (name = "RedClose", group = "autonomus")
 
 public class RedCloseWithActions extends LinearOpMode {
     AutoActions actions;
@@ -49,40 +50,40 @@ public class RedCloseWithActions extends LinearOpMode {
         MinVelConstraint velCon = new MinVelConstraint(Arrays.asList(new TranslationalVelConstraint(10),new AngularVelConstraint(10)));
 
 
-        MecanumDrive drive = new MecanumDrive(hardwareMap, RedCloseCoodrinates.getStart());
+        MecanumDrive drive = new MecanumDrive(hardwareMap, RedCloseCoordinates.getStart());
         AutoActions actions = new AutoActions(intake, transfer,  turret, shooter, hood, this);
-        Action goToShoot_0 = drive.actionBuilder(RedCloseCoodrinates.getStart())
-                .strafeTo(RedCloseCoodrinates.getShooting().position)
+        Action goToShoot_0 = drive.actionBuilder(RedCloseCoordinates.getStart())
+                .strafeTo(RedCloseCoordinates.getShooting().position)
                 .build();
-        Action waitToShoot0 = drive.actionBuilder(RedCloseCoodrinates.getShooting())
+        Action waitToShoot0 = drive.actionBuilder(RedCloseCoordinates.getShooting())
                 .waitSeconds(2)
                 .build();
-        Action waitToShoot1 = drive.actionBuilder(RedCloseCoodrinates.getShooting())
+        Action waitToShoot1 = drive.actionBuilder(RedCloseCoordinates.getShooting())
                 .waitSeconds(3)
                 .build();
-        Action waitToShoot2 = drive.actionBuilder(RedCloseCoodrinates.getShooting())
+        Action waitToShoot2 = drive.actionBuilder(RedCloseCoordinates.getShooting())
                 .waitSeconds(3)
                 .build();
 
 
-        Action goToCollect_1 = drive.actionBuilder(RedCloseCoodrinates.getShooting())
+        Action goToCollect_1 = drive.actionBuilder(RedCloseCoordinates.getShooting())
                 .setTangent(Math.toRadians(90))
-                .splineToLinearHeading(RedCloseCoodrinates.getFirstIntakeStart(), RedCloseCoodrinates.getFirstIntakeStart().heading)
-                .splineToLinearHeading(RedCloseCoodrinates.getFirstIntakeEnd(), RedCloseCoodrinates.getFirstIntakeEnd().heading)
+                .splineToLinearHeading(RedCloseCoordinates.getFirstIntakeStart(), RedCloseCoordinates.getFirstIntakeStart().heading)
+                .splineToLinearHeading(RedCloseCoordinates.getFirstIntakeEnd(), RedCloseCoordinates.getFirstIntakeEnd().heading)
                 .build();
 
-        Action goToShoot_1 = drive.actionBuilder(RedCloseCoodrinates.getFirstIntakeEnd())
-                .strafeToLinearHeading(RedCloseCoodrinates.getShooting().position, RedCloseCoodrinates.getShooting().heading)
+        Action goToShoot_1 = drive.actionBuilder(RedCloseCoordinates.getFirstIntakeEnd())
+                .strafeToLinearHeading(RedCloseCoordinates.getShooting().position, RedCloseCoordinates.getShooting().heading)
                 .build();
 
-        Action goToCollect_2 = drive.actionBuilder(RedCloseCoodrinates.getShooting())
-                .splineToLinearHeading(RedCloseCoodrinates.getSecondIntakeStart(), RedCloseCoodrinates.getSecondIntakeStart().heading)
-                .splineToLinearHeading(RedCloseCoodrinates.getSecondIntakeEnd(), RedCloseCoodrinates.getSecondIntakeEnd().heading)
+        Action goToCollect_2 = drive.actionBuilder(RedCloseCoordinates.getShooting())
+                .splineToLinearHeading(RedCloseCoordinates.getSecondIntakeStart(), RedCloseCoordinates.getSecondIntakeStart().heading)
+                .splineToLinearHeading(RedCloseCoordinates.getSecondIntakeEnd(), RedCloseCoordinates.getSecondIntakeEnd().heading)
                 .build();
 
-        Action goToShoot_2 = drive.actionBuilder(RedCloseCoodrinates.getSecondIntakeEnd())
+        Action goToShoot_2 = drive.actionBuilder(RedCloseCoordinates.getSecondIntakeEnd())
                 .setTangent(Math.toRadians(70))
-                .splineToLinearHeading(RedCloseCoodrinates.getShooting(), RedCloseCoodrinates.getShooting().heading)
+                .splineToLinearHeading(RedCloseCoordinates.getShooting(), RedCloseCoordinates.getShooting().heading)
                 .build();
 
         waitForStart();
@@ -90,11 +91,11 @@ public class RedCloseWithActions extends LinearOpMode {
         if (isStopRequested()) return;
 
         Actions.runBlocking(
-                new ParallelAction(actions.moveTurret(),
+                new ParallelAction(actions.moveTurretRed(),
                         new SequentialAction(
                                 new ParallelAction(
                                         goToShoot_0,
-                                        actions.shooterStart(),
+                                        actions.shooterStartFar(),
                                         new SequentialAction(
                                                 waitToShoot0,
                                                 actions.transferStart()

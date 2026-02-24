@@ -13,7 +13,7 @@ import org.firstinspires.ftc.teamcode.systems.Wheels;
 
 @TeleOp(name = "Field Oriented Wheels Test", group = "Test")
 //Uncomment the line below to disable this op
-//@Disabled
+@Disabled
 public class FieldOrientedWheelsTest extends LinearOpMode {
     // Declare variables you will be using throughout this class here
     Wheels wheels;

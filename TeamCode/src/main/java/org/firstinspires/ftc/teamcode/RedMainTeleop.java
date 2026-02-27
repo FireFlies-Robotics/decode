@@ -45,7 +45,7 @@ public class RedMainTeleop extends LinearOpMode {
     boolean preLeftBumper = false;
     public static double shootoingPower = 0;
 
-    public static int selectedVelocity = 1245;  // hood decides this
+    public static int selectedVelocity = 1220;  // hood decides this
     public static int farVelocity = 1580;
     public static int closeVelocity = 1220;
     int targetVelocity = 0;       // shooterPID uses this
@@ -118,7 +118,7 @@ public class RedMainTeleop extends LinearOpMode {
 //            }
 
 // Always update previous state based on the button, not shooter state
-            turret.turnWithCameraButThisTimeRed();
+            turret.turnWithCameraButThisTimeRed(0);
 //            turret.moveTurret(gamepad1.right_stick_x);
 //            turret.setTurretPosition(position);
 

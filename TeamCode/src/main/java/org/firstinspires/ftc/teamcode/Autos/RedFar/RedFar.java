@@ -93,7 +93,7 @@ public class RedFar extends LinearOpMode {
         if (isStopRequested()) return;
 
         Actions.runBlocking(
-                new ParallelAction(actions.moveTurret(),
+                new ParallelAction(actions.moveTurretRedFar(),
                         new SequentialAction(
                                 goToShoot_0,
                                 new ParallelAction(
@@ -108,7 +108,8 @@ public class RedFar extends LinearOpMode {
                                 new ParallelAction(
                                         actions.shooterStartFar(),
                                         actions.transferStartFar()
-                                )
+                                ),
+                                park
                         )
 
                 )

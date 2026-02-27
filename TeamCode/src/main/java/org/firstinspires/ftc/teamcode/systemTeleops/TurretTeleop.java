@@ -13,53 +13,37 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.teamcode.Utils.AllianceColor;
 import org.firstinspires.ftc.teamcode.systems.Camera;
 import org.firstinspires.ftc.teamcode.systems.Turret;
+import org.firstinspires.ftc.teamcode.systems.TurretPosition;
 import org.firstinspires.ftc.teamcode.systems.Wheels;
 
 @TeleOp(name = "Turret Control1", group = "TeleOp")
 @Config
-@Disabled
+//@Disabled
 public class TurretTeleop extends LinearOpMode {
-    Turret turret;
-
-    AnalogInput analogInput;
-
-    IMU imu;
+    TurretPosition turretPosition;
     Camera camera;
-    Wheels wheels;
-    double sensorVoltage;
-    public static double position;
-    public static double angleToFix = 0;
-
-    int targetTurretAngle = 270;
     @Override
     public void runOpMode() {
-        analogInput = hardwareMap.get(AnalogInput.class, "turretAnalog");
-        imu = hardwareMap.get(IMU.class, "imu");
-        imu.initialize(new IMU.Parameters(new RevHubOrientationOnRobot(
-                RevHubOrientationOnRobot.LogoFacingDirection.LEFT,
-                RevHubOrientationOnRobot.UsbFacingDirection.UP)));
-        imu.resetYaw();
-
-
+        turretPosition = new TurretPosition(this, camera);
         // ADD THESE DEBUG LINES BEFORE CREATING TURRET
-        telemetry.addData("Sensor Voltage", analogInput.getVoltage());
-        telemetry.addData("Max Voltage", analogInput.getMaxVoltage());
-        telemetry.addData("Calculated Angle", (analogInput.getVoltage() / analogInput.getMaxVoltage()) * 360);
-        telemetry.update();
-//        sleep(3000); // Give you time to read it
-        camera = new Camera(this);
-        turret = new Turret(this, imu, camera);
-        wheels = new Wheels(this, imu, AllianceColor.BLUE);
-        turret.init();
-
-
         waitForStart();
 
         while (opModeIsActive()) {
+//
+//            if (gamepad1.dpad_down){
+//                turretPosition.setTurretPosition(0.5);
+//            }
+//            if (gamepad1.dpad_left){
+//                turretPosition.setTurretPosition(0);
+//            }
+//            if (gamepad1.dpad_right){
+//                turretPosition.setTurretPosition(1);
+//            }
+            turretPosition.calculateTurretPosition();
 //            if (gamepad1.cross){
 //                wheels.driveForwordByPower(-0.5);
 //            }
-//            else if (gamepad1.triangle){
+//            else if (gamepad1.triangle)
 //                wheels.driveForwordByPower(0.5);
 //            }
 //            else {wheels.driveForwordByPower(0);}
@@ -67,24 +51,7 @@ public class TurretTeleop extends LinearOpMode {
 
             // ALSO ADD IN LOOP
 //            telemetry.addData("LIVE Sensor Voltage", analogInput.getVoltage());
-//            telemetry.addData("LIVE Max Voltage", analogInput.getMaxVoltage());
 
-//            turret.updateTurretServoRotation();
-
-//            if (gamepad1.triangle){
-//            turret.turnWithCamera();
-            telemetry.addData("turretRotation" ,turret.getTurretRotation());
-
-//            turret.moveTurret(gamepad1.right_stick_x);
-            turret.getRotationOfInput();
-            if (gamepad1.dpad_down){
-                turret.moveTurret(gamepad1.right_stick_x/7);
-            }else {
-            turret.turnWithCamera();}
-//            turret.moveTurret(gamepad1.right_stick_x);
-//            turret.setTurretPosition(position);
-
-            telemetry.addData("raw rotation" ,turret.getRotationOfInput());
             telemetry.update();
         }
     }

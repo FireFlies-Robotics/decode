@@ -46,7 +46,7 @@ public class MainTeleOp extends LinearOpMode {
     public static double shootoingPower = 0;
 
     public static int selectedVelocity = 1245;  // hood decides this
-    public static int farVelocity = 1580;
+    public static int farVelocity = 1500;
     public static int closeVelocity = 1220;
     int targetVelocity = 0;       // shooterPID uses this
     // Time that runs since the program began running
@@ -118,7 +118,7 @@ public class MainTeleOp extends LinearOpMode {
 //            }
 
 // Always update previous state based on the button, not shooter state
-            turret.turnWithCamera();
+//            turret.turnWithCamera(2);
 //            turret.moveTurret(gamepad1.right_stick_x);
 //            turret.setTurretPosition(position);
 

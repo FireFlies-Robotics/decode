@@ -73,7 +73,7 @@ public class AutoActions {
     public class TransferStartFar implements Action {
         @Override
         public boolean run(@NonNull TelemetryPacket packet) {
-            if (shooter.leftShotingMotor.getVelocity()>= 1560){
+            if (shooter.leftShotingMotor.getVelocity()>= 1500){
                 transfer.transferMotor.setPower(1);
                 intake.activateIntake(1);
                 return false;
@@ -135,7 +135,7 @@ public class AutoActions {
                 initialized = true;
             }
 
-            shooter.shooterPID(1580);
+            shooter.shooterPID(1520);
 
             double vel = shooter.leftShotingMotor.getVelocity();
             telemetryPacket.put("shooting speed", vel);
@@ -195,24 +195,43 @@ public class AutoActions {
     }
     public Action shooterEnd(){return new ShooterEnd();}
 
-    public class MoveTurret implements Action{
+    public class MoveTurretBlueFar implements Action{
         @Override
         public boolean run(@NonNull TelemetryPacket telemetryPacket) {
-            turret.turnWithCamera();
+            turret.turnWithCamera(2);
             return true;
         }
     }
-    public Action moveTurret(){return new MoveTurret();}
+    public Action moveTurretblueFar(){return new MoveTurretBlueFar();}
 
 
 
-    public class MoveTurretRed implements Action{
+    public class MoveTurretRedFar implements Action{
         @Override
         public boolean run(@NonNull TelemetryPacket telemetryPacket) {
-            turret.turnWithCamera();
+            turret.turnWithCameraButThisTimeRed(-2);
             return true;
         }
     }
-    public Action moveTurretRed(){return new MoveTurretRed();}
+    public Action moveTurretRedFar(){return new MoveTurretRedFar();}
 
+
+
+    public class MoveTurretRedClose implements Action{
+        @Override
+        public boolean run(@NonNull TelemetryPacket telemetryPacket) {
+            turret.turnWithCameraButThisTimeRed(0);
+            return true;
+        }
+    }
+    public Action moveTurretRedClose(){return new MoveTurretRedClose();}
+
+    public class MoveTurretBlueClose implements Action{
+        @Override
+        public boolean run(@NonNull TelemetryPacket telemetryPacket) {
+            turret.turnWithCameraButThisTimeRed(0);
+            return true;
+        }
+    }
+    public Action moveTurretBlueClose(){return new MoveTurretBlueClose();}
 }

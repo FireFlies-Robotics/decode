@@ -91,7 +91,7 @@
             if (isStopRequested()) return;
 
             Actions.runBlocking(
-                    new ParallelAction(actions.moveTurret(),
+                    new ParallelAction(actions.moveTurretBlueClose(),
                             new SequentialAction(
                                     new ParallelAction(
                                             goToShoot_0,

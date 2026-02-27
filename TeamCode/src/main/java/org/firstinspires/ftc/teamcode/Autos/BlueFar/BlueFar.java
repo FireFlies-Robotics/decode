@@ -94,7 +94,7 @@ public class BlueFar extends LinearOpMode {
         if (isStopRequested()) return;
 
         Actions.runBlocking(
-                new ParallelAction(actions.moveTurret(),
+                new ParallelAction(actions.moveTurretblueFar(),
                         new SequentialAction(
                                 goToShoot_0,
                                 new ParallelAction(

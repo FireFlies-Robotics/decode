@@ -17,13 +17,13 @@ import org.firstinspires.ftc.teamcode.systemTeleops.ShooterCheck;
 public class Shooter {
 
     PID pid;
-    public static double kp = 0.001;
+    public static double kp = 0.002;
     public static double ki = 0.0;
-    public static double kd = 0.00009;
+    public static double kd = 0.0001;
 
 
 
-            public static double kS = 0.05, kV = 0.00018 , kA = 0.000001; // Feedforward
+            public static double kS = 0.05, kV = 0.0001667 , kA = 0.000001; // Feedforward
     //todo find real KP
     private LinearOpMode opMode;
     public CRServo tunet;

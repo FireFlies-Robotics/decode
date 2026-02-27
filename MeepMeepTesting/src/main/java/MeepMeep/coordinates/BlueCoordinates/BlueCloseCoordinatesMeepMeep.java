@@ -9,12 +9,12 @@ public class BlueCloseCoordinatesMeepMeep {
     private static final double startPoseHeading = Math.toRadians(234);
 
     private static final double firstIntakeStartX = -12.5;
-    private static final double intakeStartY = -33
+    private static final double intakeStartY = -30
             ;
     private static final double secondIntakeX = 11.5;
 
     private static final double firstIntakeStartHeading = Math.toRadians(270);
-    private static final double intakeSEndY = -50;
+    private static final double intakeSEndY = -52;
 
 
     private static final double shootingX = -18;

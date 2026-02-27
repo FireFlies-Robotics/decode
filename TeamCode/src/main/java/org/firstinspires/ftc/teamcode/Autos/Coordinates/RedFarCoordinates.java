@@ -27,7 +27,7 @@ public class RedFarCoordinates {
     private static final Pose2d firstIntakeStart = new Pose2d(firstIntakeStartX, intakeStartY, firstIntakeStartHeading);
     private static final Pose2d secondIntakeStart = new Pose2d(secondIntakeX, intakeStartY, firstIntakeStartHeading);
     private static final Pose2d secondIntakeEnd = new Pose2d(secondIntakeX, intakeSEndY, firstIntakeStartHeading);
-    private static final Pose2d park = new Pose2d(shootingX-7, shootingY, -90);
+    private static final Pose2d park = new Pose2d(shootingX-13, shootingY, -90);
 
     private static final Pose2d firstIntakeEnd = new Pose2d(firstIntakeStartX, intakeSEndY, firstIntakeStartHeading);
 

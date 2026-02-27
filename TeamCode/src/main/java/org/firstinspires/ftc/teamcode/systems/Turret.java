@@ -39,9 +39,9 @@ public class Turret {
     public static double kd = 0.0005;
 
     PID pid;
-    public static double smallkp = 0.0083   ;
+    public static double smallkp = 0.00838   ;
     public static double smallki = 0.06;
-    public static double smallkd = 0.0003;
+    public static double smallkd = 0.00032;
     PID smallpid;
 
     public Turret(LinearOpMode opMode, IMU imu, Camera camera) {
@@ -54,7 +54,6 @@ public class Turret {
         rightTurret = opMode.hardwareMap.get(CRServo.class, "rightTurret");
         leftTurret = opMode.hardwareMap.get(CRServo.class, "leftTurret");
         turretAnalog = opMode.hardwareMap.get(AnalogInput.class, "turretAnalog");
-
     }
 
     public void init() {
@@ -139,7 +138,7 @@ public class Turret {
                 joystickAngle + 180);
     }
     double pos =0;
-    public void turnWithCamera() {
+    public void turnWithCamera(double offset) {
         pid.setPID(kp, ki, kd);
         smallpid.setPID(smallkp, smallki, smallkd);
         double erroretion = camera.getBearingToTag20();
@@ -158,14 +157,14 @@ public class Turret {
         else
         if (erroretion != -999) {
             if (Math.abs(erroretion) >= 10){
-                double poweretion = Math.min(pid.calculatePIDValue(erroretion, 0), Math.abs(0.5));
+                double poweretion = Math.min(pid.calculatePIDValue(erroretion, 0 + offset), Math.abs(0.5));
                 leftTurret.setPower(poweretion);
                 rightTurret.setPower(poweretion);
                 pos = getRotationOfInput();
             }
             else  if (Math.abs(erroretion) < 10){
                 if (erroretion >0){
-                double power = Math.min(smallpid.calculatePIDValue(erroretion, 3), .5);
+                double power = Math.min(smallpid.calculatePIDValue(erroretion, 3 + offset), .5);
                 leftTurret.setPower(power);
                 rightTurret.setPower(power);}
 //            else {
@@ -193,11 +192,11 @@ public class Turret {
 
 
 
-    public void turnWithCameraButThisTimeRed() {
+    public void turnWithCameraButThisTimeRed(double offset) {
         pid.setPID(kp, ki, kd);
         smallpid.setPID(smallkp, smallki, smallkd);
         double erroretion = camera.getBearingToTag24();
-        opMode.telemetry.addData("bearing", camera.getBearingToTag20());
+        opMode.telemetry.addData("bearing", camera.getBearingToTag24());
         opMode.telemetry.addData("angle", getRotationOfInput());
         opMode.telemetry.addData("errotation", erroretion);
 //
@@ -212,13 +211,13 @@ public class Turret {
         else
         if (erroretion != -999) {
             if (Math.abs(erroretion) >= 10){
-                double poweretion = Math.min(pid.calculatePIDValue(erroretion, 0), 0.5);
+                double poweretion = Math.min(pid.calculatePIDValue(erroretion, 0 + offset), 0.5);
                 leftTurret.setPower(poweretion);
                 rightTurret.setPower(poweretion);
                 pos = getRotationOfInput();
             }
             else  if (Math.abs(erroretion) < 10){
-                double power = Math.min(smallpid.calculatePIDValue(erroretion, 0), 0.4);
+                double power = Math.min(smallpid.calculatePIDValue(erroretion, 0 + offset), 0.4);
                 leftTurret.setPower(power);
                 rightTurret.setPower(power);
 //            else {

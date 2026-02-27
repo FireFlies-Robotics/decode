@@ -91,11 +91,11 @@ public class RedCloseWithActions extends LinearOpMode {
         if (isStopRequested()) return;
 
         Actions.runBlocking(
-                new ParallelAction(actions.moveTurretRed(),
+                new ParallelAction(actions.moveTurretRedClose(),
                         new SequentialAction(
                                 new ParallelAction(
                                         goToShoot_0,
-                                        actions.shooterStartFar(),
+                                        actions.shooterStart(),
                                         new SequentialAction(
                                                 waitToShoot0,
                                                 actions.transferStart()
@@ -129,6 +129,7 @@ public class RedCloseWithActions extends LinearOpMode {
                                 waitToShoot0,
                                 actions.shooterEnd(),
                                 actions.transferEnd()
+
                         )
                 )
         );

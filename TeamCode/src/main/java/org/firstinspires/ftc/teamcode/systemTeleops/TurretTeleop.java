@@ -24,6 +24,8 @@ public class TurretTeleop extends LinearOpMode {
     Camera camera;
     @Override
     public void runOpMode() {
+        camera = new Camera(this);
+
         turretPosition = new TurretPosition(this, camera);
         // ADD THESE DEBUG LINES BEFORE CREATING TURRET
         waitForStart();

@@ -231,6 +231,7 @@ public class Turret {
 //        }
 //        else {
 //            moveTurret(turretPID(0));
+//            moveTurret(turretPID(0));
 //        }
 //        else {
 //            leftTurret.setPower(0);

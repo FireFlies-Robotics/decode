@@ -31,16 +31,16 @@ public class TurretTeleop extends LinearOpMode {
         waitForStart();
 
         while (opModeIsActive()) {
-//
-//            if (gamepad1.dpad_down){
-//                turretPosition.setTurretPosition(0.5);
-//            }
-//            if (gamepad1.dpad_left){
-//                turretPosition.setTurretPosition(0);
-//            }
-//            if (gamepad1.dpad_right){
-//                turretPosition.setTurretPosition(1);
-//            }
+////
+            if (gamepad1.dpad_down){
+                turretPosition.setTurretPosition(0.5);
+            }
+            if (gamepad1.dpad_left){
+                turretPosition.setTurretPosition(0);
+            }
+            if (gamepad1.dpad_right){
+                turretPosition.setTurretPosition(1);
+            }
             turretPosition.calculateTurretPosition();
 //            if (gamepad1.cross){
 //                wheels.driveForwordByPower(-0.5);

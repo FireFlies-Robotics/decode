@@ -16,7 +16,7 @@
     public class TurretPosition {
         private double turretAngle = 60;
 
-        public static double kp = 0;
+        public static double kp = 0.036;
 
         private LinearOpMode opMode;
         public Servo rightTurret;
@@ -41,7 +41,7 @@
             opMode.telemetry.addData("bearing", bearing);
 
             if (bearing != -999){
-                if (bearing > 2 || bearing < -2)
+                if (bearing > 1.3 || bearing < -1.3)
                 turretAngle += bearing * kp;
                 double turretAngleAfterClip = Range.clip(turretAngle, 0, 120);
 
@@ -56,6 +56,27 @@
                 turretAngle = 60;
             }
         }
+
+    public void calculateTurretPositionRed(){
+        double bearing = camera.getBearingToTag24();
+        opMode.telemetry.addData("bearing", bearing);
+
+        if (bearing != -999){
+            if (bearing > 1.3 || bearing < -1.3)
+                turretAngle += bearing * kp;
+            double turretAngleAfterClip = Range.clip(turretAngle, 0, 120);
+
+            double turretPosition = turretAngle/120.0;
+
+            setTurretPosition(turretPosition);
+            opMode.telemetry.addData("turretAngle", turretAngle);
+            opMode.telemetry.addData("angle after clip", turretAngleAfterClip);
+            opMode.telemetry.addData("turret final position", turretPosition);
+        }
+        else {setTurretPosition(0.5);
+            turretAngle = 60;
+        }
+    }
 
 
 

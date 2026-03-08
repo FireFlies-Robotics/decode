@@ -16,6 +16,7 @@ import org.firstinspires.ftc.teamcode.systems.Intake;
 import org.firstinspires.ftc.teamcode.systems.Transfer;
 import org.firstinspires.ftc.teamcode.systems.Shooter;
 import org.firstinspires.ftc.teamcode.systems.Turret;
+import org.firstinspires.ftc.teamcode.systems.TurretPosition;
 import org.firstinspires.ftc.teamcode.systems.Wheels;
 
 @TeleOp(name = "MainTeleOpBlue", group = "Main ")
@@ -27,7 +28,7 @@ public class MainTeleOp extends LinearOpMode {
 
     // Declare variables you will be using throughout this class here
 
-    Turret turret;
+    TurretPosition turret;
 
     AnalogInput analogInput;
 
@@ -54,7 +55,7 @@ public class MainTeleOp extends LinearOpMode {
     @Override
     public void runOpMode() {
 
-        analogInput = hardwareMap.get(AnalogInput.class, "turretAnalog");
+//        analogInput = hardwareMap.get(AnalogInput.class, "turretAnalog");
 
         // Runs when init is pressed. Initialize variables and pregame logic here
         imu = hardwareMap.get(IMU.class, "imu");
@@ -63,8 +64,7 @@ public class MainTeleOp extends LinearOpMode {
         shooter = new Shooter(this);
         wheels = new Wheels(this, imu, AllianceColor.BLUE);
         camera = new Camera(this);
-        turret = new Turret(this, imu, camera);
-        turret.init();
+        turret = new TurretPosition(this, camera);
         hood =  new Hood(this);
         telemetry.addData("Status", "Initialized");
         telemetry.addData("Speed", "Waiting to start");
@@ -82,6 +82,7 @@ public class MainTeleOp extends LinearOpMode {
 
         // run until the end of the match (driver presses STOP). Logic once game starts here
         while (opModeIsActive()) {
+            turret.calculateTurretPosition();
 
 
 
@@ -122,7 +123,6 @@ public class MainTeleOp extends LinearOpMode {
 //            turret.moveTurret(gamepad1.right_stick_x);
 //            turret.setTurretPosition(position);
 
-        telemetry.addData("raw rotation" ,turret.getRotationOfInput());
 
         if (gamepad1.right_bumper && shooter.leftShotingMotor.getVelocity() >= (targetVelocity -30)){
                 transfer.setTransferPower(1);

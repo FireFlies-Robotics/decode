@@ -16,18 +16,19 @@ import org.firstinspires.ftc.teamcode.systems.Intake;
 import org.firstinspires.ftc.teamcode.systems.Transfer;
 import org.firstinspires.ftc.teamcode.systems.Shooter;
 import org.firstinspires.ftc.teamcode.systems.Turret;
+import org.firstinspires.ftc.teamcode.systems.TurretPosition;
 import org.firstinspires.ftc.teamcode.systems.Wheels;
 
-@TeleOp(name = "MainTeleOp Red", group = "Main")
+@TeleOp(name = "MainTeleOpRed", group = "Main ")
 @Config
 //Uncomment the line below to disable this op
 //@Disabled
-public class RedMainTeleop extends LinearOpMode {
+public class RedMainTaleop extends LinearOpMode {
 //    public static double targetVel = 2000;
 
     // Declare variables you will be using throughout this class here
 
-    Turret turret;
+    TurretPosition turret;
 
     AnalogInput analogInput;
 
@@ -45,8 +46,8 @@ public class RedMainTeleop extends LinearOpMode {
     boolean preLeftBumper = false;
     public static double shootoingPower = 0;
 
-    public static int selectedVelocity = 1220;  // hood decides this
-    public static int farVelocity = 1580;
+    public static int selectedVelocity = 1245;  // hood decides this
+    public static int farVelocity = 1500;
     public static int closeVelocity = 1220;
     int targetVelocity = 0;       // shooterPID uses this
     // Time that runs since the program began running
@@ -54,7 +55,7 @@ public class RedMainTeleop extends LinearOpMode {
     @Override
     public void runOpMode() {
 
-        analogInput = hardwareMap.get(AnalogInput.class, "turretAnalog");
+//        analogInput = hardwareMap.get(AnalogInput.class, "turretAnalog");
 
         // Runs when init is pressed. Initialize variables and pregame logic here
         imu = hardwareMap.get(IMU.class, "imu");
@@ -63,8 +64,7 @@ public class RedMainTeleop extends LinearOpMode {
         shooter = new Shooter(this);
         wheels = new Wheels(this, imu, AllianceColor.BLUE);
         camera = new Camera(this);
-        turret = new Turret(this, imu, camera);
-        turret.init();
+        turret = new TurretPosition(this, camera);
         hood =  new Hood(this);
         telemetry.addData("Status", "Initialized");
         telemetry.addData("Speed", "Waiting to start");
@@ -82,6 +82,7 @@ public class RedMainTeleop extends LinearOpMode {
 
         // run until the end of the match (driver presses STOP). Logic once game starts here
         while (opModeIsActive()) {
+            turret.calculateTurretPositionRed();
 
 
 
@@ -94,7 +95,7 @@ public class RedMainTeleop extends LinearOpMode {
 
             wheels.setMaxSpeed(1 - (gamepad1.left_trigger * 0.7));
 
-            if (gamepad1.right_trigger >0.2) {
+               if (gamepad1.right_trigger >0.2) {
                 intake.activateIntake(1.0); // full power intake
             } else if (gamepad1.square){
                 transfer.setTransferPower(-1);
@@ -118,11 +119,10 @@ public class RedMainTeleop extends LinearOpMode {
 //            }
 
 // Always update previous state based on the button, not shooter state
-            turret.turnWithCameraButThisTimeRed(0);
+//            turret.turnWithCamera(2);
 //            turret.moveTurret(gamepad1.right_stick_x);
 //            turret.setTurretPosition(position);
 
-            telemetry.addData("raw rotation" ,turret.getRotationOfInput());
 
             if (gamepad1.right_bumper && shooter.leftShotingMotor.getVelocity() >= (targetVelocity -30)){
                 transfer.setTransferPower(1);

@@ -82,7 +82,11 @@ public class RedMainTaleop extends LinearOpMode {
 
         // run until the end of the match (driver presses STOP). Logic once game starts here
         while (opModeIsActive()) {
-            turret.calculateTurretPositionRed();
+
+            double startTime = runtime.milliseconds();
+            double shooterVelocity = shooter.leftShotingMotor.getVelocity();
+
+            turret.calculateTurretPositionRed(1);
 
 
 
@@ -124,7 +128,7 @@ public class RedMainTaleop extends LinearOpMode {
 //            turret.setTurretPosition(position);
 
 
-            if (gamepad1.right_bumper && shooter.leftShotingMotor.getVelocity() >= (targetVelocity -30)){
+            if (gamepad1.right_bumper && shooterVelocity >= (targetVelocity -30)){
                 transfer.setTransferPower(1);
             }
 
@@ -154,7 +158,7 @@ public class RedMainTaleop extends LinearOpMode {
                 hood.setPosition(Hood.UP);
                 selectedVelocity = closeVelocity;
             }
-            if (shooter.leftShotingMotor.getVelocity() >= (selectedVelocity - 30)){
+            if (shooterVelocity >= (selectedVelocity - 30)){
                 gamepad1.rumble(100);
             }
             if (gamepad1.triangle){transfer.setTransferPower(1);}
@@ -179,7 +183,7 @@ public class RedMainTaleop extends LinearOpMode {
             wheels.driveByJoystickFieldOriented(gamepad1.left_stick_x, -gamepad1.left_stick_y, gamepad1.right_stick_x);
             TelemetryPacket packet = new TelemetryPacket();
             packet.put("time", runtime.seconds());
-            packet.put("shooting velocity",shooter.leftShotingMotor.getVelocity());
+            packet.put("shooting velocity",shooterVelocity);
             packet.put("up", Hood.UP);
             packet.put("down", Hood.DOWN);
 
@@ -188,6 +192,9 @@ public class RedMainTaleop extends LinearOpMode {
             // Show data on driver station
             telemetry.addData("Status", "Run Time: " + runtime.toString());
             telemetry.addData("Speed", wheels.getMaxSpeed()*100 + "%");
+            double endTime = runtime.milliseconds();
+            double loopTime = endTime - startTime;
+
             telemetry.update();
         }
     }

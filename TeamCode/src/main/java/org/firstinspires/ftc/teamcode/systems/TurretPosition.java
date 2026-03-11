@@ -15,6 +15,7 @@
 @Config
     public class TurretPosition {
         private double turretAngle = 60;
+    private double lastDetectionTime = 0;
 
         public static double kp = 0.036;
 
@@ -36,34 +37,47 @@
             rightTurret.setPosition(pos);
             leftTurret.setPosition(pos);
         }
-        public void calculateTurretPosition(){
+        public void calculateTurretPosition(double loopTime) {
             double bearing = camera.getBearingToTag20();
+            double now = opMode.getRuntime();
+
             opMode.telemetry.addData("bearing", bearing);
 
-            if (bearing != -999){
-                if (bearing > 1.3 || bearing < -1.3)
-                turretAngle += bearing * kp;
-                double turretAngleAfterClip = Range.clip(turretAngle, 0, 120);
+            if (bearing != -999) {
+                if (bearing > 1.3 || bearing < -1.3) {
+                    turretAngle += bearing * (kp * loopTime);
 
-                double turretPosition = turretAngle/120.0;
+                    double turretAngleAfterClip = Range.clip(turretAngle, 0, 120);
 
-                setTurretPosition(turretPosition);
-                opMode.telemetry.addData("turretAngle", turretAngle);
-                opMode.telemetry.addData("angle after clip", turretAngleAfterClip);
-                opMode.telemetry.addData("turret final position", turretPosition);
-            }
-            else {setTurretPosition(0.5);
-                turretAngle = 60;
+                    double turretPosition = turretAngleAfterClip / 120.0;
+
+                    setTurretPosition(turretPosition);
+                    opMode.telemetry.addData("turretAngle", turretAngle);
+                    opMode.telemetry.addData("angle after clip", turretAngleAfterClip);
+                    opMode.telemetry.addData("turret final position", turretPosition);
+                }
+
+            } else { // 400ms בלי זיהוי
+                {
+                    setTurretPosition(0.5);
+                    turretAngle = 60;
+                }
             }
         }
 
-    public void calculateTurretPositionRed(){
+
+
+    public void calculateTurretPositionRed(double loopTime){
         double bearing = camera.getBearingToTag24();
+        double now = opMode.getRuntime();
+
         opMode.telemetry.addData("bearing", bearing);
 
         if (bearing != -999){
+            lastDetectionTime = now;
+
             if (bearing > 1.3 || bearing < -1.3)
-                turretAngle += bearing * kp;
+                turretAngle += bearing * (kp * loopTime);
             double turretAngleAfterClip = Range.clip(turretAngle, 0, 120);
 
             double turretPosition = turretAngle/120.0;
@@ -73,9 +87,10 @@
             opMode.telemetry.addData("angle after clip", turretAngleAfterClip);
             opMode.telemetry.addData("turret final position", turretPosition);
         }
-        else {setTurretPosition(0.5);
-            turretAngle = 60;
-        }
+//        else {
+//        setTurretPosition(0.5);
+//            turretAngle = 60;
+//        }
     }
 
 

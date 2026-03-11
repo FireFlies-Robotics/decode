@@ -76,13 +76,15 @@ public class MainTeleOp extends LinearOpMode {
         boolean lastpress = false;
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
+        runtime.reset();
         shooter.setShotingPower(0);
 
-        runtime.reset();
 
         // run until the end of the match (driver presses STOP). Logic once game starts here
         while (opModeIsActive()) {
-            turret.calculateTurretPosition();
+            double startTime = runtime.milliseconds();
+            double shooterVelocity = shooter.leftShotingMotor.getVelocity();
+
 
 
 
@@ -124,7 +126,7 @@ public class MainTeleOp extends LinearOpMode {
 //            turret.setTurretPosition(position);
 
 
-        if (gamepad1.right_bumper && shooter.leftShotingMotor.getVelocity() >= (targetVelocity -30)){
+        if (gamepad1.right_bumper && shooterVelocity >= (targetVelocity -30)){
                 transfer.setTransferPower(1);
             }
 
@@ -154,13 +156,13 @@ public class MainTeleOp extends LinearOpMode {
                 hood.setPosition(Hood.UP);
                 selectedVelocity = closeVelocity;
             }
-            if (shooter.leftShotingMotor.getVelocity() >= (selectedVelocity - 30)){
+            if (shooterVelocity >= (selectedVelocity - 30)){
                 gamepad1.rumble(100);
             }
             if (gamepad1.triangle){transfer.setTransferPower(1);}
             if (gamepad1.cross){transfer.setTransferPower(-1);}
 
-            telemetry.addData("target velocity", targetVelocity);
+//            telemetry.addData("target velocity", targetVelocity);
 
 
 
@@ -174,21 +176,30 @@ public class MainTeleOp extends LinearOpMode {
 //            }
 //            else {
 //                intake.transferServo.setPower(0);
+            double endTime = runtime.milliseconds();
 //            }
                 // Move robot by controller 1
+
             wheels.driveByJoystickFieldOriented(gamepad1.left_stick_x, -gamepad1.left_stick_y, gamepad1.right_stick_x);
             TelemetryPacket packet = new TelemetryPacket();
-            packet.put("time", runtime.seconds());
-            packet.put("shooting velocity",shooter.leftShotingMotor.getVelocity());
-            packet.put("up", Hood.UP);
-            packet.put("down", Hood.DOWN);
+            packet.put("time", runtime.nanoseconds());
+            packet.put("shooting velocity", shooterVelocity);
+            packet.put("loop time", endTime - startTime);
+//            packet.put("up", Hood.UP);
+//            packet.put("down", Hood.DOWN);
 
             FtcDashboard.getInstance().sendTelemetryPacket(packet);
 
             // Show data on driver station
-            telemetry.addData("Status", "Run Time: " + runtime.toString());
-            telemetry.addData("Speed", wheels.getMaxSpeed()*100 + "%");
+//            telemetry.addData("Status", "Run Time: " + runtime.toString());
+//            telemetry.addData("Speed", wheels.getMaxSpeed()*100 + "%");
+
+            telemetry.addData("loop time" ,endTime -startTime);
+            double loopTime = endTime - startTime;
+            turret.calculateTurretPosition(loopTime);
+
             telemetry.update();
+
         }
     }
 }

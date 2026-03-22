@@ -14,17 +14,18 @@ import org.firstinspires.ftc.teamcode.systems.Intake;
 import org.firstinspires.ftc.teamcode.systems.Shooter;
 import org.firstinspires.ftc.teamcode.systems.Transfer;
 import org.firstinspires.ftc.teamcode.systems.Turret;
+import org.firstinspires.ftc.teamcode.systems.TurretPosition;
 
 public class AutoActions {
     Intake intake;
     Transfer transfer;
     Shooter shooter;
-    Turret turret;
+    TurretPosition turret;
     Hood hood;
     Camera camera;
     IMU imu;
     LinearOpMode opMode;
-    public AutoActions(Intake intake, Transfer transfer, Turret turret, Shooter shooter, Hood hood, LinearOpMode opMode){
+    public AutoActions(Intake intake, Transfer transfer, TurretPosition turret, Shooter shooter, Hood hood, LinearOpMode opMode){
         this.intake = intake;
         this.transfer = transfer;
         this.turret = turret;
@@ -37,7 +38,7 @@ public class AutoActions {
         @Override
         public boolean run(@NonNull TelemetryPacket packet) {
             intake.intakeMotor.setPower(1);
-            transfer.setTransferPower(0.4);
+            transfer.setTransferPower(0.42);
             return false;
         }
     }
@@ -49,6 +50,7 @@ public class AutoActions {
         @Override
         public boolean run(@NonNull TelemetryPacket packet) {
             intake.intakeMotor.setPower(0);
+            transfer.setTransferPower(0);
             return false;
         }
     }
@@ -58,7 +60,7 @@ public class AutoActions {
     public class TransferStart implements Action {
         @Override
         public boolean run(@NonNull TelemetryPacket packet) {
-            if (shooter.leftShotingMotor.getVelocity()>= 1180){
+            if (shooter.leftShotingMotor.getVelocity()>= 1130){
                 transfer.transferMotor.setPower(1);
                 intake.activateIntake(1);
             return false;
@@ -109,11 +111,12 @@ public class AutoActions {
                 initialized = true;
             }
 
-            shooter.shooterPID(1200);
+            shooter.shooterPID(1150);
 
             double vel = shooter.leftShotingMotor.getVelocity();
             telemetryPacket.put("shooting speed", vel);
-            return timer.seconds() < 6;
+            return true;
+//                    timer.seconds() < 6;
 //            if (shooter.leftShotingMotor.getVelocity()<= 1000){
 //                return true;
 //            } else
@@ -121,8 +124,6 @@ public class AutoActions {
         }
     }
     public Action shooterStart(){return new ShooterStart();}
-
-
     public class ShooterStartFar implements Action{
         private boolean initialized = false;
         private ElapsedTime timer = new ElapsedTime();
@@ -139,7 +140,8 @@ public class AutoActions {
 
             double vel = shooter.leftShotingMotor.getVelocity();
             telemetryPacket.put("shooting speed", vel);
-            return timer.seconds() < 6;
+//            return timer.seconds() < 6;
+            return true;
 //            if (shooter.leftShotingMotor.getVelocity()<= 1000){
 //                return true;
 //            } else
@@ -149,31 +151,32 @@ public class AutoActions {
     public Action shooterStartFar(){return new ShooterStartFar();}
 
 
-
-    public class ShooterSecond implements Action{
-        private boolean initialized = false;
-        private ElapsedTime timer = new ElapsedTime();
-
-
-        @Override
-        public boolean run(@NonNull TelemetryPacket telemetryPacket) {
-            if (!initialized){
-                timer.reset();
-                initialized = true;
-            }
-
-            shooter.shooterPID(1200);
-
-            double vel = shooter.leftShotingMotor.getVelocity();
-            telemetryPacket.put("shooting speed", vel);
-            return timer.seconds() < 3;
-//            if (shooter.leftShotingMotor.getVelocity()<= 1000){
-//                return true;
-//            } else
-//            return false;
-        }
-    }
-    public Action shooterStartSecond(){return new ShooterSecond();}
+//
+//    public class ShooterSecond implements Action{
+//        private boolean initialized = false;
+//        private ElapsedTime timer = new ElapsedTime();
+//
+//
+//        @Override
+//        public boolean run(@NonNull TelemetryPacket telemetryPacket) {
+//            if (!initialized){
+//                timer.reset();
+//                initialized = true;
+//            }
+//
+//            shooter.shooterPID(1160);
+//
+//            double vel = shooter.leftShotingMotor.getVelocity();
+//            telemetryPacket.put("shooting speed", vel);
+//            return true;
+////                    timer.seconds() < 3;
+////            if (shooter.leftShotingMotor.getVelocity()<= 1000){
+////                return true;
+////            } else
+////            return false;
+//        }
+//    }
+//    public Action shooterStartSecond(){return new ShooterSecond();}
 
 
     public class ShooterEnd implements Action{
@@ -198,7 +201,7 @@ public class AutoActions {
     public class MoveTurretBlueFar implements Action{
         @Override
         public boolean run(@NonNull TelemetryPacket telemetryPacket) {
-            turret.turnWithCamera(2);
+
             return true;
         }
     }
@@ -209,7 +212,7 @@ public class AutoActions {
     public class MoveTurretRedFar implements Action{
         @Override
         public boolean run(@NonNull TelemetryPacket telemetryPacket) {
-            turret.turnWithCameraButThisTimeRed(-2);
+            turret.calculateTurretPosition(0);
             return true;
         }
     }
@@ -220,7 +223,7 @@ public class AutoActions {
     public class MoveTurretRedClose implements Action{
         @Override
         public boolean run(@NonNull TelemetryPacket telemetryPacket) {
-            turret.turnWithCameraButThisTimeRed(0);
+            turret.calculateTurretPositionRed(-4);
             return true;
         }
     }
@@ -229,7 +232,7 @@ public class AutoActions {
     public class MoveTurretBlueClose implements Action{
         @Override
         public boolean run(@NonNull TelemetryPacket telemetryPacket) {
-            turret.turnWithCameraButThisTimeRed(0);
+            turret.calculateTurretPosition(4);
             return true;
         }
     }

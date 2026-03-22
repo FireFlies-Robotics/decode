@@ -12,15 +12,17 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.Autos.AutoActions;
+import org.firstinspires.ftc.teamcode.Autos.Coordinates.BlueCloseCoordinated;
 import org.firstinspires.ftc.teamcode.Autos.Coordinates.RedCloseCoordinates;
 import org.firstinspires.ftc.teamcode.MecanumDrive;
-import org.firstinspires.ftc.teamcode.Autos.Coordinates.RedCloseCoordinates;
+import org.firstinspires.ftc.teamcode.Autos.Coordinates.BlueCloseCoordinated;
 import org.firstinspires.ftc.teamcode.systems.Camera;
 import org.firstinspires.ftc.teamcode.systems.Hood;
 import org.firstinspires.ftc.teamcode.systems.Intake;
 import org.firstinspires.ftc.teamcode.systems.Shooter;
 import org.firstinspires.ftc.teamcode.systems.Transfer;
 import org.firstinspires.ftc.teamcode.systems.Turret;
+import org.firstinspires.ftc.teamcode.systems.TurretPosition;
 
 import java.util.Arrays;
 
@@ -33,7 +35,7 @@ public class RedCloseWithActions extends LinearOpMode {
     Transfer transfer;
     Hood hood;
     Shooter shooter;
-    Turret turret;
+    TurretPosition turret;
     Camera camera;
 
 
@@ -44,8 +46,7 @@ public class RedCloseWithActions extends LinearOpMode {
         transfer = new Transfer(this);
         shooter = new Shooter(this);
         camera = new Camera(this);
-        turret = new Turret(this, null, camera);
-        turret.init();
+        turret = new TurretPosition(this, camera);
         hood =  new Hood(this);
         MinVelConstraint velCon = new MinVelConstraint(Arrays.asList(new TranslationalVelConstraint(10),new AngularVelConstraint(10)));
 
@@ -83,7 +84,7 @@ public class RedCloseWithActions extends LinearOpMode {
 
         Action goToShoot_2 = drive.actionBuilder(RedCloseCoordinates.getSecondIntakeEnd())
                 .setTangent(Math.toRadians(70))
-                .splineToLinearHeading(RedCloseCoordinates.getShooting(), RedCloseCoordinates.getShooting().heading)
+                .splineToLinearHeading(RedCloseCoordinates.getLastShooting(), RedCloseCoordinates.getShooting().heading)
                 .build();
 
         waitForStart();
@@ -91,48 +92,46 @@ public class RedCloseWithActions extends LinearOpMode {
         if (isStopRequested()) return;
 
         Actions.runBlocking(
-                new ParallelAction(actions.moveTurretRedClose(),
+                new ParallelAction(
+                        // Turret and shooter run in parallel throughout
+                        actions.moveTurretRedClose(),
+                        actions.shooterStart(),
+
+                        // Main sequence of driving, transferring, and collecting
                         new SequentialAction(
-                                new ParallelAction(
-                                        goToShoot_0,
-                                        actions.shooterStart(),
-                                        new SequentialAction(
-                                                waitToShoot0,
-                                                actions.transferStart()
-                                        )
-                                ),
-
-                                new ParallelAction(
-                                        actions.shooterEnd(),
-                                        actions.transferEnd(),
-                                        actions.intakeStart(),
-                                        goToCollect_1
-                                ),
-                                new ParallelAction(
-                                        goToShoot_1,
-                                        actions.intakeEnd()),
-                                new ParallelAction(
-                                        actions.shooterStartSecond(),
-                                        actions.transferStart()
-                                ),
-                                waitToShoot1,
-                                actions.shooterEnd(),
+                                // First shooting cycle
+                                goToShoot_0,
+                                actions.transferStart(),
+//                                    waitToShoot0, // optional wait to let shooter reach speed
                                 actions.transferEnd(),
-                                actions.intakeStart(),
-                                goToCollect_2,
-                                new ParallelAction(
-                                        actions.intakeEnd(),
-                                        goToShoot_2),
-                                new ParallelAction(
-                                        actions.shooterStart(),
-                                        actions.transferStart()),
-                                waitToShoot0,
-                                actions.shooterEnd(),
-                                actions.transferEnd()
 
+                                // Collect first batch of rings
+                                new ParallelAction(
+                                        goToCollect_1,
+                                        actions.intakeStart()
+                                ),
+                                actions.intakeEnd(), // stop intake after collection
+
+                                // Drive back to shooting position
+                                goToShoot_1,
+                                actions.transferStart(),
+//                                    waitToShoot1,
+                                actions.transferEnd(),
+
+                                // Collect second batch of rings
+                                new ParallelAction(
+                                        goToCollect_2,
+                                        actions.intakeStart()
+                                ),
+                                actions.intakeEnd(),
+
+                                // Final shooting
+                                goToShoot_2,
+                                actions.transferStart(),
+//                                    waitToShoot2,
+                                actions.transferEnd()
                         )
                 )
         );
-
     }
 }

@@ -4,17 +4,17 @@ import com.acmerobotics.roadrunner.Pose2d;
 
 public class BlueCloseCoordinatesMeepMeep {
 
-    private static final double startX = -56.5;
-    private static final double startY = -45.5;
-    private static final double startPoseHeading = Math.toRadians(234);
+    private static final double startX = -60.6634;
+    private static final double startY = -43.3425;
+    private static final double startPoseHeading = Math.toRadians(-136);
 
-    private static final double firstIntakeStartX = -12.5;
-    private static final double intakeStartY = -30
-            ;
-    private static final double secondIntakeX = 11.5;
+    private static final double firstIntakeStartX = -8.7038;
+    private static final double intakeStartY = -28.2548;
+    private static final double intakeSEndY = -53.5;
 
-    private static final double firstIntakeStartHeading = Math.toRadians(270);
-    private static final double intakeSEndY = -52;
+    private static final double secondIntakeX = 13.5;
+
+    private static final double firstIntakeStartHeading = Math.toRadians(-91);
 
 
     private static final double shootingX = -18;
@@ -35,14 +35,15 @@ public class BlueCloseCoordinatesMeepMeep {
 
 
     private static final Pose2d shooting = new Pose2d(shootingX, shootingY, shootingHeading);
+    private static final Pose2d lastShooting = new Pose2d(shootingX-7.5, shootingY, shootingHeading);
+
 
 
     public static Pose2d getStart() {
         return start;
     }
 
-    public static Pose2d getFirstIntakeStart() {
-        return firstIntakeStart;
+    public static Pose2d getFirstIntakeStart() {return firstIntakeStart;
     }
     public static Pose2d getFirstIntakeEnd() {
         return firstIntakeEnd;
@@ -57,4 +58,8 @@ public class BlueCloseCoordinatesMeepMeep {
     public static Pose2d getShooting(){
         return shooting;
     }
+    public static Pose2d getLastShooting(){
+        return lastShooting;
+    }
+
 }

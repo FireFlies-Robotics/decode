@@ -21,6 +21,7 @@
     import org.firstinspires.ftc.teamcode.systems.Shooter;
     import org.firstinspires.ftc.teamcode.systems.Transfer;
     import org.firstinspires.ftc.teamcode.systems.Turret;
+    import org.firstinspires.ftc.teamcode.systems.TurretPosition;
 
     import java.util.Arrays;
 
@@ -33,7 +34,7 @@
         Transfer transfer;
         Hood hood;
         Shooter shooter;
-        Turret turret;
+        TurretPosition turret;
         Camera camera;
 
 
@@ -44,8 +45,7 @@
             transfer = new Transfer(this);
             shooter = new Shooter(this);
             camera = new Camera(this);
-            turret = new Turret(this, null, camera);
-            turret.init();
+            turret = new TurretPosition(this, camera);
             hood =  new Hood(this);
             MinVelConstraint velCon = new MinVelConstraint(Arrays.asList(new TranslationalVelConstraint(10),new AngularVelConstraint(10)));
 
@@ -69,6 +69,8 @@
             Action goToCollect_1 = drive.actionBuilder(BlueCloseCoordinated.getShooting())
                     .setTangent(Math.toRadians(90))
                     .splineToLinearHeading(BlueCloseCoordinated.getFirstIntakeStart(), BlueCloseCoordinated.getFirstIntakeStart().heading)
+                    .setTangent(Math.toRadians(270))
+
                     .splineToLinearHeading(BlueCloseCoordinated.getFirstIntakeEnd(), BlueCloseCoordinated.getFirstIntakeEnd().heading)
                     .build();
 
@@ -91,47 +93,46 @@
             if (isStopRequested()) return;
 
             Actions.runBlocking(
-                    new ParallelAction(actions.moveTurretBlueClose(),
-                            new SequentialAction(
-                                    new ParallelAction(
-                                            goToShoot_0,
-                                            actions.shooterStart(),
-                                            new SequentialAction(
-                                                    waitToShoot0,
-                                                    actions.transferStart()
-                                            )
-                                    ),
+                    new ParallelAction(
+                            // Turret and shooter run in parallel throughout
+                            actions.moveTurretBlueClose(),
+                            actions.shooterStart(),
 
-                            new ParallelAction(
-                                    actions.shooterEnd(),
+                            // Main sequence of driving, transferring, and collecting
+                            new SequentialAction(
+                                    // First shooting cycle
+                                    goToShoot_0,
+                                    actions.transferStart(),
+                                    waitToShoot0, // optional wait to let shooter reach speed
                                     actions.transferEnd(),
-                                    actions.intakeStart(),
-                                    goToCollect_1
-                            ),
+
+                                    // Collect first batch of rings
                                     new ParallelAction(
-                                            goToShoot_1,
-                                            actions.intakeEnd()),
-                            new ParallelAction(
-                                    actions.shooterStartSecond(),
-                                    actions.transferStart()
-                            ),
-                            waitToShoot1,
-                            actions.shooterEnd(),
-                            actions.transferEnd(),
-                            actions.intakeStart(),
-                            goToCollect_2,
-                            new ParallelAction(
+                                            goToCollect_1,
+                                            actions.intakeStart()
+                                    ),
+                                    actions.intakeEnd(), // stop intake after collection
+
+                                    // Drive back to shooting position
+                                    goToShoot_1,
+                                    actions.transferStart(),
+                                    waitToShoot1,
+                                    actions.transferEnd(),
+
+//                                     Collect second batch of rings
+                                    new ParallelAction(
+                                            goToCollect_2,
+                                            actions.intakeStart()
+                                    ),
                                     actions.intakeEnd(),
-                                    goToShoot_2),
-                            new ParallelAction(
-                                    actions.shooterStart(),
-                                    actions.transferStart()),
-                            waitToShoot0,
-                            actions.shooterEnd(),
-                            actions.transferEnd()
+
+//                                     Final shooting
+                                    goToShoot_2,
+                                    actions.transferStart(),
+                                    waitToShoot2,
+                                    actions.transferEnd()
                             )
                     )
             );
-
         }
     }

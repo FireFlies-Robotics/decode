@@ -19,9 +19,9 @@ import org.firstinspires.ftc.teamcode.systems.Turret;
 import org.firstinspires.ftc.teamcode.systems.TurretPosition;
 import org.firstinspires.ftc.teamcode.systems.Wheels;
 
-@TeleOp(name = "MainTeleOpBlue", group = "Main ")
+@TeleOp(name = "MainTeleOpRed", group = "Main ")
 @Config
-public class MainTeleOp extends LinearOpMode {
+public class RedMainTeleOp extends LinearOpMode {
 
     TurretPosition turret;
     AnalogInput analogInput;
@@ -34,11 +34,8 @@ public class MainTeleOp extends LinearOpMode {
     Intake intake;
     Hood hood;
 
-    public static double offset = 4;
-
-    public static double transferDash = 0.41;
-
-    private double transferPower = 0;
+    public static double offset = -4;
+    public static double transferPower = 0;
 
     public static double shootoingPower = 0;
 
@@ -91,7 +88,7 @@ public class MainTeleOp extends LinearOpMode {
             // Intake
             if (gamepad1.right_trigger > 0.2) {
                 intake.activateIntake(1.0);
-                transferPower = transferDash;
+                transferPower = 0.37;
             }
             else if (gamepad1.square) {
                 intake.activateIntake(-1);
@@ -168,7 +165,7 @@ public class MainTeleOp extends LinearOpMode {
 
             telemetry.addData("loop time", endTime - startTime);
 
-            turret.calculateTurretPosition(offset);
+            turret.calculateTurretPositionRed(offset);
 
             telemetry.update();
         }

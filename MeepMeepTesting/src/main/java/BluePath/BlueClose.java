@@ -10,29 +10,52 @@ public class BlueClose {
     public static void main(String[] args) {
         MeepMeep meepMeep = new MeepMeep(670);
 
-
-        RoadRunnerBotEntity myBot = new DefaultBotBuilder(meepMeep).setDimensions(15.5, 17)
-                // Set bot constraints: maxVel, maxAccel, maxAngVel, maxAngAccel, track width
+        RoadRunnerBotEntity myBot = new DefaultBotBuilder(meepMeep)
+                .setDimensions(15.5, 17)
                 .setConstraints(100, 70, Math.toRadians(180), Math.toRadians(180), 15)
                 .build();
 
-        myBot.runAction(myBot.getDrive().actionBuilder(BlueCloseCoordinatesMeepMeep.getStart())
-                .strafeTo(BlueCloseCoordinatesMeepMeep.getShooting().position)
+        myBot.runAction(
+                myBot.getDrive().actionBuilder(BlueCloseCoordinatesMeepMeep.getStart())
+                        // Go to first shooting position
+                        .strafeTo(BlueCloseCoordinatesMeepMeep.getShooting().position)
 
-                .setTangent(Math.toRadians(45))
-                .splineToLinearHeading(BlueCloseCoordinatesMeepMeep.getFirstIntakeStart(), BlueCloseCoordinatesMeepMeep.getFirstIntakeStart().heading)
-                .splineToSplineHeading(BlueCloseCoordinatesMeepMeep.getFirstIntakeEnd(), BlueCloseCoordinatesMeepMeep.getFirstIntakeEnd().heading)
+                        // Go to first intake
+                        .setTangent(Math.toRadians(90))
+                        .splineToLinearHeading(
+                                BlueCloseCoordinatesMeepMeep.getFirstIntakeStart(),
+                                BlueCloseCoordinatesMeepMeep.getFirstIntakeStart().heading
+                        )
+                        .splineToLinearHeading(
+                                BlueCloseCoordinatesMeepMeep.getFirstIntakeEnd(),
+                                BlueCloseCoordinatesMeepMeep.getFirstIntakeEnd().heading
+                        )
 
-                //first intake
+                        // Go back to first shooting
+                        .strafeToLinearHeading(
+                                BlueCloseCoordinatesMeepMeep.getShooting().position,
+                                BlueCloseCoordinatesMeepMeep.getShooting().heading
+                        )
+                        .waitSeconds(2)
 
-                .strafeToLinearHeading(BlueCloseCoordinatesMeepMeep.getShooting().position, BlueCloseCoordinatesMeepMeep.getShooting().heading)
-                .waitSeconds(2)
-                //first shoot
+                        // Go to second intake
+                        .splineToLinearHeading(
+                                BlueCloseCoordinatesMeepMeep.getSecondIntakeStart(),
+                                BlueCloseCoordinatesMeepMeep.getSecondIntakeStart().heading
+                        )
+                        .strafeToLinearHeading(
+                                BlueCloseCoordinatesMeepMeep.getSecondIntakeEnd().position,
+                                BlueCloseCoordinatesMeepMeep.getSecondIntakeEnd().heading
+                        )
 
-                .splineToLinearHeading(BlueCloseCoordinatesMeepMeep.getSecondIntakeStart(), BlueCloseCoordinatesMeepMeep.getSecondIntakeStart().heading)
-                .strafeToSplineHeading(BlueCloseCoordinatesMeepMeep.getSecondIntakeEnd().position, BlueCloseCoordinatesMeepMeep.getSecondIntakeEnd().heading)
-                .strafeToLinearHeading(BlueCloseCoordinatesMeepMeep.getShooting().position, BlueCloseCoordinatesMeepMeep.getShooting().heading)
-                .build());
+                        // Go back to last shooting
+                        .setTangent(Math.toRadians(70))
+                        .strafeToLinearHeading(
+                                BlueCloseCoordinatesMeepMeep.getShooting().position,
+                                BlueCloseCoordinatesMeepMeep.getShooting().heading
+                        )
+                        .build()
+        );
 
         meepMeep.setBackground(MeepMeep.Background.FIELD_DECODE_JUICE_BLACK)
                 .setDarkMode(true)

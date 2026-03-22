@@ -4,15 +4,15 @@ import com.acmerobotics.roadrunner.Pose2d;
 
 public class BlueCloseCoordinated {
 
-    private static final double startX = -56.5;
-    private static final double startY = -45.5;
-    private static final double startPoseHeading = Math.toRadians(234);
+    private static final double startX = -60.6634;
+    private static final double startY = -43.3425;
+    private static final double startPoseHeading = Math.toRadians(-136);
 
-    private static final double firstIntakeStartX = -8.7038;
-    private static final double intakeStartY = -28.2548;
+    private static final double firstIntakeStartX = -16.8148;
+    private static final double intakeStartY = -26.1426;
     private static final double intakeSEndY = -53.5;
 
-    private static final double secondIntakeX = 13.5;
+    private static final double secondIntakeX = 9.8;
 
     private static final double firstIntakeStartHeading = Math.toRadians(-91);
 
@@ -27,7 +27,7 @@ public class BlueCloseCoordinated {
     private static final Pose2d firstIntakeStart = new Pose2d(firstIntakeStartX, intakeStartY, firstIntakeStartHeading);
 
     private static final Pose2d secondIntakeStart = new Pose2d(secondIntakeX, intakeStartY, firstIntakeStartHeading);
-    private static final Pose2d secondIntakeEnd = new Pose2d(secondIntakeX, intakeSEndY, firstIntakeStartHeading);
+    private static final Pose2d secondIntakeEnd = new Pose2d(secondIntakeX+2.4, intakeSEndY+3, firstIntakeStartHeading);
 
 
     private static final Pose2d firstIntakeEnd = new Pose2d(firstIntakeStartX, intakeSEndY, firstIntakeStartHeading);

@@ -51,7 +51,6 @@ public class BlueClose_3_plus_6 extends LinearOpMode {
         Action goToShoot_2 = drive.actionBuilder(BlueCloseCoordinated.getStart())
                 .strafeToLinearHeading(BlueCloseCoordinated.getShooting().position, BlueCloseCoordinated.getShooting().heading)
                 .build();
-
         waitForStart();
 
         if (isStopRequested()) return;

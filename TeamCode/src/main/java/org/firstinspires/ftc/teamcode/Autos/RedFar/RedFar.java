@@ -21,6 +21,7 @@ import org.firstinspires.ftc.teamcode.systems.Intake;
 import org.firstinspires.ftc.teamcode.systems.Shooter;
 import org.firstinspires.ftc.teamcode.systems.Transfer;
 import org.firstinspires.ftc.teamcode.systems.Turret;
+import org.firstinspires.ftc.teamcode.systems.TurretPosition;
 
 import java.util.Arrays;
 
@@ -33,7 +34,7 @@ public class RedFar extends LinearOpMode {
     Transfer transfer;
     Hood hood;
     Shooter shooter;
-    Turret turret;
+    TurretPosition turret;
     Camera camera;
 
 
@@ -44,8 +45,7 @@ public class RedFar extends LinearOpMode {
         transfer = new Transfer(this);
         shooter = new Shooter(this);
         camera = new Camera(this);
-        turret = new Turret(this, null, camera);
-        turret.init();
+        turret = new TurretPosition(this,  camera);
         hood =  new Hood(this);
         MinVelConstraint velCon = new MinVelConstraint(Arrays.asList(new TranslationalVelConstraint(10),new AngularVelConstraint(10)));
 

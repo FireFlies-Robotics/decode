@@ -103,7 +103,7 @@ public class MainTeleOp extends LinearOpMode {
             }
 
             // Shooter feeding (override intake)
-            if (gamepad1.right_bumper && shooterVelocity >= (targetVelocity - 30)) {
+            if (gamepad1.right_bumper && shooterVelocity >= (targetVelocity - 50)) {
                 transferPower = 1;
             }
 

@@ -58,13 +58,13 @@ public class BlueFar extends LinearOpMode {
                 .splineToLinearHeading(BlueFarCoordinates.getShooting(), BlueFarCoordinates.getShooting().heading)
                 .build();
         Action waitToShoot0 = drive.actionBuilder(BlueFarCoordinates.getShooting())
-                .waitSeconds(2)
+                .waitSeconds(4)
                 .build();
         Action waitToShoot1 = drive.actionBuilder(BlueFarCoordinates.getShooting())
-                .waitSeconds(3)
+                .waitSeconds(4)
                 .build();
         Action waitToShoot2 = drive.actionBuilder(BlueFarCoordinates.getShooting())
-                .waitSeconds(3)
+                .waitSeconds(4)
                 .build();
 
 
@@ -95,24 +95,48 @@ public class BlueFar extends LinearOpMode {
         if (isStopRequested()) return;
 
         Actions.runBlocking(
-                new ParallelAction(actions.moveTurretblueFar(),
-                        new SequentialAction(
-                                goToShoot_0,
-                                new ParallelAction(
-                                        actions.shooterStartFar(),
-                                        actions.transferStartFar()
-                                ),
-                                actions.shooterEnd(),
-                                actions.transferEnd(),
-                                actions.intakeStart(),
-                                goToCollect_1,
-                                goToShoot_1,
-                                new ParallelAction(
-                                        actions.shooterStartFar(),
-                                        actions.transferStartFar()
-                                )
-                        )
+                new ParallelAction(
+                        // Always running in background
+                        actions.moveTurretblueFar(),
+                        actions.shooterStartFar(),
 
+                        // Main logic
+                        new SequentialAction(
+                                // First shot
+                                goToShoot_0,
+                                actions.transferStartFar(),
+                                waitToShoot0,
+                                actions.transferEnd(),
+
+                                // First intake
+                                new ParallelAction(
+                                        goToCollect_1,
+                                        actions.intakeStart()
+                                ),
+                                actions.intakeEnd(),
+
+                                // Second shot
+                                goToShoot_1,
+                                actions.transferStartFar(),
+                                waitToShoot1,
+                                actions.transferEnd(),
+
+                                // (optional second intake cycle if you add later)
+            /*
+            new ParallelAction(
+                goToCollect_2,
+                actions.intakeStart()
+            ),
+            actions.intakeEnd(),
+
+            goToShoot_2,
+            actions.transferStartFar(),
+            actions.transferEnd(),
+            */
+
+                                // Park
+                                park
+                        )
                 )
         );
 

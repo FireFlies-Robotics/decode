@@ -17,9 +17,12 @@ public class BlueFarCoordinates {
     private static final double intakeSEndY = -54;
 
 
-    private static final double shootingX = 57;
-    private static final double shootingY = -14;
+    private static final double shootingX = 50;
+    private static final double shootingY = -7;
     private static final double shootingHeading = Math.toRadians(-160);
+
+    private static final double parkX = 35;
+    private static final double parkY = -15;
 
 
 
@@ -27,7 +30,7 @@ public class BlueFarCoordinates {
     private static final Pose2d firstIntakeStart = new Pose2d(firstIntakeStartX, intakeStartY, firstIntakeStartHeading);
     private static final Pose2d secondIntakeStart = new Pose2d(secondIntakeX, intakeStartY, firstIntakeStartHeading);
     private static final Pose2d secondIntakeEnd = new Pose2d(secondIntakeX, intakeSEndY, firstIntakeStartHeading);
-    private static final Pose2d park = new Pose2d(shootingX-7, shootingY, -90);
+    private static final Pose2d park = new Pose2d(parkX, parkY, -90);
 
     private static final Pose2d firstIntakeEnd = new Pose2d(firstIntakeStartX, intakeSEndY, firstIntakeStartHeading);
 

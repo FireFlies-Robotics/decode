@@ -201,7 +201,7 @@ public class AutoActions {
     public class MoveTurretBlueFar implements Action{
         @Override
         public boolean run(@NonNull TelemetryPacket telemetryPacket) {
-
+            turret.calculateTurretPosition(4);
             return true;
         }
     }
